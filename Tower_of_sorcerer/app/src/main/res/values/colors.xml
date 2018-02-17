@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#3F51B5</color>
+    <color name="colorPrimaryDark">#303F9F</color>
+    <color name="colorAccent">#FF4081</color>
+    <color name="colorAccentLight">#f68026</color>
+    <color name="end">#00FF24</color>
+    <color name="back">#496e9c</color>
+    <color name="bord">#03244d</color>
+    <color name="player">#f68026</color>
+    <color name="ahh">#000000</color>
+    <color name="starcolor1">#FFFF00</color>
+    <color name="starcolor2">#FF00FF</color>
+    <color name="starcolor3">#00ccFF</color>
+    <color name="starcolor4">#FFAE33</color>
+    <color name="gravswitch">#B30000</color>
+</resources>
