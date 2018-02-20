@@ -7,28 +7,76 @@ import android.graphics.Rect;
 public class Sprite {
 
     private int x, y;
+    private byte id;
     private int xSpeed, ySpeed;
     private int height, width;
-    private Bitmap b;
-    private Gamelogic.Floors ov;
+    private Bitmap sprite_sheet;
+    private Gamelogic.GameView ov;
     private int currentFrame = 0;
     private int direction = 2;
     private Rect src, dst;
+    private int timer = 0;
 
-    public Sprite(Gamelogic.Floors ourView, Bitmap blob) {
-        b = blob;
+    public Sprite(Gamelogic.GameView ourView, Bitmap in_sheet) {
+        sprite_sheet = in_sheet;
         ov = ourView;
-        height = b.getHeight() / 4;
-        width = b.getWidth() / 4;
+        height = sprite_sheet.getHeight() / 4;
+        width = sprite_sheet.getWidth() / 4;
         x = y = 0;
+        id = 127;
         xSpeed = 20;
         ySpeed = 0;
         src = new Rect(0,0,0,0);
         dst = new Rect(0,0,0,0);
     }
+    public Sprite(Gamelogic.GameView ourView, Bitmap in_sheet, int in_xloc, int in_yloc, byte in_id) {
+        sprite_sheet = in_sheet;
+        x = in_xloc;
+        y = in_yloc;
+        id = in_id;
 
-    private void update() {
+        ov = ourView;
+        height = sprite_sheet.getHeight();
+        if (id > 20 && id < 29 && id != 25 && id != 27)
+            width = sprite_sheet.getWidth() / 3;
+        else if (id > 30 && id < 66)
+            width = sprite_sheet.getWidth() / 3;
+        else
+            width = sprite_sheet.getWidth();
+        currentFrame = 0;
+        xSpeed = 0;
+        ySpeed = 0;
+        src = new Rect(0,0,0,0);
+        dst = new Rect(0,0,0,0);
+    }
 
+    public void display(Canvas canvas){
+
+        src.set(0, 0, width, height);
+        dst.set(x, y, x + width, y + height);
+        canvas.drawBitmap(sprite_sheet, src, dst, null);
+    }
+
+    public void blink(Canvas canvas) {
+/*
+        try {
+            Thread.sleep(50);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+*/
+        timer = ++timer % 4;
+        if (timer == 1) {
+            currentFrame = ++currentFrame % 3;
+        }
+
+        int srcX = currentFrame * width;
+        src.set(srcX, 0, srcX + width, height);
+        dst.set(x, y, x + width, y + height);
+        canvas.drawBitmap(sprite_sheet, src, dst, null);
+    }
+
+    public void loopRun(Canvas canvas) {
         // 0 = up
         // 1 = down
         // 2 = left
@@ -70,14 +118,23 @@ public class Sprite {
         currentFrame = ++currentFrame % 4;
         x += xSpeed;
         y += ySpeed;
-    }
 
-    public void onDraw(Canvas canvas) {
-        update();
         int srcX = currentFrame * width;
         int srcY = direction * height;
         src.set(srcX, srcY, srcX + width, srcY + height);
         dst.set(x, y, x + width, y + height);
-        canvas.drawBitmap(b, src, dst, null);
+        canvas.drawBitmap(sprite_sheet, src, dst, null);
     }
+
+    public void update(Canvas canvas){
+        if (id == 25 || id == 27)
+            display(canvas);
+        else if (id > 20 && id < 29)
+            blink(canvas);
+        else if (id > 30 && id < 66)
+            blink(canvas);
+        else
+            display(canvas);
+    }
+
 }
