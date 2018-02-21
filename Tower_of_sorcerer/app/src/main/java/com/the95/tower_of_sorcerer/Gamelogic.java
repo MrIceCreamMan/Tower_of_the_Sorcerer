@@ -27,9 +27,11 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
     private boolean             load_ctr, refresh_ctr;
     private float               x, y;
     private ArrayList<Sprite>   all_sprites;
-    private Bitmap              ball, kid, pic_debug;
+    private Bitmap              ball, kid;
+    private Bitmap              pic_debug, hero;
 
     private Sprite              kid_sprite;
+    private Sprite              hero_sprite;
 
     private Bitmap              t__floor, t___wall, t___star, t_ustair, t_dstair;
     private Bitmap              t_door_y, t_door_b, t_door_r, t_door_m, t_prison, t___logo;
@@ -50,9 +52,10 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
     private Bitmap              i_____bomb, i__wing_up, i_key_ehac, i_wing_dow, i_lucky_gd;
     private Bitmap              i_dra_bane, i_snow_crs;
 
+    public final int            UP = 3, DOWN = 0, RIGHT = 2, LEFT = 1;
     private static final String TAG = "debuuuuuuuuuuuuuuuuuug";
     //Log.v(TAG, "x = " + me.getX() + " y = " + me.getY());
-
+    private boolean             isWalk;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -61,13 +64,14 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
         gameview.setOnTouchListener(this);
         current_game = new Floors();
         current_floor = current_game.get_one_floor(1);
-        floor_num = 1; sq_size = 32;
+        floor_num = 10; sq_size = 32;
         load_ctr = refresh_ctr = true;
         x = y = 0;
         all_sprites = new ArrayList<>();
         ball = BitmapFactory.decodeResource(getResources(), R.drawable.brokeearth);
         pic_debug = BitmapFactory.decodeResource(getResources(), R.drawable.z1_debug);
         kid = BitmapFactory.decodeResource(getResources(), R.drawable.poke);
+        hero = BitmapFactory.decodeResource(getResources(), R.drawable.hero);
 
         t__floor = BitmapFactory.decodeResource(getResources(), R.drawable.tile1_floor);
         t___wall = BitmapFactory.decodeResource(getResources(), R.drawable.tile2_wall);
@@ -97,6 +101,8 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
         n_shop__l = BitmapFactory.decodeResource(getResources(), R.drawable.npc5_shop_left);
         n_shop__m = BitmapFactory.decodeResource(getResources(), R.drawable.npc6_shop_middle);
         n_shop__r = BitmapFactory.decodeResource(getResources(), R.drawable.npc7_shop_right);
+        n_princes = BitmapFactory.decodeResource(getResources(), R.drawable.npc8_princess);
+        n____lava = BitmapFactory.decodeResource(getResources(), R.drawable.npc9_lava);
         m__slime_g = BitmapFactory.decodeResource(getResources(), R.drawable.m01t1_green_slime);
         m__slime_r = BitmapFactory.decodeResource(getResources(), R.drawable.m02t1_red_slime);
         m_bat_fier = BitmapFactory.decodeResource(getResources(), R.drawable.m03t1_fierce_bat);
@@ -152,6 +158,8 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
         i_lucky_gd = BitmapFactory.decodeResource(getResources(), R.drawable.i20_lucky_gold);
         i_dra_bane = BitmapFactory.decodeResource(getResources(), R.drawable.i21_dragonsbane);
         i_snow_crs = BitmapFactory.decodeResource(getResources(), R.drawable.i22_snow_crystal);
+
+        isWalk = false;
 
         //Log.v(TAG, "width = " + sq_wall.getWidth() + " y = " + sq_wall.getHeight());
         setContentView(gameview);
@@ -223,6 +231,8 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
             n_shop__l = createScaledBitmap(n_shop__l, sq_size, sq_size, false);
             n_shop__m = createScaledBitmap(n_shop__m, sq_size * 3, sq_size, false);
             n_shop__r = createScaledBitmap(n_shop__r, sq_size, sq_size, false);
+            n_princes = createScaledBitmap(n_princes, sq_size * 3, sq_size, false);
+            n____lava = createScaledBitmap(n____lava, sq_size * 4, sq_size, false);
             m__slime_g = createScaledBitmap(m__slime_g, sq_size * 3, sq_size, false);
             m__slime_r = createScaledBitmap(m__slime_r, sq_size * 3, sq_size, false);
             m_bat_fier = createScaledBitmap(m_bat_fier, sq_size * 3, sq_size, false);
@@ -280,6 +290,8 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
             i_snow_crs = createScaledBitmap(i_snow_crs, sq_size, sq_size, false);
 
             pic_debug = createScaledBitmap(pic_debug, sq_size * 3, sq_size, false);
+            hero = createScaledBitmap(hero, sq_size * 3, sq_size * 4, false);
+            hero_sprite = new Sprite(GameView.this, hero, 495, 945, (byte)30);
             kid_sprite = new Sprite(GameView.this, kid);
 
             while (isItOK) {
@@ -325,9 +337,23 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
             textpaint.setTextSize(160);
             //canvas.drawPaint(textpaint);
             String my_text = String.valueOf(floor_num) + " F";
-            canvas.drawText(my_text, 300, 1400, textpaint);
-            canvas.drawBitmap(ball, x - ball.getWidth()/2, y - ball.getHeight()/2, null);
+            canvas.drawText(my_text, 700, 1400, textpaint);
+            if (isWalk) {
+                hero_sprite.walk(canvas);
+                isWalk = false;
+            }
+            else
+                hero_sprite.stand(canvas);
             kid_sprite.loopRun(canvas);
+            Paint pt1 = new Paint();
+            pt1.setColor(Color.rgb(255, 0, 0));
+            pt1.setStrokeWidth(10);
+            canvas.drawRect(50, 1300, 230, 1480, pt1);
+            canvas.drawRect(250, 1080, 430, 1260, pt1);
+            canvas.drawRect(250, 1300, 430, 1480, pt1);
+            canvas.drawRect(250, 1500, 430, 1680, pt1);
+            canvas.drawRect(450, 1300, 630, 1480, pt1);
+            canvas.drawBitmap(ball, x - ball.getWidth()/2, y - ball.getHeight()/2, null);
         }
 
         public void load_draw_objects(byte[][] curr_floor){
@@ -479,14 +505,14 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
                             Sprite sp_shop_r = new Sprite(GameView.this, n_shop__r, origin+j*sq_size,origin+i*sq_size, b);
                             all_sprites.add(sp_shop_r);
                             break;
-                        case 28:    // pricess
+                        case 28:    // princess
                             b = 28;
-                            Sprite sp_princess = new Sprite(GameView.this, pic_debug, origin+j*sq_size,origin+i*sq_size, b);
+                            Sprite sp_princess = new Sprite(GameView.this, n_princes, origin+j*sq_size,origin+i*sq_size, b);
                             all_sprites.add(sp_princess);
                             break;
                         case 29:    // lava
                             b = 29;
-                            Sprite sp_lava = new Sprite(GameView.this, pic_debug, origin+j*sq_size,origin+i*sq_size, b);
+                            Sprite sp_lava = new Sprite(GameView.this, n____lava, origin+j*sq_size,origin+i*sq_size, b);
                             all_sprites.add(sp_lava);
                             break;
                         case 31:    // green slime
@@ -810,26 +836,40 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
             case MotionEvent.ACTION_DOWN:
                 x = me.getX();
                 y = me.getY();
-                if (x > 500 && y > 1200){
-                    if (floor_num <50)
+                if (x > 50 && y > 1300 && x < 230 && y < 1480){
+                    hero_sprite.set_direction(LEFT);
+                    isWalk = true;
+                }
+                else if (x > 250 && y > 1080 && x < 430 && y < 1260){
+                    hero_sprite.set_direction(UP);
+                    isWalk = true;
+                }
+                else if (x > 250 && y > 1300 && x < 430 && y < 1480){
+                    if (floor_num > 0)
+                        floor_num--;
+                    refresh_ctr = true;
+                    load_ctr = true;
+                }
+                else if (x > 250 && y > 1500 && x < 430 && y < 1680){
+                    hero_sprite.set_direction(DOWN);
+                    isWalk = true;
+
+                }
+                else if (x > 450 && y > 1300 && x < 630 && y < 1480){
+                    hero_sprite.set_direction(RIGHT);
+                    isWalk = true;
+
+                }
+                else if (x > 630 && y > 1480){
+                    if (floor_num < 50)
                         floor_num++;
                     refresh_ctr = true;
                     load_ctr = true;
                 }
-                else if (x < 500 && y > 1200){
-                    if (floor_num > 0)
-                        floor_num--;
-                    refresh_ctr =true;
-                    load_ctr = true;
-                }
                 break;
             case MotionEvent.ACTION_UP:
-                //x = me.getX();
-                //y = me.getY();
                 break;
             case MotionEvent.ACTION_MOVE:
-                //x = me.getX();
-                //y = me.getY();
                 break;
             default:
                 break;

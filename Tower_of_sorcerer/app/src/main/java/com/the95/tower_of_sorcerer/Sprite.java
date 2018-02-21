@@ -3,6 +3,7 @@ package com.the95.tower_of_sorcerer;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Rect;
+import android.util.Log;
 
 public class Sprite {
 
@@ -16,6 +17,8 @@ public class Sprite {
     private int direction = 2;
     private Rect src, dst;
     private int timer = 0;
+
+    private static final String TAG = "debuuuuuuuuuuuuuuuuuug";
 
     public Sprite(Gamelogic.GameView ourView, Bitmap in_sheet) {
         sprite_sheet = in_sheet;
@@ -37,17 +40,23 @@ public class Sprite {
 
         ov = ourView;
         height = sprite_sheet.getHeight();
-        if (id > 20 && id < 30 && id != 25 && id != 27)
-            width = sprite_sheet.getWidth() / 3;
-        else if (id > 30 && id < 66)
-            width = sprite_sheet.getWidth() / 3;
-        else
+        if (id == 25 || id == 27)
             width = sprite_sheet.getWidth();
-        currentFrame = 0;
+        else if (id > 20 && id < 66)
+            width = sprite_sheet.getWidth() / 3;
+        else {
+            width = sprite_sheet.getWidth();
+        }
+        currentFrame = 1;
         xSpeed = 0;
         ySpeed = 0;
         src = new Rect(0,0,0,0);
         dst = new Rect(0,0,0,0);
+        if (id == 30){
+            height = sprite_sheet.getHeight() / 4;
+            width = sprite_sheet.getWidth() / 3;
+            direction = 3;
+        }
     }
 
     public void display(Canvas canvas){
@@ -126,12 +135,58 @@ public class Sprite {
         canvas.drawBitmap(sprite_sheet, src, dst, null);
     }
 
+
+    public void set_location(int in_x, int in_y) {
+        x = in_x;
+        y = in_y;
+    }
+    public void set_direction(int in_d) {
+        direction = in_d;
+    }
+
+    public void walk(Canvas canvas) {
+
+        for (int i = 0; i < 3; i++) {
+            if (direction == 0) {
+                // going down
+                xSpeed = 0;
+                ySpeed = height / 3;
+            } else if (direction == 1) {
+                // going left
+                xSpeed = -width / 3;
+                ySpeed = 0;
+            } else if (direction == 2) {
+                // going right
+                xSpeed = width / 3;
+                ySpeed = 0;
+            } else {
+                // going up
+                xSpeed = 0;
+                ySpeed = -height / 3;
+            }
+
+            currentFrame = ++currentFrame % 3;
+            x += xSpeed;
+            y += ySpeed;
+
+            int srcX = currentFrame * width;
+            int srcY = direction * height;
+            src.set(srcX, srcY, srcX + width, srcY + height);
+            dst.set(x, y, x + width, y + height);
+            canvas.drawBitmap(sprite_sheet, src, dst, null);
+        }
+    }
+    public void stand(Canvas canvas) {
+        int srcY = direction * height;
+        src.set(width, srcY, 2 * width, srcY + height);
+        dst.set(x, y, x + width, y + height);
+        canvas.drawBitmap(sprite_sheet, src, dst, null);
+    }
+
     public void update(Canvas canvas){
         if (id == 25 || id == 27)
             display(canvas);
-        else if (id > 20 && id < 30)
-            blink(canvas);
-        else if (id > 30 && id < 66)
+        else if (id > 20 && id < 66)
             blink(canvas);
         else
             display(canvas);
