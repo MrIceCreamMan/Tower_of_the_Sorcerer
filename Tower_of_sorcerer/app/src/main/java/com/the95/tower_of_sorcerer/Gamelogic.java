@@ -35,8 +35,8 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
     private Bitmap              t_door_y, t_door_b, t_door_r, t_door_m, t_prison, t___logo;
     private Bitmap              w___ironw, w_silverw, w_knightw, w_divinew, w_sacredw;
     private Bitmap              w___ironh, w_silverh, w_knighth, w_divineh, w_sacredh;
-    private Bitmap              n___thief, n___saint, n_merchat, n___fairy;
-    private Bitmap              n_shop__l, n_shop__m, n_shop__r;
+    private Bitmap              n___thief, n___saint, n_merchat, n___fairy, n_shop__l;
+    private Bitmap              n_shop__m, n_shop__r, n_princes, n____lava;
     private Bitmap              m__slime_g, m__slime_r, m_bat_fier, m___priest, m_skeleton;
     private Bitmap              m_skelet_w, m_gatekeep, m_skelet_c, m__slime_b, m_bat_gian;
     private Bitmap              m_priest_m, m___zombie, m_stone_gd, m_zombie_w, m__vampire;
@@ -337,6 +337,11 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
                 for (int j = 1; j < 12; j++){
                     byte b;
                     switch (curr_floor[i][j]){
+                        case -1:    // fake wall
+                            b = -1;
+                            Sprite sp_fake_wall = new Sprite(GameView.this, t___wall, origin+j*sq_size, origin+i*sq_size, b);
+                            all_sprites.add(sp_fake_wall);
+                            break;
                         case 0:     // wall
                             b = 0;
                             Sprite sp_wall = new Sprite(GameView.this, t___wall, origin+j*sq_size, origin+i*sq_size, b);
@@ -474,10 +479,15 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
                             Sprite sp_shop_r = new Sprite(GameView.this, n_shop__r, origin+j*sq_size,origin+i*sq_size, b);
                             all_sprites.add(sp_shop_r);
                             break;
-                        case 28:    // debug picture
+                        case 28:    // pricess
                             b = 28;
-                            Sprite sp_debug = new Sprite(GameView.this, pic_debug, origin+j*sq_size,origin+i*sq_size, b);
-                            all_sprites.add(sp_debug);
+                            Sprite sp_princess = new Sprite(GameView.this, pic_debug, origin+j*sq_size,origin+i*sq_size, b);
+                            all_sprites.add(sp_princess);
+                            break;
+                        case 29:    // lava
+                            b = 29;
+                            Sprite sp_lava = new Sprite(GameView.this, pic_debug, origin+j*sq_size,origin+i*sq_size, b);
+                            all_sprites.add(sp_lava);
                             break;
                         case 31:    // green slime
                             b = 31;
@@ -528,6 +538,116 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
                             b = 40;
                             Sprite sp_giant_bat = new Sprite(GameView.this, m_bat_gian, origin+j*sq_size,origin+i*sq_size, b);
                             all_sprites.add(sp_giant_bat);
+                            break;
+                        case 41:    // priest_master
+                            b = 41;
+                            Sprite sp_priest_master = new Sprite(GameView.this, m_priest_m, origin+j*sq_size,origin+i*sq_size, b);
+                            all_sprites.add(sp_priest_master);
+                            break;
+                        case 42:    // zombie
+                            b = 42;
+                            Sprite sp_zombie = new Sprite(GameView.this, m___zombie, origin+j*sq_size,origin+i*sq_size, b);
+                            all_sprites.add(sp_zombie);
+                            break;
+                        case 43:    // stone_guardian
+                            b = 43;
+                            Sprite sp_stone_guardian = new Sprite(GameView.this, m_stone_gd, origin+j*sq_size,origin+i*sq_size, b);
+                            all_sprites.add(sp_stone_guardian);
+                            break;
+                        case 44:    // zombie_warrior
+                            b = 44;
+                            Sprite sp_zombie_warrior = new Sprite(GameView.this, m_zombie_w, origin+j*sq_size,origin+i*sq_size, b);
+                            all_sprites.add(sp_zombie_warrior);
+                            break;
+                        case 45:    // vampire
+                            b = 45;
+                            Sprite sp_vampire = new Sprite(GameView.this, m__vampire, origin+j*sq_size,origin+i*sq_size, b);
+                            all_sprites.add(sp_vampire);
+                            break;
+                        case 46:    // slime_man
+                            b = 46;
+                            Sprite sp_slime_man = new Sprite(GameView.this, m__slime_m, origin+j*sq_size,origin+i*sq_size, b);
+                            all_sprites.add(sp_slime_man);
+                            break;
+                        case 47:    // skeleton_elite
+                            b = 47;
+                            Sprite sp_skeleton_elite = new Sprite(GameView.this, m_skelet_e, origin+j*sq_size,origin+i*sq_size, b);
+                            all_sprites.add(sp_skeleton_elite);
+                            break;
+                        case 48:    // knight
+                            b = 48;
+                            Sprite sp_knight = new Sprite(GameView.this, m___knight, origin+j*sq_size,origin+i*sq_size, b);
+                            all_sprites.add(sp_knight);
+                            break;
+                        case 49:    // gatekeeper_elite
+                            b = 49;
+                            Sprite sp_gatekeeper_elite = new Sprite(GameView.this, m_gatekp_e, origin+j*sq_size,origin+i*sq_size, b);
+                            all_sprites.add(sp_gatekeeper_elite);
+                            break;
+                        case 50:    // swordsman
+                            b = 50;
+                            Sprite sp_swordsman = new Sprite(GameView.this, m_swordsmn, origin+j*sq_size,origin+i*sq_size, b);
+                            all_sprites.add(sp_swordsman);
+                            break;
+                        case 51:    // knight_elite
+                            b = 51;
+                            Sprite sp_knight_elite = new Sprite(GameView.this, m_knight_e, origin+j*sq_size,origin+i*sq_size, b);
+                            all_sprites.add(sp_knight_elite);
+                            break;
+                        case 52:    // knight_captain
+                            b = 52;
+                            Sprite sp_knight_captain = new Sprite(GameView.this, m_knight_c, origin+j*sq_size,origin+i*sq_size, b);
+                            all_sprites.add(sp_knight_captain);
+                            break;
+                        case 53:    // slimelord
+                            b = 53;
+                            Sprite sp_slimelord = new Sprite(GameView.this, m_slimelod, origin+j*sq_size,origin+i*sq_size, b);
+                            all_sprites.add(sp_slimelord);
+                            break;
+                        case 54:    // vampire_bat
+                            b = 54;
+                            Sprite sp_vampire_bat = new Sprite(GameView.this, m_bat_vamp, origin+j*sq_size,origin+i*sq_size, b);
+                            all_sprites.add(sp_vampire_bat);
+                            break;
+                        case 55:    // mage
+                            b = 55;
+                            Sprite sp_mage = new Sprite(GameView.this, m_____mage, origin+j*sq_size,origin+i*sq_size, b);
+                            all_sprites.add(sp_mage);
+                            break;
+                        case 56:    // mage master
+                            b = 56;
+                            Sprite sp_mage_master = new Sprite(GameView.this, m_mage_mas, origin+j*sq_size,origin+i*sq_size, b);
+                            all_sprites.add(sp_mage_master);
+                            break;
+                        case 57:    // demo_sergent
+                            b = 57;
+                            Sprite sp_demo_sergent = new Sprite(GameView.this, m_demo_sgt, origin+j*sq_size,origin+i*sq_size, b);
+                            all_sprites.add(sp_demo_sergent);
+                            break;
+                        case 58:    // dark_knight
+                            b = 58;
+                            Sprite sp_dark_knight = new Sprite(GameView.this, m_d_knight, origin+j*sq_size,origin+i*sq_size, b);
+                            all_sprites.add(sp_dark_knight);
+                            break;
+                        case 59:    // gate_guardian
+                            b = 59;
+                            Sprite sp_gate_guardian = new Sprite(GameView.this, m_gate_gdn, origin+j*sq_size,origin+i*sq_size, b);
+                            all_sprites.add(sp_gate_guardian);
+                            break;
+                        case 60:    // fake_zeno
+                            b = 60;
+                            Sprite sp_fake_zeno = new Sprite(GameView.this, m_demozeno, origin+j*sq_size,origin+i*sq_size, b);
+                            all_sprites.add(sp_fake_zeno);
+                            break;
+                        case 64:    // archmage
+                            b = 64;
+                            Sprite sp_archmage = new Sprite(GameView.this, m_archmage, origin+j*sq_size,origin+i*sq_size, b);
+                            all_sprites.add(sp_archmage);
+                            break;
+                        case 65:    // real_zeno
+                            b = 65;
+                            Sprite sp_real_zeno = new Sprite(GameView.this, m_demozeno, origin+j*sq_size,origin+i*sq_size, b);
+                            all_sprites.add(sp_real_zeno);
                             break;
                         case 71:    // yellow_key
                             b = 71;

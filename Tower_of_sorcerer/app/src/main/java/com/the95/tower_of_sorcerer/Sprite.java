@@ -37,7 +37,7 @@ public class Sprite {
 
         ov = ourView;
         height = sprite_sheet.getHeight();
-        if (id > 20 && id < 29 && id != 25 && id != 27)
+        if (id > 20 && id < 30 && id != 25 && id != 27)
             width = sprite_sheet.getWidth() / 3;
         else if (id > 30 && id < 66)
             width = sprite_sheet.getWidth() / 3;
@@ -129,7 +129,7 @@ public class Sprite {
     public void update(Canvas canvas){
         if (id == 25 || id == 27)
             display(canvas);
-        else if (id > 20 && id < 29)
+        else if (id > 20 && id < 30)
             blink(canvas);
         else if (id > 30 && id < 66)
             blink(canvas);
