@@ -143,7 +143,6 @@ public class Sprite {
     public void set_direction(int in_d) {
         direction = in_d;
     }
-
     public void walk(Canvas canvas) {
 
         if (direction == 0) {

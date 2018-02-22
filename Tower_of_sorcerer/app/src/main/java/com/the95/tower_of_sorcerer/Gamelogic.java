@@ -8,11 +8,11 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
+//import android.util.Log;
 
 import java.util.ArrayList;
 
@@ -24,12 +24,16 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
     private Floors              current_game;
     private byte[][]            current_floor;
     private int                 floor_num, sq_size;
-    private boolean             load_ctr, refresh_ctr;
+    private boolean             refresh_ctr, motion_ctr;
     private float               x, y;
     private ArrayList<Sprite>   all_sprites;
+    private int                 isWalk = 0, walk_count = 0;
+    private int                 hero_x, hero_y;
+    private int                 count_y, count_b, count_r;
+    private int                 atk, def, hp;
+
     private Bitmap              ball, kid;
     private Bitmap              pic_debug, hero;
-
     private Sprite              kid_sprite;
     private Sprite              hero_sprite;
 
@@ -53,10 +57,9 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
     private Bitmap              i_dra_bane, i_snow_crs;
 
     public final int            UP = 3, DOWN = 0, RIGHT = 2, LEFT = 1;
-    private static final String TAG = "debuuuuuuuuuuuuuuuuuug";
+    //private static final String TAG = "debuuuuuuuuuuuuuuuuuug";
     //Log.v(TAG, "x = " + me.getX() + " y = " + me.getY());
-    private int                 isWalk;
-    private int                 walk_count = 0;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -65,10 +68,14 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
         gameview.setOnTouchListener(this);
         current_game = new Floors();
         current_floor = current_game.get_one_floor(1);
-        floor_num = 10; sq_size = 32;
-        load_ctr = refresh_ctr = true;
+        floor_num = 1; sq_size = 32;
+        refresh_ctr = true; motion_ctr = true;
         x = y = 0;
         all_sprites = new ArrayList<>();
+        hero_x = 6; hero_y = 11;
+        count_y = 0; count_b = 0; count_r = 0;
+        atk = 100; def = 100; hp = 1000;
+
         ball = BitmapFactory.decodeResource(getResources(), R.drawable.brokeearth);
         pic_debug = BitmapFactory.decodeResource(getResources(), R.drawable.z1_debug);
         kid = BitmapFactory.decodeResource(getResources(), R.drawable.poke);
@@ -160,8 +167,6 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
         i_dra_bane = BitmapFactory.decodeResource(getResources(), R.drawable.i21_dragonsbane);
         i_snow_crs = BitmapFactory.decodeResource(getResources(), R.drawable.i22_snow_crystal);
 
-        isWalk = 0;
-
         //Log.v(TAG, "width = " + sq_wall.getWidth() + " y = " + sq_wall.getHeight());
         setContentView(gameview);
     }
@@ -197,13 +202,36 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
                 if (!holder.getSurface().isValid()) {
                     continue;
                 }
-                //Log.v(TAG, "hello there");
                 Canvas canvas = holder.lockCanvas();
                 sq_size = canvas.getWidth() / 12;
                 holder.unlockCanvasAndPost(canvas);
                 break;
             }
+            resize_bitmaps();
 
+            int xx = hero_x * sq_size - sq_size / 2;
+            int yy = hero_y * sq_size - sq_size / 2;
+            hero_sprite = new Sprite(GameView.this, hero, xx, yy, (byte)30);
+            kid_sprite = new Sprite(GameView.this, kid);
+
+            while (isItOK) {
+                if (!holder.getSurface().isValid()) {
+                    continue;
+                }
+                if (refresh_ctr) {
+                    current_floor = current_game.get_one_floor(floor_num);
+                    load_draw_objects(current_floor);
+                    refresh_ctr = false;
+                }
+                //Log.v(TAG, "who are you?");
+                Canvas c = holder.lockCanvas();
+                this.gameviewDraw(c);
+                holder.unlockCanvasAndPost(c);
+            }
+
+        }
+
+        private void resize_bitmaps(){
             t__floor = createScaledBitmap(t__floor, sq_size, sq_size, false);
             t___wall = createScaledBitmap(t___wall, sq_size, sq_size, false);
             t___star = createScaledBitmap(t___star, sq_size, sq_size, false);
@@ -292,102 +320,30 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
 
             pic_debug = createScaledBitmap(pic_debug, sq_size * 3, sq_size, false);
             hero = createScaledBitmap(hero, sq_size * 3, sq_size * 4, false);
-            hero_sprite = new Sprite(GameView.this, hero, 495, 945, (byte)30);
-            kid_sprite = new Sprite(GameView.this, kid);
-
-            while (isItOK) {
-                if (!holder.getSurface().isValid()) {
-                    continue;
-                }
-                if (refresh_ctr) {
-                    if (load_ctr) {
-                        current_floor = current_game.get_one_floor(floor_num);
-                        load_draw_objects(current_floor);
-                        load_ctr = false;
-                    } else
-                        load_draw_objects(current_floor);
-                    refresh_ctr = false;
-                }
-                //Log.v(TAG, "who are you?");
-                Canvas c = holder.lockCanvas();
-                this.gameviewDraw(c);
-                holder.unlockCanvasAndPost(c);
-            }
-
         }
 
-        protected void gameviewDraw(Canvas canvas) {
-            canvas.drawARGB(255, 255, 128, 128);
-            int origin = 0 - sq_size/2;
-            for (int a = 1; a < 12; a++){  // -------------------- Draw Floor ----------------------
-                for (int b = 1; b < 12; b++){
-                    canvas.drawBitmap(t__floor, origin + sq_size * a, origin + sq_size * b, null);
-                }
-            }
-            for (int i = 0; i < 13; i++) {  // ------------------- Draw Wall -----------------------
-                canvas.drawBitmap(t___wall, origin + i * sq_size, origin, null);
-                canvas.drawBitmap(t___wall, origin + i * sq_size, origin + 12 * sq_size, null);
-                canvas.drawBitmap(t___wall, origin, origin + i * sq_size, null);
-                canvas.drawBitmap(t___wall, origin + 12 * sq_size, origin + i * sq_size, null);
-            }
-            for (int idx = 0; idx < all_sprites.size(); idx++){
-                all_sprites.get(idx).update(canvas);
-            }
-            Paint textpaint = new Paint();
-            textpaint.setColor(Color.BLACK);
-            textpaint.setTextSize(160);
-            //canvas.drawPaint(textpaint);
-            String my_text = String.valueOf(floor_num) + " F";
-            canvas.drawText(my_text, 700, 1400, textpaint);
-            if (isWalk == 1){
-                if (walk_count < 3) {
-                    hero_sprite.walk(canvas);
-                    walk_count++;
-                }
-                else {
-                    walk_count = 0;
-                    hero_sprite.stand(canvas);
-                    isWalk = 0;
-                }
-            }
-            else if (isWalk == 2){
-                if (walk_count < 3) {
-                    hero_sprite.walk(canvas);
-                    walk_count++;
-                }
-                else {
-                    walk_count = 0;
-                    hero_sprite.stand(canvas);
-                    isWalk = 0;
-                    plot(floor_num);
-                }
-            }
-            else
-                hero_sprite.stand(canvas);
-            kid_sprite.loopRun(canvas);
-            Paint pt1 = new Paint();
-            pt1.setColor(Color.rgb(255, 0, 0));
-            pt1.setStrokeWidth(10);
-            canvas.drawRect(50, 1300, 230, 1480, pt1);
-            canvas.drawRect(250, 1080, 430, 1260, pt1);
-            canvas.drawRect(250, 1300, 430, 1480, pt1);
-            canvas.drawRect(450, 1300, 630, 1480, pt1);
-            canvas.drawRect(200, 1500, 330, 1680, pt1);
-            canvas.drawRect(350, 1500, 480, 1680, pt1);
-            canvas.drawBitmap(ball, x - ball.getWidth()/2, y - ball.getHeight()/2, null);
-        }
-
-        public void plot(int f_num) {
-            return;
-        }
-
-        public void load_draw_objects(byte[][] curr_floor){
+        private void load_draw_objects(byte[][] curr_floor){
             all_sprites.clear();
             int origin = 0 - sq_size/2;
             for (int i = 1; i < 12; i++){
                 for (int j = 1; j < 12; j++){
                     byte b;
                     switch (curr_floor[i][j]){
+                        case -4:    // event floor
+                            b = -4;
+                            Sprite sp_event_floor = new Sprite(GameView.this, t__floor, origin+j*sq_size, origin+i*sq_size, b);
+                            all_sprites.add(sp_event_floor);
+                            break;
+                        case -3:    // event wall
+                            b = -3;
+                            Sprite sp_event_wall = new Sprite(GameView.this, t___wall, origin+j*sq_size, origin+i*sq_size, b);
+                            all_sprites.add(sp_event_wall);
+                            break;
+                        case -2:    // fake floor
+                            b = -2;
+                            Sprite sp_fake_floor = new Sprite(GameView.this, t__floor, origin+j*sq_size, origin+i*sq_size, b);
+                            all_sprites.add(sp_fake_floor);
+                            break;
                         case -1:    // fake wall
                             b = -1;
                             Sprite sp_fake_wall = new Sprite(GameView.this, t___wall, origin+j*sq_size, origin+i*sq_size, b);
@@ -399,6 +355,9 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
                             all_sprites.add(sp_wall);
                             break;
                         case 1:     // floor
+                            b = 1;
+                            Sprite sp_floor = new Sprite(GameView.this, t__floor, origin+j*sq_size, origin+i*sq_size, b);
+                            all_sprites.add(sp_floor);
                             break;
                         case 2:     // star
                             b = 2;
@@ -820,6 +779,81 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
             }
         }
 
+        protected void gameviewDraw(Canvas canvas) {
+            canvas.drawARGB(255, 255, 128, 128);
+            int origin = 0 - sq_size/2;
+            // -------------------- Draw Floor ----------------------
+            for (int a = 1; a < 12; a++){
+                for (int b = 1; b < 19; b++){
+                    canvas.drawBitmap(t__floor, origin + sq_size * a, origin + sq_size * b, null);
+                }
+            }
+            // ------------------- Draw Wall -----------------------
+            for (int i = 0; i < 13; i++) {
+                canvas.drawBitmap(t___wall, origin + i * sq_size, origin, null);
+                canvas.drawBitmap(t___wall, origin + i * sq_size, origin + 12 * sq_size, null);
+                canvas.drawBitmap(t___wall, origin, origin + i * sq_size, null);
+                canvas.drawBitmap(t___wall, origin + 12 * sq_size, origin + i * sq_size, null);
+            }
+            // ------------------- Update sprites -----------------------
+            for (int idx = 0; idx < all_sprites.size(); idx++){
+                all_sprites.get(idx).update(canvas);
+            }
+            // ------------------- Draw Hero -----------------------
+            if (isWalk == 1){
+                if (walk_count < 3) {
+                    motion_ctr = false;
+                    hero_sprite.walk(canvas);
+                    walk_count++;
+                }
+                else {
+                    walk_count = 0;
+                    hero_sprite.stand(canvas);
+                    isWalk = 0;
+                    motion_ctr = true;
+                }
+            }
+            else {
+                hero_sprite.set_location(hero_x*sq_size-sq_size/2, hero_y*sq_size-sq_size/2);
+                hero_sprite.stand(canvas);
+            }
+            // ------------------- Draw Text -----------------------
+            Paint textpaint = new Paint();
+            textpaint.setColor(Color.BLACK);
+            textpaint.setTextSize(sq_size);
+            String my_text = String.valueOf(floor_num) + " F";
+            canvas.drawText(my_text, 7*sq_size, 13*sq_size, textpaint);
+            my_text = "Key_y " + String.valueOf(count_y);
+            canvas.drawText(my_text, 7*sq_size, 14*sq_size, textpaint);
+            my_text = "Key_b " + String.valueOf(count_b);
+            canvas.drawText(my_text, 7*sq_size, 15*sq_size, textpaint);
+            my_text = "Key_r " + String.valueOf(count_r);
+            canvas.drawText(my_text, 7*sq_size, 16*sq_size, textpaint);
+            my_text = "ATK " + String.valueOf(atk);
+            canvas.drawText(my_text, 7*sq_size, 17*sq_size, textpaint);
+            my_text = "DEF " + String.valueOf(def);
+            canvas.drawText(my_text, 7*sq_size, 18*sq_size, textpaint);
+            my_text = "HP  " + String.valueOf(hp);
+            canvas.drawText(my_text, 7*sq_size, 19*sq_size, textpaint);
+            // ------------------- Draw Buttons -----------------------
+            Paint pt1 = new Paint();
+            pt1.setColor(Color.rgb(255, 0, 0));
+            pt1.setStrokeWidth(10);
+            canvas.drawRect(0, sq_size*15, sq_size*2, sq_size*17, pt1);
+            canvas.drawRect(sq_size*2, sq_size*13, sq_size*4, sq_size*15, pt1);
+            pt1.setColor(Color.rgb(0, 255, 0));
+            canvas.drawRect(sq_size*2, sq_size*15, sq_size*4, sq_size*17, pt1);
+            pt1.setColor(Color.rgb(255, 0, 0));
+            canvas.drawRect(sq_size*4, sq_size*15, sq_size*6, sq_size*17, pt1);
+            pt1.setColor(Color.rgb(255, 0, 255));
+            canvas.drawRect(sq_size/2, sq_size*17, sq_size*3, sq_size*19, pt1);
+            pt1.setColor(Color.rgb(0, 0, 255));
+            canvas.drawRect(sq_size*3, sq_size*17, sq_size*6-sq_size/2, sq_size*19, pt1);
+            // ------------------- Debug purpose -----------------------
+            kid_sprite.loopRun(canvas);
+            canvas.drawBitmap(ball, x - ball.getWidth()/2, y - ball.getHeight()/2, null);
+        }
+
         public void pause() {
             isItOK = false;
             while (true) {
@@ -848,6 +882,7 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
         }
     }
 
+    @Override
     public boolean onTouch(View v, MotionEvent me) {
 
         //v.performClick();
@@ -861,35 +896,47 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
             case MotionEvent.ACTION_DOWN:
                 x = me.getX();
                 y = me.getY();
-                if (x > 50 && y > 1300 && x < 230 && y < 1480){
+                if (x > 0 && y > sq_size*15 && x < sq_size*2 && y < sq_size*17 && motion_ctr){
                     hero_sprite.set_direction(LEFT);
                     isWalk = move(LEFT);
+                    if (isWalk !=0)
+                        hero_x--;
+                    if (isWalk ==  2)
+                        story(floor_num);
                 }
-                else if (x > 250 && y > 1080 && x < 430 && y < 1260){
+                else if (x > sq_size*2 && y > sq_size*13 && x < sq_size*4 && y < sq_size*15 && motion_ctr){
                     hero_sprite.set_direction(UP);
                     isWalk = move(UP);
+                    if (isWalk !=0)
+                        hero_y--;
+                    if (isWalk ==  2)
+                        story(floor_num);
                 }
-                else if (x > 250 && y > 1300 && x < 430 && y < 1480){
+                else if (x > sq_size*2 && y > sq_size*15 && x < sq_size*4 && y < sq_size*17 && motion_ctr){
                     hero_sprite.set_direction(DOWN);
                     isWalk = move(DOWN);
+                    if (isWalk !=0)
+                        hero_y++;
+                    if (isWalk ==  2)
+                        story(floor_num);
                 }
-                else if (x > 450 && y > 1300 && x < 630 && y < 1480){
+                else if (x > sq_size*4 && y > sq_size*15 && x < sq_size*6 && y < sq_size*17 && motion_ctr){
                     hero_sprite.set_direction(RIGHT);
                     isWalk = move(RIGHT);
-
+                    if (isWalk !=0)
+                        hero_x++;
+                    if (isWalk ==  2)
+                        story(floor_num);
                 }
-                else if (x > 200 && y > 1500 && x < 330 && y < 1680){
+                else if (x > sq_size/2 && y > sq_size*17 && x < sq_size*3 && y < sq_size*19 && motion_ctr){
                     if (floor_num > 0)
                         floor_num--;
                     refresh_ctr = true;
-                    load_ctr = true;
-
                 }
-                else if (x > 350 && y > 1500 && x < 480 && y < 1680){
+                else if (x > sq_size*3 && y > sq_size*17 && x <  sq_size*6-sq_size/2 && y < sq_size*19 && motion_ctr){
                     if (floor_num < 50)
                         floor_num++;
                     refresh_ctr = true;
-                    load_ctr = true;
                 }
                 break;
             case MotionEvent.ACTION_UP:
@@ -903,8 +950,137 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
 
     }
 
-    public int move(int diretion) {
-        return 1;
+    public int move(int direction) {
+        int i, j;
+        switch (direction) {
+            case UP:
+                i = hero_y - 1; j = hero_x;
+                break;
+            case DOWN:
+                i = hero_y + 1; j = hero_x;
+                break;
+            case LEFT:
+                i = hero_y; j = hero_x - 1;
+                break;
+            case RIGHT:
+                i = hero_y; j = hero_x + 1;
+                break;
+            default:
+                return 0;
+        }
+        switch (current_floor[i][j]) {
+            case -2:        // fake floor
+                current_floor[i][j] = 0;
+                refresh_ctr = true;
+                return 0;
+            case -1:        // fake wall
+                current_floor[i][j] = 1;
+                refresh_ctr = true;
+                return 1;
+            case 0:         // wall
+                return 0;
+            case 1:         // floor
+                return 1;
+            case 3:         // upstairs
+                current_game.put_one_floor(floor_num, current_floor);
+                floor_num++;
+                int pairup[] = find_hero_next_floor(i,j,floor_num);
+                hero_y = pairup[0];
+                hero_x = pairup[1];
+                refresh_ctr = true;
+                return 0;
+            case 4:         // downstairs
+                current_game.put_one_floor(floor_num, current_floor);
+                floor_num--;
+                int pairdown[] = find_hero_next_floor(i,j,floor_num);
+                hero_y = pairdown[0];
+                hero_x = pairdown[1];
+                refresh_ctr = true;
+                return 0;
+            case 5:         // yellow door
+                if (count_y > 0) {
+                    count_y--;
+                    current_floor[i][j] = 1;
+                    refresh_ctr = true;
+                    return 1;
+                } else
+                    return 0;
+            case 6:         // blue door
+                if (count_b > 0) {
+                    count_b--;
+                    current_floor[i][j] = 1;
+                    refresh_ctr = true;
+                    return 1;
+                } else
+                    return 0;
+            case 7:         // red door
+                if (count_r > 0) {
+                    count_r--;
+                    current_floor[i][j] = 1;
+                    refresh_ctr = true;
+                    return 1;
+                } else
+                    return 0;
+            case 71:        // yellow key
+                current_floor[i][j] = 1;
+                count_y++;
+                refresh_ctr = true;
+                return 1;
+            case 72:        // blue key
+                current_floor[i][j] = 1;
+                count_b++;
+                refresh_ctr = true;
+                return 1;
+            case 73:        // red key
+                current_floor[i][j] = 1;
+                count_r++;
+                refresh_ctr = true;
+                return 1;
+            case 74:        // red potion
+                current_floor[i][j] = 1;
+                hp += 50 * (floor_num/10 + 1);
+                refresh_ctr = true;
+                return 1;
+            case 75:        // blue potion
+                current_floor[i][j] = 1;
+                hp += 200 * (floor_num/10 + 1);
+                refresh_ctr = true;
+                return 1;
+            case 76:        //
+                current_floor[i][j] = 1;
+                atk += (floor_num/10 + 1);
+                refresh_ctr = true;
+                return 1;
+            case 77:        //
+                current_floor[i][j] = 1;
+                def += (floor_num/10 + 1);
+                refresh_ctr = true;
+                return 1;
+            default:
+                return 1;
+        }
+    }
+    private int[] find_hero_next_floor(int i, int j, int in_floor_num) {
+        byte[][] floor = current_game.get_one_floor(in_floor_num);
+        if (floor[hero_y][hero_x] == 1){
+            int[] res = {hero_y,hero_x};
+            return res;
+        }
+        for (int a = i-1; a < i+2; a++) {
+            for (int b = j-1; b<j+2; b++){
+                if (floor[a][b] == 1){
+                    int[] res = {a,b};
+                    return res;
+                }
+            }
+        }
+        int[] res = {12,1};
+        return res;
+    }
+
+
+    public void story(int floor_num){
+        return;
     }
 
 }
