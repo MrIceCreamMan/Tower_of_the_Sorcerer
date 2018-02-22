@@ -146,35 +146,33 @@ public class Sprite {
 
     public void walk(Canvas canvas) {
 
-        for (int i = 0; i < 3; i++) {
-            if (direction == 0) {
-                // going down
-                xSpeed = 0;
-                ySpeed = height / 3;
-            } else if (direction == 1) {
-                // going left
-                xSpeed = -width / 3;
-                ySpeed = 0;
-            } else if (direction == 2) {
-                // going right
-                xSpeed = width / 3;
-                ySpeed = 0;
-            } else {
-                // going up
-                xSpeed = 0;
-                ySpeed = -height / 3;
-            }
-
-            currentFrame = ++currentFrame % 3;
-            x += xSpeed;
-            y += ySpeed;
-
-            int srcX = currentFrame * width;
-            int srcY = direction * height;
-            src.set(srcX, srcY, srcX + width, srcY + height);
-            dst.set(x, y, x + width, y + height);
-            canvas.drawBitmap(sprite_sheet, src, dst, null);
+        if (direction == 0) {
+            // going down
+            xSpeed = 0;
+            ySpeed = height / 3;
+        } else if (direction == 1) {
+            // going left
+            xSpeed = -width / 3;
+            ySpeed = 0;
+        } else if (direction == 2) {
+            // going right
+            xSpeed = width / 3;
+            ySpeed = 0;
+        } else {
+            // going up
+            xSpeed = 0;
+            ySpeed = -height / 3;
         }
+
+        currentFrame = ++currentFrame % 3;
+        x += xSpeed;
+        y += ySpeed;
+
+        int srcX = currentFrame * width;
+        int srcY = direction * height;
+        src.set(srcX, srcY, srcX + width, srcY + height);
+        dst.set(x, y, x + width, y + height);
+        canvas.drawBitmap(sprite_sheet, src, dst, null);
     }
     public void stand(Canvas canvas) {
         int srcY = direction * height;

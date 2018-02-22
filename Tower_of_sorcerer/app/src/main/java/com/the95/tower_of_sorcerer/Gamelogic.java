@@ -55,7 +55,8 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
     public final int            UP = 3, DOWN = 0, RIGHT = 2, LEFT = 1;
     private static final String TAG = "debuuuuuuuuuuuuuuuuuug";
     //Log.v(TAG, "x = " + me.getX() + " y = " + me.getY());
-    private boolean             isWalk;
+    private int                 isWalk;
+    private int                 walk_count = 0;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -159,7 +160,7 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
         i_dra_bane = BitmapFactory.decodeResource(getResources(), R.drawable.i21_dragonsbane);
         i_snow_crs = BitmapFactory.decodeResource(getResources(), R.drawable.i22_snow_crystal);
 
-        isWalk = false;
+        isWalk = 0;
 
         //Log.v(TAG, "width = " + sq_wall.getWidth() + " y = " + sq_wall.getHeight());
         setContentView(gameview);
@@ -338,9 +339,28 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
             //canvas.drawPaint(textpaint);
             String my_text = String.valueOf(floor_num) + " F";
             canvas.drawText(my_text, 700, 1400, textpaint);
-            if (isWalk) {
-                hero_sprite.walk(canvas);
-                isWalk = false;
+            if (isWalk == 1){
+                if (walk_count < 3) {
+                    hero_sprite.walk(canvas);
+                    walk_count++;
+                }
+                else {
+                    walk_count = 0;
+                    hero_sprite.stand(canvas);
+                    isWalk = 0;
+                }
+            }
+            else if (isWalk == 2){
+                if (walk_count < 3) {
+                    hero_sprite.walk(canvas);
+                    walk_count++;
+                }
+                else {
+                    walk_count = 0;
+                    hero_sprite.stand(canvas);
+                    isWalk = 0;
+                    plot(floor_num);
+                }
             }
             else
                 hero_sprite.stand(canvas);
@@ -351,9 +371,14 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
             canvas.drawRect(50, 1300, 230, 1480, pt1);
             canvas.drawRect(250, 1080, 430, 1260, pt1);
             canvas.drawRect(250, 1300, 430, 1480, pt1);
-            canvas.drawRect(250, 1500, 430, 1680, pt1);
             canvas.drawRect(450, 1300, 630, 1480, pt1);
+            canvas.drawRect(200, 1500, 330, 1680, pt1);
+            canvas.drawRect(350, 1500, 480, 1680, pt1);
             canvas.drawBitmap(ball, x - ball.getWidth()/2, y - ball.getHeight()/2, null);
+        }
+
+        public void plot(int f_num) {
+            return;
         }
 
         public void load_draw_objects(byte[][] curr_floor){
@@ -838,29 +863,29 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
                 y = me.getY();
                 if (x > 50 && y > 1300 && x < 230 && y < 1480){
                     hero_sprite.set_direction(LEFT);
-                    isWalk = true;
+                    isWalk = move(LEFT);
                 }
                 else if (x > 250 && y > 1080 && x < 430 && y < 1260){
                     hero_sprite.set_direction(UP);
-                    isWalk = true;
+                    isWalk = move(UP);
                 }
                 else if (x > 250 && y > 1300 && x < 430 && y < 1480){
+                    hero_sprite.set_direction(DOWN);
+                    isWalk = move(DOWN);
+                }
+                else if (x > 450 && y > 1300 && x < 630 && y < 1480){
+                    hero_sprite.set_direction(RIGHT);
+                    isWalk = move(RIGHT);
+
+                }
+                else if (x > 200 && y > 1500 && x < 330 && y < 1680){
                     if (floor_num > 0)
                         floor_num--;
                     refresh_ctr = true;
                     load_ctr = true;
-                }
-                else if (x > 250 && y > 1500 && x < 430 && y < 1680){
-                    hero_sprite.set_direction(DOWN);
-                    isWalk = true;
 
                 }
-                else if (x > 450 && y > 1300 && x < 630 && y < 1480){
-                    hero_sprite.set_direction(RIGHT);
-                    isWalk = true;
-
-                }
-                else if (x > 630 && y > 1480){
+                else if (x > 350 && y > 1500 && x < 480 && y < 1680){
                     if (floor_num < 50)
                         floor_num++;
                     refresh_ctr = true;
@@ -869,13 +894,17 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
                 break;
             case MotionEvent.ACTION_UP:
                 break;
-            case MotionEvent.ACTION_MOVE:
+            case MotionEvent.ACTION_CANCEL:
                 break;
             default:
                 break;
         }
         return true;
 
+    }
+
+    public int move(int diretion) {
+        return 1;
     }
 
 }
