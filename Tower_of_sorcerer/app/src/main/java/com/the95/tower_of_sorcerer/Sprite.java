@@ -119,7 +119,7 @@ public class Sprite {
         }
 
         try {
-            Thread.sleep(50);
+            Thread.sleep(25);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }

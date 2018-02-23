@@ -31,6 +31,11 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
     private int                 hero_x, hero_y;
     private int                 count_y, count_b, count_r;
     private int                 atk, def, hp;
+    private boolean             dont_update_hero_now = false;
+    private boolean             stf_wsdm, stf_echo, stf_space, cross, elixir;
+    private boolean             m_mattock, wing_cent, e_mattock, bomb, wing_up;
+    private boolean             key_enhac, wing_down, lucky_gold, dragonsbane, snow_cryst;
+
 
     private Bitmap              ball, kid;
     private Bitmap              pic_debug, hero;
@@ -56,7 +61,10 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
     private Bitmap              i_____bomb, i__wing_up, i_key_ehac, i_wing_dow, i_lucky_gd;
     private Bitmap              i_dra_bane, i_snow_crs;
 
-    public final int            UP = 3, DOWN = 0, RIGHT = 2, LEFT = 1;
+    public final int            UP = 3, DOWN = 0, RIGHT = 2, LEFT = 1, FLY_UP = 4, FLY_DOWN = 5;
+    private Paint               pt1;
+    private boolean             button_click = false;
+    private int                 which_button = 6;
     //private static final String TAG = "debuuuuuuuuuuuuuuuuuug";
     //Log.v(TAG, "x = " + me.getX() + " y = " + me.getY());
 
@@ -75,6 +83,10 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
         hero_x = 6; hero_y = 11;
         count_y = 0; count_b = 0; count_r = 0;
         atk = 100; def = 100; hp = 1000;
+        stf_wsdm = stf_echo = stf_space = cross = elixir = false;
+        m_mattock = wing_cent = e_mattock = bomb = wing_up = false;
+        key_enhac = wing_down = lucky_gold = dragonsbane = snow_cryst = false;
+        pt1 = new Paint(); pt1.setColor(Color.rgb(0, 255, 255)); pt1.setStrokeWidth(10);
 
         ball = BitmapFactory.decodeResource(getResources(), R.drawable.brokeearth);
         pic_debug = BitmapFactory.decodeResource(getResources(), R.drawable.z1_debug);
@@ -218,14 +230,16 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
                 if (!holder.getSurface().isValid()) {
                     continue;
                 }
+                if (button_click)
+                    button_logic(which_button);
                 if (refresh_ctr) {
                     current_floor = current_game.get_one_floor(floor_num);
-                    load_draw_objects(current_floor);
+                    load_objects(current_floor);
                     refresh_ctr = false;
                 }
                 //Log.v(TAG, "who are you?");
                 Canvas c = holder.lockCanvas();
-                this.gameviewDraw(c);
+                this.draw_game(c);
                 holder.unlockCanvasAndPost(c);
             }
 
@@ -322,7 +336,7 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
             hero = createScaledBitmap(hero, sq_size * 3, sq_size * 4, false);
         }
 
-        private void load_draw_objects(byte[][] curr_floor){
+        private void load_objects(byte[][] curr_floor){
             all_sprites.clear();
             int origin = 0 - sq_size/2;
             for (int i = 1; i < 12; i++){
@@ -779,7 +793,7 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
             }
         }
 
-        protected void gameviewDraw(Canvas canvas) {
+        protected void draw_game(Canvas canvas) {
             canvas.drawARGB(255, 255, 128, 128);
             int origin = 0 - sq_size/2;
             // -------------------- Draw Floor ----------------------
@@ -797,21 +811,25 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
             }
             // ------------------- Update sprites -----------------------
             for (int idx = 0; idx < all_sprites.size(); idx++){
+                dont_update_hero_now = false;
                 all_sprites.get(idx).update(canvas);
             }
             // ------------------- Draw Hero -----------------------
             if (isWalk == 1){
-                if (walk_count < 3) {
+                if (walk_count < 2) {
                     motion_ctr = false;
                     hero_sprite.walk(canvas);
                     walk_count++;
                 }
                 else {
                     walk_count = 0;
-                    hero_sprite.stand(canvas);
+                    hero_sprite.walk(canvas);
                     isWalk = 0;
                     motion_ctr = true;
                 }
+            }
+            else if (dont_update_hero_now){
+                dont_update_hero_now = false;
             }
             else {
                 hero_sprite.set_location(hero_x*sq_size-sq_size/2, hero_y*sq_size-sq_size/2);
@@ -836,22 +854,85 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
             my_text = "HP  " + String.valueOf(hp);
             canvas.drawText(my_text, 7*sq_size, 19*sq_size, textpaint);
             // ------------------- Draw Buttons -----------------------
-            Paint pt1 = new Paint();
-            pt1.setColor(Color.rgb(255, 0, 0));
-            pt1.setStrokeWidth(10);
-            canvas.drawRect(0, sq_size*15, sq_size*2, sq_size*17, pt1);
-            canvas.drawRect(sq_size*2, sq_size*13, sq_size*4, sq_size*15, pt1);
-            pt1.setColor(Color.rgb(0, 255, 0));
-            canvas.drawRect(sq_size*2, sq_size*15, sq_size*4, sq_size*17, pt1);
-            pt1.setColor(Color.rgb(255, 0, 0));
-            canvas.drawRect(sq_size*4, sq_size*15, sq_size*6, sq_size*17, pt1);
-            pt1.setColor(Color.rgb(255, 0, 255));
-            canvas.drawRect(sq_size/2, sq_size*17, sq_size*3, sq_size*19, pt1);
-            pt1.setColor(Color.rgb(0, 0, 255));
+            Paint pt2 = new Paint();
+            pt2.setStrokeWidth(10);
+            pt2.setColor(Color.rgb(255, 0, 0));
+            canvas.drawRect(0, sq_size*15, sq_size*2, sq_size*17, pt2);
+            canvas.drawRect(sq_size*2, sq_size*13, sq_size*4, sq_size*15, pt2);
+            pt2.setColor(Color.rgb(0, 255, 0));
+            canvas.drawRect(sq_size*2, sq_size*15, sq_size*4, sq_size*17, pt2);
+            pt2.setColor(Color.rgb(255, 0, 0));
+            canvas.drawRect(sq_size*4, sq_size*15, sq_size*6, sq_size*17, pt2);
+            pt2.setColor(Color.rgb(255, 0, 255));
+            canvas.drawRect(sq_size/2, sq_size*17, sq_size*3, sq_size*19, pt2);
             canvas.drawRect(sq_size*3, sq_size*17, sq_size*6-sq_size/2, sq_size*19, pt1);
             // ------------------- Debug purpose -----------------------
             kid_sprite.loopRun(canvas);
             canvas.drawBitmap(ball, x - ball.getWidth()/2, y - ball.getHeight()/2, null);
+        }
+
+        private void button_logic(int inButton) {
+            if (!motion_ctr)
+                return;
+            switch (inButton) {
+                case UP:
+                    hero_sprite.set_direction(UP);
+                    isWalk = move(UP);
+                    if (isWalk != 0)
+                        hero_y--;
+                    if (isWalk == 2)
+                        story(floor_num);
+                    break;
+                case DOWN:
+                    hero_sprite.set_direction(DOWN);
+                    isWalk = move(DOWN);
+                    if (isWalk != 0)
+                        hero_y++;
+                    if (isWalk == 2)
+                        story(floor_num);
+                    break;
+                case LEFT:
+                    hero_sprite.set_direction(LEFT);
+                    isWalk = move(LEFT);
+                    if (isWalk != 0)
+                        hero_x--;
+                    if (isWalk == 2)
+                        story(floor_num);
+                    break;
+                case RIGHT:
+                    hero_sprite.set_direction(RIGHT);
+                    isWalk = move(RIGHT);
+                    if (isWalk != 0)
+                        hero_x++;
+                    if (isWalk == 2)
+                        story(floor_num);
+                    break;
+                case FLY_UP:
+                    if (floor_num < 50) {
+                        current_game.put_one_floor(floor_num, current_floor);
+                        floor_num++;
+                        int pairup[] = find_hero_next_floor(true, floor_num);
+                        refresh_ctr = true;
+                        dont_update_hero_now = true;
+                        hero_y = pairup[0];
+                        hero_x = pairup[1];
+                    }
+                    break;
+                case FLY_DOWN:
+                    if (floor_num > 0) {
+                        current_game.put_one_floor(floor_num, current_floor);
+                        floor_num--;
+                        int pairup[] = find_hero_next_floor(false, floor_num);
+                        refresh_ctr = true;
+                        dont_update_hero_now = true;
+                        hero_y = pairup[0];
+                        hero_x = pairup[1];
+                    }
+                    break;
+                default:
+                    break;
+
+            }
         }
 
         public void pause() {
@@ -887,69 +968,38 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
 
         //v.performClick();
         try {
-            Thread.sleep(50);
+            Thread.sleep(100);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-
-        switch(me.getAction()) {
+        switch (me.getAction()) {
             case MotionEvent.ACTION_DOWN:
+                button_click = true;
+                pt1.setColor(Color.rgb(255, 0, 0));
                 x = me.getX();
                 y = me.getY();
-                if (x > 0 && y > sq_size*15 && x < sq_size*2 && y < sq_size*17 && motion_ctr){
-                    hero_sprite.set_direction(LEFT);
-                    isWalk = move(LEFT);
-                    if (isWalk !=0)
-                        hero_x--;
-                    if (isWalk ==  2)
-                        story(floor_num);
+                if (x > 0 && y > sq_size * 15 && x < sq_size * 2 && y < sq_size * 17) {
+                    which_button = LEFT;
+                } else if (x > sq_size * 2 && y > sq_size * 13 && x < sq_size * 4 && y < sq_size * 15) {
+                    which_button = UP;
+                } else if (x > sq_size * 2 && y > sq_size * 15 && x < sq_size * 4 && y < sq_size * 17) {
+                    which_button = DOWN;
+                } else if (x > sq_size * 4 && y > sq_size * 15 && x < sq_size * 6 && y < sq_size * 17) {
+                    which_button = RIGHT;
+                } else if (x > sq_size / 2 && y > sq_size * 17 && x < sq_size * 3 && y < sq_size * 19) {
+                    which_button = FLY_DOWN;
+                } else if (x > sq_size * 3 && y > sq_size * 17 && x < sq_size * 6 - sq_size / 2 && y < sq_size * 19) {
+                    which_button = FLY_UP;
                 }
-                else if (x > sq_size*2 && y > sq_size*13 && x < sq_size*4 && y < sq_size*15 && motion_ctr){
-                    hero_sprite.set_direction(UP);
-                    isWalk = move(UP);
-                    if (isWalk !=0)
-                        hero_y--;
-                    if (isWalk ==  2)
-                        story(floor_num);
-                }
-                else if (x > sq_size*2 && y > sq_size*15 && x < sq_size*4 && y < sq_size*17 && motion_ctr){
-                    hero_sprite.set_direction(DOWN);
-                    isWalk = move(DOWN);
-                    if (isWalk !=0)
-                        hero_y++;
-                    if (isWalk ==  2)
-                        story(floor_num);
-                }
-                else if (x > sq_size*4 && y > sq_size*15 && x < sq_size*6 && y < sq_size*17 && motion_ctr){
-                    hero_sprite.set_direction(RIGHT);
-                    isWalk = move(RIGHT);
-                    if (isWalk !=0)
-                        hero_x++;
-                    if (isWalk ==  2)
-                        story(floor_num);
-                }
-                else if (x > sq_size/2 && y > sq_size*17 && x < sq_size*3 && y < sq_size*19 && motion_ctr){
-                    if (floor_num > 0)
-                        floor_num--;
-                    refresh_ctr = true;
-                }
-                else if (x > sq_size*3 && y > sq_size*17 && x <  sq_size*6-sq_size/2 && y < sq_size*19 && motion_ctr){
-                    if (floor_num < 50)
-                        floor_num++;
-                    refresh_ctr = true;
-                }
-                break;
+                return true;
             case MotionEvent.ACTION_UP:
-                break;
-            case MotionEvent.ACTION_CANCEL:
-                break;
+                button_click = false;
+                pt1.setColor(Color.rgb(0, 255, 255));
+                return true;
             default:
-                break;
+                return true;
         }
-        return true;
-
     }
-
     public int move(int direction) {
         int i, j;
         switch (direction) {
@@ -984,7 +1034,7 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
             case 3:         // upstairs
                 current_game.put_one_floor(floor_num, current_floor);
                 floor_num++;
-                int pairup[] = find_hero_next_floor(i,j,floor_num);
+                int pairup[] = find_hero_next_floor(true,floor_num);
                 hero_y = pairup[0];
                 hero_x = pairup[1];
                 refresh_ctr = true;
@@ -992,7 +1042,7 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
             case 4:         // downstairs
                 current_game.put_one_floor(floor_num, current_floor);
                 floor_num--;
-                int pairdown[] = find_hero_next_floor(i,j,floor_num);
+                int pairdown[] = find_hero_next_floor(false,floor_num);
                 hero_y = pairdown[0];
                 hero_x = pairdown[1];
                 refresh_ctr = true;
@@ -1016,6 +1066,75 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
             case 7:         // red door
                 if (count_r > 0) {
                     count_r--;
+                    current_floor[i][j] = 1;
+                    refresh_ctr = true;
+                    return 1;
+                } else
+                    return 0;
+            case 8:         // magic door
+            case 9:         // prison
+                return 0;
+            case 11:        // iron sword
+                current_floor[i][j] = 1;
+                atk += 10;
+                refresh_ctr = true;
+                return 1;
+            case 12:        // iron shield
+                current_floor[i][j] = 1;
+                def += 10;
+                refresh_ctr = true;
+                return 1;
+            case 13:        // silver sword
+                current_floor[i][j] = 1;
+                atk += 20;
+                refresh_ctr = true;
+                return 1;
+            case 14:        // silver shield
+                current_floor[i][j] = 1;
+                def += 20;
+                refresh_ctr = true;
+                return 1;
+            case 15:        // knight sword
+                current_floor[i][j] = 1;
+                atk += 40;
+                refresh_ctr = true;
+                return 1;
+            case 16:        // knight shield
+                current_floor[i][j] = 1;
+                def += 40;
+                refresh_ctr = true;
+                return 1;
+            case 17:        // divine sword
+                current_floor[i][j] = 1;
+                atk += 50;
+                refresh_ctr = true;
+                return 1;
+            case 18:        // divine shield
+                current_floor[i][j] = 1;
+                def += 50;
+                refresh_ctr = true;
+                return 1;
+            case 19:        // sacred sword
+                current_floor[i][j] = 1;
+                atk += 100;
+                refresh_ctr = true;
+                return 1;
+            case 20:        // sacred shield
+                current_floor[i][j] = 1;
+                def += 100;
+                refresh_ctr = true;
+                return 1;
+            case 21:
+            case 22:
+            case 23:
+            case 24:
+            case 25:
+            case 26:
+            case 27:
+            case 28:
+                return 0;
+            case 29:
+                if (snow_cryst) {
                     current_floor[i][j] = 1;
                     refresh_ctr = true;
                     return 1;
@@ -1046,33 +1165,127 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
                 hp += 200 * (floor_num/10 + 1);
                 refresh_ctr = true;
                 return 1;
-            case 76:        //
+            case 76:        // red crystal
                 current_floor[i][j] = 1;
                 atk += (floor_num/10 + 1);
                 refresh_ctr = true;
                 return 1;
-            case 77:        //
+            case 77:        // blue crystal
                 current_floor[i][j] = 1;
                 def += (floor_num/10 + 1);
                 refresh_ctr = true;
                 return 1;
+            case 78:        // staff of wisdom
+                current_floor[i][j] = 1;
+                stf_wsdm = true;
+                refresh_ctr = true;
+                return 1;
+            case 79:        // staff of echo
+                current_floor[i][j] = 1;
+                stf_echo = true;
+                refresh_ctr = true;
+                return 1;
+            case 80:        // staff of space
+                current_floor[i][j] = 1;
+                stf_space = true;
+                refresh_ctr = true;
+                return 1;
+            case 81:        // cross
+                current_floor[i][j] = 1;
+                cross = true;
+                refresh_ctr = true;
+                return 1;
+            case 82:        // elixir
+                current_floor[i][j] = 1;
+                elixir = true;
+                refresh_ctr = true;
+                return 1;
+            case 83:        // magic mattock
+                current_floor[i][j] = 1;
+                m_mattock = true;
+                refresh_ctr = true;
+                return 1;
+            case 84:        // magic wing cent
+                current_floor[i][j] = 1;
+                wing_cent = true;
+                refresh_ctr = true;
+                return 1;
+            case 85:        // enhanced mattock
+                current_floor[i][j] = 1;
+                e_mattock = true;
+                refresh_ctr = true;
+                return 1;
+            case 86:        // bomb
+                current_floor[i][j] = 1;
+                bomb = true;
+                refresh_ctr = true;
+                return 1;
+            case 87:        // magic wing up
+                current_floor[i][j] = 1;
+                wing_up = true;
+                refresh_ctr = true;
+                return 1;
+            case 88:        // enhanced key
+                current_floor[i][j] = 1;
+                key_enhac = true;
+                refresh_ctr = true;
+                return 1;
+            case 89:        // magic wing down
+                current_floor[i][j] = 1;
+                wing_down = true;
+                refresh_ctr = true;
+                return 1;
+            case 90:        // lucky gold
+                current_floor[i][j] = 1;
+                lucky_gold = true;
+                refresh_ctr = true;
+                return 1;
+            case 91:        // dragonsbane
+                current_floor[i][j] = 1;
+                dragonsbane = true;
+                refresh_ctr = true;
+                return 1;
+            case 92:        // snow crystal
+                current_floor[i][j] = 1;
+                snow_cryst = true;
+                refresh_ctr = true;
+                return 1;
+
             default:
                 return 1;
         }
     }
-    private int[] find_hero_next_floor(int i, int j, int in_floor_num) {
+    private int[] find_hero_next_floor(boolean dir, int in_floor_num) {
         byte[][] floor = current_game.get_one_floor(in_floor_num);
-        if (floor[hero_y][hero_x] == 1){
-            int[] res = {hero_y,hero_x};
-            return res;
-        }
-        for (int a = i-1; a < i+2; a++) {
-            for (int b = j-1; b<j+2; b++){
-                if (floor[a][b] == 1){
-                    int[] res = {a,b};
-                    return res;
+        int i = 6,j = 6;
+        for (int a = 1; a < 12; a++){
+            for (int b = 1; b < 12; b++){
+                if (dir) {  // going up
+                    if (floor[a][b] == 4){
+                        i = a; j = b;
+                    }
+                } else {    // going down
+                    if (floor[a][b] == 3){
+                        i = a; j = b;
+                    }
                 }
             }
+        }
+        if (floor[i+1][j] == 1) {
+            int[] res = {i+1,j};
+            return res;
+        }
+        if (floor[i-1][j] == 1) {
+            int[] res = {i-1,j};
+            return res;
+        }
+        if (floor[i][j-1] == 1) {
+            int[] res = {i,j-1};
+            return res;
+        }
+        if (floor[i][j+1] == 1) {
+            int[] res = {i,j+1};
+            return res;
         }
         int[] res = {12,1};
         return res;

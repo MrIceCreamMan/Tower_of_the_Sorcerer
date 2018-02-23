@@ -77,8 +77,8 @@ m33b3_archmage          4500        560         310         1000
 ----------------------------------------------------------------------------------
 ----------------------------------------------------------------------------------
 
-                        case 3:    // 
-                            b = 3;
-                            Sprite sp_ = new Sprite(GameView.this, , origin+j*sq_size,origin+i*sq_size, b);
-                            all_sprites.add(sp_);
-                            break;
+            case 9:        // 
+                current_floor[i][j] = 1;
+                ;
+                refresh_ctr = true;
+                return 1;
