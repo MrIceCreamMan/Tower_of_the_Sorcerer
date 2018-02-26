@@ -40,8 +40,10 @@ public class MainActivity extends AppCompatActivity {
                     builder.setTitle(getString(R.string.levelSelect));
                     builder.setItems(level, new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int item) {
-                            Intent game = new Intent(MainActivity.this, Gamelogic.class);
-                            startActivity(game);
+                            if (item == 1) {
+                                Intent game = new Intent(MainActivity.this, Gamelogic.class);
+                                startActivity(game);
+                            }
                         }
                     });
                     AlertDialog alert = builder.create();

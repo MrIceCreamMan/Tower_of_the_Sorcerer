@@ -42,6 +42,8 @@ public class Sprite {
         height = sprite_sheet.getHeight();
         if (id == 25 || id == 27)
             width = sprite_sheet.getWidth();
+        else if (id == 29)
+            width = sprite_sheet.getWidth() / 4;
         else if (id > 20 && id < 66)
             width = sprite_sheet.getWidth() / 3;
         else {
@@ -66,17 +68,23 @@ public class Sprite {
         canvas.drawBitmap(sprite_sheet, src, dst, null);
     }
 
-    public void blink(Canvas canvas) {
-/*
-        try {
-            Thread.sleep(50);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-*/
+    public void blink_x3(Canvas canvas) {
+
         timer = ++timer % 4;
         if (timer == 1) {
             currentFrame = ++currentFrame % 3;
+        }
+
+        int srcX = currentFrame * width;
+        src.set(srcX, 0, srcX + width, height);
+        dst.set(x, y, x + width, y + height);
+        canvas.drawBitmap(sprite_sheet, src, dst, null);
+    }
+    public void blink_x4(Canvas canvas) {
+
+        timer = ++timer % 4;
+        if (timer == 1) {
+            currentFrame = ++currentFrame % 4;
         }
 
         int srcX = currentFrame * width;
@@ -119,7 +127,7 @@ public class Sprite {
         }
 
         try {
-            Thread.sleep(25);
+            Thread.sleep(40);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
@@ -181,10 +189,19 @@ public class Sprite {
     }
 
     public void update(Canvas canvas){
+/*
+        try {
+            Thread.sleep(50);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+*/
         if (id == 25 || id == 27)
             display(canvas);
+        else if (id == 29)
+            blink_x4(canvas);
         else if (id > 20 && id < 66)
-            blink(canvas);
+            blink_x3(canvas);
         else
             display(canvas);
     }
