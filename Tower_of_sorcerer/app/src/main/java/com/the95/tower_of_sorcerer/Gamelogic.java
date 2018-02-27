@@ -2,6 +2,7 @@ package com.the95.tower_of_sorcerer;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.graphics.Bitmap;
@@ -36,7 +37,7 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
     private boolean             refresh_ctr, isWalk, isBattle, isEvent;
     private boolean             button_click;
     private boolean             show_hero, show_fight, hero_attack;
-    private boolean             proceed = false;
+    private boolean             blackout = false, proceed = false;
     //  current game data
     private Floors              current_game;
     private byte[][]            current_floor;
@@ -273,13 +274,32 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
     public boolean onTouch(View v, MotionEvent me) {
 
         //v.performClick();
+
         try {
             Thread.sleep(25);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
+        //*/
         switch (me.getAction()) {
             case MotionEvent.ACTION_DOWN:
+                if (blackout){
+                    AlertDialog.Builder wakeup_builder = new AlertDialog.Builder(v.getContext());
+                    wakeup_builder.setMessage("... ... wake up!");
+                    AlertDialog wakeup_dialog = wakeup_builder.create();
+                    wakeup_dialog.setCanceledOnTouchOutside(true);
+                    wakeup_dialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
+                        @Override
+                        public void onCancel(DialogInterface dialogInterface) {
+                            isEvent = false;
+                            blackout = false;
+                        }
+                    });
+                    wakeup_dialog.show();
+                    return true;
+                }
+                if (isEvent)
+                    return true;
                 button_click = true;
                 x = me.getX();
                 y = me.getY();
@@ -339,14 +359,15 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
                 switch (floor_num) {
                     case 3:
                         AlertDialog.Builder f3_builder = new AlertDialog.Builder(v.getContext());
-                        f3_builder.setMessage("Get him!");
-                        f3_builder.setPositiveButton("who are you!", new DialogInterface.OnClickListener() {
+                        f3_builder.setMessage("You are trapped, kys haha");
+                        AlertDialog f3_dialog = f3_builder.create();
+                        f3_dialog.setCanceledOnTouchOutside(true);
+                        f3_dialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
                             @Override
-                            public void onClick(DialogInterface dialogInterface, int i) {
+                            public void onCancel(DialogInterface dialogInterface) {
                                 proceed = true;
                             }
                         });
-                        AlertDialog f3_dialog = f3_builder.create();
                         f3_dialog.show();
                         break;
                     default:
@@ -1120,6 +1141,10 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
         }
 
         private void draw_game(Canvas canvas) {
+            if (blackout) {
+                canvas.drawARGB(255, 0,0,0);
+                return;
+            }
             final int origin = 0 - sq_size/2;
             final int margin = sq_size / 10;
             // -------------------- Draw Floor ----------------------
@@ -1267,11 +1292,13 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
             canvas.drawText(my_text, 5*sq_size, 13*sq_size+margin*2, textpaint);
             // ------------------- Debug purpose -----------------------
             //kid_sprite.loopRun(canvas);
+
             try {
                 Thread.sleep(50);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
+            //*/
             canvas.drawBitmap(ball, x - ball.getWidth()/2, y - ball.getHeight()/2, null);
         }
 
@@ -1617,14 +1644,14 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
             switch (in_floor_num) {
                 case 3:
                     if (act == 0) {
-                        if (!proceed && !button_click)
+                        if (!proceed)
                             return;
                         act++;
                         current_floor[7][5] = 60;
                         refresh_ctr = true;
                     } else if (act == 1) {
                         try {
-                            Thread.sleep(50);
+                            Thread.sleep(900);
                         } catch (InterruptedException e) {
                             e.printStackTrace();
                         }
@@ -1636,7 +1663,7 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
                         refresh_ctr = true;
                     } else if (act == 2) {
                         try {
-                            Thread.sleep(50);
+                            Thread.sleep(900);
                         } catch (InterruptedException e) {
                             e.printStackTrace();
                         }
@@ -1645,7 +1672,7 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
                         hp = 0;
                     } else if (act == 3) {
                         try {
-                            Thread.sleep(50);
+                            Thread.sleep(900);
                         } catch (InterruptedException e) {
                             e.printStackTrace();
                         }
@@ -1653,7 +1680,7 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
                         show_fight = false;
                     } else {
                         try {
-                            Thread.sleep(50);
+                            Thread.sleep(500);
                         } catch (InterruptedException e) {
                             e.printStackTrace();
                         }
@@ -1663,10 +1690,11 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
                         hp = 200; atk = 10; def = 10;
                         refresh_ctr = true;
                         isEvent = false;
+                        blackout = true;
                     }
                     break;
                 default:
-                    isEvent = false;
+                    isEvent = true;
                     break;
             }
         }
