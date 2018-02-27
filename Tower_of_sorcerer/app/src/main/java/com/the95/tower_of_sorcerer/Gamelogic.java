@@ -32,10 +32,11 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
     private int                 walk_result, walk_count;
     private int                 which_button;
     private int                 m_hp, m_atk, m_def, m_gold;
-    private int                 npc_dialog, price_idx;
+    private int                 price_idx, act;
     private boolean             refresh_ctr, isWalk, isBattle, isEvent;
     private boolean             button_click;
     private boolean             show_hero, show_fight, hero_attack;
+    private boolean             proceed = false;
     //  current game data
     private Floors              current_game;
     private byte[][]            current_floor;
@@ -123,16 +124,18 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
         walk_result = 0; walk_count = 0;
         which_button = 6;
         m_hp = 0; m_atk = 0; m_def = 0; m_gold = 0;
-        npc_dialog = 0; price_idx = 0;
+        price_idx = 0; act = 0;
         refresh_ctr = true; isWalk = false; isBattle = false; isEvent = false;
         button_click = false;
         show_hero = true; show_fight = false; hero_attack = true;
+
+        //set_all_true();
         // initialize current game data
         current_game = new Floors();
         current_floor = current_game.get_one_floor(1);
-        floor_num = 12;
+        floor_num = 3;
         hero_x = 6; hero_y = 11;
-        count_y = 0; count_b = 0; count_r = 0;
+        count_y = 10; count_b = 10; count_r = 10;
         atk = 100; def = 100; hp = 1000; gold = 0;
         stf_wsdm = stf_echo = stf_space = cross = elixir = false;
         m_mattock = wing_cent = e_mattock = bomb = wing_up = false;
@@ -245,7 +248,6 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
         pt6 = new Paint(); pt6.setColor(Color.rgb(180, 150, 180)); pt1.setStrokeWidth(10);
         pt7 = new Paint(); pt7.setColor(Color.rgb(150, 150, 150)); pt1.setStrokeWidth(10);
         pt8 = new Paint(); pt8.setColor(Color.rgb(220, 220, 220)); pt1.setStrokeWidth(10);
-        set_all_true();
         //Log.v(TAG, "width = " + sq_wall.getWidth() + " y = " + sq_wall.getHeight());
         setContentView(gameview);
     }
@@ -286,16 +288,19 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
                 if (x > sq_size*9 + origin        && y > sq_size*13          && x < sq_size*10          && y < sq_size*14) {
                     pt1.setColor(Color.rgb(255, 255, 255));
                     which_button = UP;
-                    temp_x = hero_x; temp_y = hero_y -1;
+                    temp_x = hero_x; temp_y = hero_y - 1;
                 } else if (x > sq_size*9 + origin && y > sq_size*16 + origin && x < sq_size*10          && y < sq_size*17) {
                     pt2.setColor(Color.rgb(255, 255, 255));
                     which_button = DOWN;
+                    temp_x = hero_x; temp_y = hero_y + 1;
                 } else if (x > sq_size*7          && y > sq_size*14          && x < sq_size*9  + origin && y < sq_size*16 + origin) {
                     pt3.setColor(Color.rgb(255, 255, 255));
                     which_button = LEFT;
+                    temp_x = hero_x - 1; temp_y = hero_y;
                 } else if (x > sq_size*10         && y > sq_size*14          && x < sq_size*12 + origin && y < sq_size*16 + origin) {
                     pt4.setColor(Color.rgb(255, 255, 255));
                     which_button = RIGHT;
+                    temp_x = hero_x + 1; temp_y = hero_y;
                 } else if (x > sq_size*7          && y > sq_size*17          && x < sq_size*9  + origin && y < sq_size*19) {
                     pt5.setColor(Color.rgb(255, 255, 255));
                     which_button = 6;
@@ -330,13 +335,56 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
     }
     public void checkPos(View v, int j, int i){
         switch (current_floor[i][j]) {
-            case 21:
+            case -4:        // event floor
+                switch (floor_num) {
+                    case 3:
+                        AlertDialog.Builder f3_builder = new AlertDialog.Builder(v.getContext());
+                        f3_builder.setMessage("Get him!");
+                        f3_builder.setPositiveButton("who are you!", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                proceed = true;
+                            }
+                        });
+                        AlertDialog f3_dialog = f3_builder.create();
+                        f3_dialog.show();
+                        break;
+                    default:
+                        break;
+                }
                 break;
-            case 22:
+
+            case 21:        // thief
+                AlertDialog.Builder thief_builder = new AlertDialog.Builder(v.getContext());
+                thief_builder.setMessage("thief!");
+                AlertDialog thief_dialog = thief_builder.create();
+                thief_dialog.show();
                 break;
-            case 23:
+            case 22:        // saint
+                AlertDialog.Builder saint_builder = new AlertDialog.Builder(v.getContext());
+                saint_builder.setMessage("saint");
+                AlertDialog saint_dialog = saint_builder.create();
+                saint_dialog.show();
                 break;
-            case 26:
+            case 23:        // merchant
+                AlertDialog.Builder merchant_builder = new AlertDialog.Builder(v.getContext());
+                merchant_builder.setMessage("buy!");
+                merchant_builder.setPositiveButton("cool", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        gold = 1000;
+                    }
+                });
+                merchant_builder.setNegativeButton("nah", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        gold = 10;
+                    }
+                });
+                AlertDialog merchant_dialog = merchant_builder.create();
+                merchant_dialog.show();
+                break;
+            case 26:        // shop
                 String item_atk = "Attack \t+ " + String.valueOf(2 + 2 * (floor_num/10));
                 String item_def = "Defence \t+ " + String.valueOf(4 + 4 * (floor_num/10));
                 String price = "Would you like to spend " + String.valueOf(10*price_idx*price_idx+10*price_idx+20)+ " gold for one of the following items";
@@ -345,7 +393,6 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
                 shop_builder.setTitle(price);
                 shop_builder.setItems(item_list, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int item) {
-                        npc_dialog = 0;
                         if (item == 0) {
                             count_y += 10;
                         } else if (item == 1) {
@@ -362,13 +409,7 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
                 break;
             case 28:
                 AlertDialog.Builder princess_builder = new AlertDialog.Builder(v.getContext());
-                princess_builder.setTitle("I am fake, fuck you!");
-                String[] what = {""};
-                princess_builder.setItems(what, new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int item) {
-                        npc_dialog = 0;
-                    }
-                });
+                princess_builder.setMessage("I am fake, fuck you!");
                 AlertDialog princess_dialog = princess_builder.create();
                 princess_dialog.show();
                 break;
@@ -443,6 +484,8 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
                 }
                 if (isBattle && !isWalk)
                     battle_animation(hero_attack, hero_y, hero_x);
+                else if (isEvent && !isWalk)
+                    event(floor_num);
                 if (button_click && !isWalk && !isBattle && !isEvent)
                     button_logic(which_button);
                 if (refresh_ctr) {
@@ -1021,32 +1064,24 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
                     walk_result = move(UP);
                     if (walk_result != 0)
                         hero_y--;
-                    if (walk_result == 2)
-                        event(floor_num);
                     break;
                 case DOWN:
                     hero_sprite.set_direction(DOWN);
                     walk_result = move(DOWN);
                     if (walk_result != 0)
                         hero_y++;
-                    if (walk_result == 2)
-                        event(floor_num);
                     break;
                 case LEFT:
                     hero_sprite.set_direction(LEFT);
                     walk_result = move(LEFT);
                     if (walk_result != 0)
                         hero_x--;
-                    if (walk_result == 2)
-                        event(floor_num);
                     break;
                 case RIGHT:
                     hero_sprite.set_direction(RIGHT);
                     walk_result = move(RIGHT);
                     if (walk_result != 0)
                         hero_x++;
-                    if (walk_result == 2)
-                        event(floor_num);
                     break;
                 case FLY_UP:
                     try {
@@ -1183,7 +1218,7 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
             }
             // ------------------- Draw Hero -----------------------
             if (show_hero) {
-                if (walk_result == 1) {
+                if (walk_result == 1 || walk_result == 2) {
                     if (walk_count < 2) {
                         isWalk = true;
                         hero_sprite.walk(canvas);
@@ -1259,6 +1294,10 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
                     return 0;
             }
             switch (current_floor[i][j]) {
+                case -4:        // event floor
+                    current_floor[i][j] = 1;
+                    isEvent = true;
+                    return 1;
                 case -2:        // fake floor
                     current_floor[i][j] = 0;
                     refresh_ctr = true;
@@ -1574,7 +1613,63 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
             }
         }
 
-        private void event(int floor_num){        }
+        private void event(int in_floor_num){
+            switch (in_floor_num) {
+                case 3:
+                    if (act == 0) {
+                        if (!proceed && !button_click)
+                            return;
+                        act++;
+                        current_floor[7][5] = 60;
+                        refresh_ctr = true;
+                    } else if (act == 1) {
+                        try {
+                            Thread.sleep(50);
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+                        act++;
+                        current_floor[8][5] = 57;
+                        current_floor[10][5] = 57;
+                        current_floor[9][4] = 57;
+                        current_floor[9][6] = 57;
+                        refresh_ctr = true;
+                    } else if (act == 2) {
+                        try {
+                            Thread.sleep(50);
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+                        act++;
+                        show_fight = true;
+                        hp = 0;
+                    } else if (act == 3) {
+                        try {
+                            Thread.sleep(50);
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+                        act++;
+                        show_fight = false;
+                    } else {
+                        try {
+                            Thread.sleep(50);
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+                        act = 0;
+                        floor_num = 2;
+                        hero_x = 4; hero_y = 8;
+                        hp = 200; atk = 10; def = 10;
+                        refresh_ctr = true;
+                        isEvent = false;
+                    }
+                    break;
+                default:
+                    isEvent = false;
+                    break;
+            }
+        }
 
         private int[] find_hero_next_floor(boolean dir, int in_floor_num) {
             byte[][] floor = current_game.get_one_floor(in_floor_num);
