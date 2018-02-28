@@ -75,3 +75,95 @@ m33b3_archmage          4500        560         310         1000
 ----------------------------------------------------------------------------------
 ----------------------------------------------------------------------------------
 ----------------------------------------------------------------------------------
+							
+-----------------------------    My translation    -------------------------------
+ 1. There are doors which cannot be opened with a key. To open them, you will have
+ to defeat the monsters who guard them.
+ 2. 
+ 3. This tower consists of 50 floors. Every 10 floors form one area, and each area
+ has one boss guarding the entrance to the next area. To proceed, you must defeat
+ these bosses.
+
+-----------------------------    Original text    --------------------------------
+ 1. There are doors which cannot be opened with a key; these doors can only open 
+ by beating the monsters which guard them.
+
+ 2. If you buy goods from merchants, you will be able to hear important 
+ information later.
+
+ 3.Here is a magic tower of 50 stories. Every ten stories form one area. The boss
+ who controls each area, are posted in this tower. And if you don't beat them, 
+ you cannot ascend from there.
+
+ 4. When you offer gold at an alter, you may as well have your defensive power 
+ risen rather than you offensive power. The enemy whom you cannot beat may appear,
+ provided you won't raise your offensive power.
+
+ 5. Did you notice the secret passages on the 9th, 16th, and 18th floors?
+
+ 6. If you carry a cross, the strength of Zombies and Vampires will be cut in 
+ half. It is near impossible to defeat them without a cross, especially Vampires.
+ A cross is on a floor higher than this one.
+
+ 7. I heard that you can find a red key at two places in this area. 
+
+ 8. In this area, if you don't raise your offensive power at an altar a few times,
+ you mayy not be able to destroy 'Rock' monsters. Be careful!
+
+ 9. The Great Magic Master is in this area. He is a proprietor of this magic 
+ tower. At your strenght, to attack him means death. It stands to reason that you 
+ should not face him, but rather, get items on higher levels first. 
+
+10. In the stage of this floor, if your strength is 1500, offensive power is 80,
+defensive power is 98, you have five keys, and one bluee key, you are almost 
+ideal.
+
+11. The offensive power of the swordsman who uses two swords is too high. He can 
+use two swords at the same time. You will lose much strength if you fight him
+normally. You should never fight him before your attacks are stronger than his. 
+
+12. This tower is 50 stories high, but in reality it seems that you cannot go up 
+to the 50th floor. 
+
+13. More haste, less speed.
+
+14. You may be able to go upstairs without fighting strong enemies, if you could
+use four tunnels skillfully in this floor.
+
+15. You need the mattock in order to get the treasure which is in the item 
+warehouse on this floor.
+
+16. There is never a gate without a Gate-Keeper. Conversely there are always
+enemies who keep the gate on floors that have gates. So,
+
+17. At three o'clock, the secret treasure that lets one travel in space will 
+appear.
+
+18. There is a Lucky Gold somewhere in this tower. If you have it, you can get
+twice as much money when you beat an enemy.
+
+19. A Magician will attack using magic when he is next to you. The Magic Sergeant
+will attack and divide the vital power in half when he is caught between two. As
+for an attack on both sides from the Magic Sergeant, the stronger you are, the 
+more damage you take. So, please be careful.
+
+20. The 44th floor in this tower is an illusion. It seems that we cannot go to 
+there even if we use the stairs. I think that it is impossible to get there 
+without teleporting.
+
+21. The sacred shield can defend you against magic attacks. But I heard this 
+shield is hidden on a floor that doesn't exist.
+
+22. The 41st floor is perfectly symmetrical, and therefore, 
+
+23. If you want to beat the Dragon, you must have a holy sword, a holy shield,
+and a Dragon slayer, and also you must be high level.
+
+24. It is said that the symbol of 5 on a pair of dice has the force of sealing 
+magic. You had better memorize it till you fight the boss of theis area.
+
+default: 
+Saint:	  I have done what I can. Good luck!
+Merchant: Be careful. I have nothing more to say.
+
+I have nothing to say. A certain message may be hidden in this room.

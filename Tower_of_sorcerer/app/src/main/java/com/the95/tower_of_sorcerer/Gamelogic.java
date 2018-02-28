@@ -2,7 +2,6 @@ package com.the95.tower_of_sorcerer;
 
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.graphics.Bitmap;
@@ -15,7 +14,7 @@ import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
-//import android.util.Log;
+import android.util.Log;
 
 import java.util.ArrayList;
 
@@ -42,12 +41,14 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
     private Floors              current_game;
     private byte[][]            current_floor;
     private int                 floor_num;
-    private int                 hero_x, hero_y;
+    private int                 hero_x, hero_y, temp_x, temp_y;
     private int                 count_y, count_b, count_r;
     private int                 atk, def, hp, gold;
     private boolean             stf_wsdm, stf_echo, stf_space, cross, elixir;
     private boolean             m_mattock, wing_cent, e_mattock, bomb, wing_up;
     private boolean             key_enhac, wing_down, lucky_gold, dragonsbane, snow_cryst;
+    private int                 thief_event_count = 0;
+    private int[]               merchant_history = {0,0,0};
     // game pictures and stats table
     private Bitmap              ball, kid, pic_debug, hero;
     private Sprite              kid_sprite, hero_sprite, red_star_sprite;
@@ -110,7 +111,7 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
     };
     //  debug purpose
     private Paint               pt1, pt2, pt3, pt4, pt5, pt6, pt7, pt8;
-    //private static final String TAG = "debuuuuuuuuuuuuuuuuuug";
+    private static final String TAG = "debuuuuuuuuuuuuuuuuuug";
     //Log.v(TAG, "x = " + me.getX() + " y = " + me.getY());
 
     @Override
@@ -134,8 +135,8 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
         // initialize current game data
         current_game = new Floors();
         current_floor = current_game.get_one_floor(1);
-        floor_num = 3;
-        hero_x = 6; hero_y = 11;
+        floor_num = 10;
+        hero_x = 6; hero_y = 11; temp_x = 6; temp_y = 10;
         count_y = 10; count_b = 10; count_r = 10;
         atk = 100; def = 100; hp = 1000; gold = 0;
         stf_wsdm = stf_echo = stf_space = cross = elixir = false;
@@ -256,7 +257,7 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
         stf_wsdm = stf_echo = stf_space = cross = elixir = true;
         m_mattock = wing_cent = e_mattock = bomb = wing_up = true;
         key_enhac = wing_down = lucky_gold = dragonsbane = snow_cryst = true;
-    };
+    }
 
     @Override
     protected void onPause() {
@@ -285,7 +286,7 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
             case MotionEvent.ACTION_DOWN:
                 if (blackout){
                     AlertDialog.Builder wakeup_builder = new AlertDialog.Builder(v.getContext());
-                    wakeup_builder.setMessage("... ... wake up!");
+                    wakeup_builder.setMessage("... ... \nwake up!");
                     AlertDialog wakeup_dialog = wakeup_builder.create();
                     wakeup_dialog.setCanceledOnTouchOutside(true);
                     wakeup_dialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
@@ -303,7 +304,6 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
                 button_click = true;
                 x = me.getX();
                 y = me.getY();
-                int temp_x = 0, temp_y = 0;
                 final int origin = 0 - sq_size / 2;
                 if (x > sq_size*9 + origin        && y > sq_size*13          && x < sq_size*10          && y < sq_size*14) {
                     pt1.setColor(Color.rgb(255, 255, 255));
@@ -336,7 +336,6 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
                 } else {
                     which_button = 8;
                 }
-                checkPos(v, temp_x, temp_y);
                 return true;
             case MotionEvent.ACTION_UP:
                 button_click = false;
@@ -348,60 +347,174 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
                 pt6.setColor(Color.rgb(180, 150, 180));
                 pt7.setColor(Color.rgb(150, 150, 150));
                 pt8.setColor(Color.rgb(220, 220, 220));
+                checkCurrentPosition(v, hero_x, hero_y);
+                checkNextPosition(v, temp_x, temp_y);
                 return true;
             default:
                 return true;
         }
     }
-    public void checkPos(View v, int j, int i){
+    // interactions with events marked with -4
+    private void checkCurrentPosition(View v, int j, int i) {
+        //Log.v(TAG, "curr called -------" + String.valueOf(current_floor[i][j]));
+        if (current_floor[i][j] != -4){
+            return;
+        }
+        //Log.v(TAG, "curr is - 4");
+        final int ii = i, jj = j;
+        switch (floor_num) {
+            case 3:
+                AlertDialog.Builder f3_builder = new AlertDialog.Builder(v.getContext());
+                f3_builder.setMessage("You are trapped, kys haha");
+                AlertDialog f3_dialog = f3_builder.create();
+                f3_dialog.setCanceledOnTouchOutside(true);
+                f3_dialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
+                    @Override
+                    public void onCancel(DialogInterface dialogInterface) {
+                        proceed = true;
+                        current_floor[ii][jj] = 1;
+                    }
+                });
+                f3_dialog.show();
+                break;
+            case 10:
+                if (act != 0) {
+                    current_floor[ii][jj] = 1;
+                    break;
+                }
+                AlertDialog.Builder f10_builder = new AlertDialog.Builder(v.getContext());
+                f10_builder.setMessage("Soldiers, go take him!!!");
+                AlertDialog f10_dialog = f10_builder.create();
+                f10_dialog.setCanceledOnTouchOutside(true);
+                f10_dialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
+                    @Override
+                    public void onCancel(DialogInterface dialogInterface) {
+                        proceed = true;
+                        current_floor[ii][jj] = 1;
+                    }
+                });
+                f10_dialog.show();
+                break;
+            default:
+                break;
+        }
+    }
+    // interactions with npc: thief, saint, merchant, shop, and princess)
+    public void checkNextPosition(View v, int j, int i){
+        //Log.v(TAG, "next called  " + String.valueOf(current_floor[i][j]));
         switch (current_floor[i][j]) {
-            case -4:        // event floor
+            case 21:        // thief
+                AlertDialog.Builder thief_builder = new AlertDialog.Builder(v.getContext());
+                if (thief_event_count == 0){
+                    thief_event_count++;
+                    thief_builder.setMessage("Follow me and you will be free");
+                } else if (thief_event_count == 1) {
+                    thief_event_count++;
+                    thief_builder.setMessage("I dug many tunnels, find them");
+                } else if (thief_event_count == 2) {
+                    thief_event_count++;
+                    thief_builder.setMessage("silver swords is on 17. I got to go");
+                } else if (thief_event_count == 3) {
+                    thief_event_count++;
+                    thief_builder.setMessage("octopus");
+                } else {
+                    thief_event_count = 0;
+                    thief_builder.setMessage("devil zeno");
+                }
+                AlertDialog thief_dialog = thief_builder.create();
+                thief_dialog.setCanceledOnTouchOutside(true);
+                thief_dialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
+                    @Override
+                    public void onCancel(DialogInterface dialogInterface) {
+                        proceed = true;
+                    }
+                });
+                thief_dialog.show();
+                isEvent = true;
+                break;
+            case 22:        // saint
+                AlertDialog.Builder saint_builder = new AlertDialog.Builder(v.getContext());
                 switch (floor_num) {
+                    case 2:
+                        saint_builder.setMessage("i am saint 2f");
+                        break;
                     case 3:
-                        AlertDialog.Builder f3_builder = new AlertDialog.Builder(v.getContext());
-                        f3_builder.setMessage("You are trapped, kys haha");
-                        AlertDialog f3_dialog = f3_builder.create();
-                        f3_dialog.setCanceledOnTouchOutside(true);
-                        f3_dialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
-                            @Override
-                            public void onCancel(DialogInterface dialogInterface) {
-                                proceed = true;
-                            }
-                        });
-                        f3_dialog.show();
+                        saint_builder.setMessage("here is staff of wisdom, it shows you stats");
+                        stf_wsdm = true;
+                        break;
+                    case 4:
+                        saint_builder.setMessage("i am saint 4f");
+                        break;
+                    case 6:
+                        saint_builder.setMessage("i am saint 6f");
                         break;
                     default:
                         break;
                 }
-                break;
-
-            case 21:        // thief
-                AlertDialog.Builder thief_builder = new AlertDialog.Builder(v.getContext());
-                thief_builder.setMessage("thief!");
-                AlertDialog thief_dialog = thief_builder.create();
-                thief_dialog.show();
-                break;
-            case 22:        // saint
-                AlertDialog.Builder saint_builder = new AlertDialog.Builder(v.getContext());
-                saint_builder.setMessage("saint");
                 AlertDialog saint_dialog = saint_builder.create();
                 saint_dialog.show();
                 break;
             case 23:        // merchant
                 AlertDialog.Builder merchant_builder = new AlertDialog.Builder(v.getContext());
-                merchant_builder.setMessage("buy!");
-                merchant_builder.setPositiveButton("cool", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        gold = 1000;
-                    }
-                });
-                merchant_builder.setNegativeButton("nah", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        gold = 10;
-                    }
-                });
+                switch (floor_num){
+                    case 2:
+                        if (merchant_history[0] == 0) {
+                            merchant_builder.setMessage("thank you! 1000 gold");
+                            merchant_history[0]++;
+                        } else {
+                            merchant_builder.setMessage("no more money");
+                        }
+                        break;
+                    case 6:
+                        if (merchant_history[0] == 0) {
+                            merchant_builder.setMessage("buy!");
+                            merchant_builder.setPositiveButton("yes", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialogInterface, int i) {
+                                    merchant_history[0]++;
+                                    gold = 1000;
+                                }
+                            });
+                            merchant_builder.setNegativeButton("no", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialogInterface, int i) {
+                                    gold = 10;
+                                }
+                            });
+                        } else if (merchant_history[0] == 1) {
+                            merchant_history[0]++;
+                            merchant_builder.setMessage("tell you something");
+                        } else {
+                            merchant_builder.setMessage("can't tell you, sorry");
+                        }
+                        break;
+                    case 7:
+                        if (merchant_history[1] == 0) {
+                            merchant_builder.setMessage("buy!");
+                            merchant_builder.setPositiveButton("yes", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialogInterface, int i) {
+                                    merchant_history[1]++;
+                                    gold = 1000;
+                                }
+                            });
+                            merchant_builder.setNegativeButton("no", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialogInterface, int i) {
+                                    gold = 10;
+                                }
+                            });
+                        } else if (merchant_history[1] == 1) {
+                            merchant_history[1]++;
+                            merchant_builder.setMessage("tell you something");
+                        } else {
+                            merchant_builder.setMessage("can't tell you, sorry");
+                        }
+                        break;
+                    default:
+                        merchant_builder.setMessage("dude");
+                        break;
+                }
                 AlertDialog merchant_dialog = merchant_builder.create();
                 merchant_dialog.show();
                 break;
@@ -449,6 +562,14 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
             super(context);
             holder = getHolder();
             //Log.v(TAG, "tell me the width = " + this.getWidth());
+        }
+
+        private void sleep(int sleep_time) {
+            try {
+                Thread.sleep(sleep_time);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
         }
 
         public void pause() {
@@ -505,8 +626,8 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
                 }
                 if (isBattle && !isWalk)
                     battle_animation(hero_attack, hero_y, hero_x);
-                else if (isEvent && !isWalk)
-                    event(floor_num);
+                if (isEvent && !isWalk)
+                    event();
                 if (button_click && !isWalk && !isBattle && !isEvent)
                     button_logic(which_button);
                 if (refresh_ctr) {
@@ -619,6 +740,489 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
 
             pic_debug = createScaledBitmap(pic_debug, sq_size * 3, sq_size, false);
             hero = createScaledBitmap(hero, sq_size * 3, sq_size * 4, false);
+        }
+
+        private void battle_animation(boolean isHero, int i, int j){
+            int a_damage_b = atk - m_def;
+            int b_damage_a = m_atk - def;
+            if (b_damage_a < 0)
+                b_damage_a = 0;
+            if (m_hp <= 0){
+                isBattle = false;
+                show_hero = true;
+                show_fight = false;
+                current_floor[i][j] = 1;
+                refresh_ctr = true;
+                if (lucky_gold)
+                    gold += m_gold * 2;
+                else
+                    gold += m_gold;
+                check_complete();
+            } else {
+                isBattle = true;
+            }
+            if (isHero) {
+                show_hero = false;
+                show_fight = true;
+                m_hp -= a_damage_b;
+            }
+            else {
+                show_hero = true;
+                show_fight = false;
+                hp -= b_damage_a;
+            }
+            hero_attack = !hero_attack;
+        }
+
+        private void event(){
+            switch (floor_num) {
+                case 2:
+                    if (thief_event_count == 1) {
+                        if (act == 0) {
+                            if (!proceed)
+                                return;
+                            proceed = false;
+                            act++;
+                            current_floor[7][2] = 1;
+                            refresh_ctr = true;
+                        } else if (act == 1) {
+                            sleep(500);
+                            act++;
+                            current_floor[7][3] = 1;
+                            current_floor[7][2] = 21;
+                            refresh_ctr = true;
+                        } else if (act == 2) {
+                            sleep(500);
+                            act++;
+                            current_floor[7][2] = 1;
+                            current_floor[7][1] = 21;
+                            refresh_ctr = true;
+                        } else {
+                            sleep(500);
+                            act = 0;
+                            current_floor[7][1] = 1;
+                            current_floor[8][1] = 21;
+                            refresh_ctr = true;
+                            isEvent = false;
+                        }
+                    } else if (thief_event_count == 2) {
+                        if (act == 0) {
+                            if (!proceed)
+                                return;
+                            proceed = false;
+                            act++;
+                            current_floor[8][1] = 1;
+                            current_floor[9][1] = 21;
+                            refresh_ctr = true;
+                        } else if (act == 1) {
+                            sleep(500);
+                            act++;
+                            current_floor[9][1] = 1;
+                            current_floor[10][1] = 21;
+                            refresh_ctr = true;
+                        } else {
+                            sleep(500);
+                            act = 0;
+                            current_floor[10][1] = 1;
+                            refresh_ctr = true;
+                            isEvent = false;
+                        }
+                    }
+                    break;
+                case 3:
+                    if (act == 0) {
+                        if (!proceed)
+                            return;
+                        proceed = false;
+                        act++;
+                        current_floor[7][5] = 60;
+                        refresh_ctr = true;
+                    } else if (act == 1) {
+                        sleep(500);
+                        act++;
+                        current_floor[8][5] = 57;
+                        current_floor[10][5] = 57;
+                        current_floor[9][4] = 57;
+                        current_floor[9][6] = 57;
+                        refresh_ctr = true;
+                    } else if (act == 2) {
+                        sleep(500);
+                        act++;
+                        show_fight = true;
+                        hp = 0;
+                    } else if (act == 3) {
+                        sleep(500);
+                        act++;
+                        show_fight = false;
+                    } else {
+                        sleep(500);
+                        act = 0;
+                        floor_num = 2;
+                        hero_x = 4; hero_y = 8;
+                        hp = 400; atk = 10; def = 10;
+                        current_floor[7][5] = 1;
+                        current_floor[8][5] = 1;
+                        current_floor[10][5] = 1;
+                        current_floor[9][4] = 1;
+                        current_floor[9][6] = 1;
+                        refresh_ctr = true;
+                        isEvent = false;
+                        blackout = true;
+                    }
+                    break;
+                case 10:
+                    if (act == 0) {
+                        if (!proceed)
+                            return;
+                        proceed = false;
+                        act++;
+                        current_floor[4][6] = 1;
+                        current_floor[3][6] = 38;
+                        current_floor[6][5] = 1;
+                        current_floor[6][7] = 1;
+                        refresh_ctr = true;
+                    } else if (act == 1) {
+                        sleep(200);
+                        act++;
+                        current_floor[3][6] = 8;
+                        current_floor[7][6] = 8;
+                        current_floor[2][6] = 38;
+                        refresh_ctr = true;
+                    } else if (act == 2) {
+                        sleep(200);
+                        act++;
+                        current_floor[4][4] = 1;
+                        current_floor[4][8] = 1;
+                        current_floor[2][6] = 1;
+                        current_floor[1][6] = 38;
+                        current_floor[4][2] = 1;
+                        current_floor[4][3] = 36;
+                        current_floor[4][10] = 1;
+                        current_floor[4][9] = 36;
+                        refresh_ctr = true;
+                    } else if (act == 3) {
+                        sleep(200);
+                        act++;
+                        current_floor[4][4] = 36;
+                        current_floor[4][8] = 36;
+                        current_floor[4][3] = 1;
+                        current_floor[4][9] = 1;
+                        refresh_ctr = true;
+                    }  else if (act == 4) {
+                        sleep(200);
+                        act++;
+                        current_floor[4][5] = 36;
+                        current_floor[4][7] = 36;
+                        current_floor[4][4] = 1;
+                        current_floor[4][8] = 1;
+                        refresh_ctr = true;
+                    }  else if (act == 5) {
+                        sleep(200);
+                        act++;
+                        current_floor[4][6] = 36;
+                        current_floor[5][7] = 36;
+                        current_floor[4][5] = 1;
+                        current_floor[4][7] = 1;
+                        refresh_ctr = true;
+                    }  else if (act == 6) {
+                        sleep(200);
+                        act++;
+                        current_floor[6][7] = 36;
+                        current_floor[5][7] = 1;
+                        refresh_ctr = true;
+                    } else if (act == 7) {
+                        sleep(200);
+                        act++;
+                        current_floor[6][6] = 36;
+                        current_floor[6][7] = 1;
+                        refresh_ctr = true;
+                    } else if (act == 8) {
+                        sleep(200);
+                        act++;
+                        current_floor[3][1] = 1;
+                        current_floor[3][2] = 1;
+                        current_floor[3][3] = 1;
+                        current_floor[4][1] = 35;
+                        current_floor[4][2] = 35;
+                        current_floor[4][3] = 35;
+                        current_floor[3][9] = 1;
+                        current_floor[3][10] = 1;
+                        current_floor[3][11] = 1;
+                        current_floor[4][9] = 35;
+                        current_floor[4][10] = 35;
+                        current_floor[4][11] = 35;
+                        refresh_ctr = true;
+                    } else if (act == 9) {
+                        sleep(200);
+                        act++;
+                        current_floor[4][4] = 35;
+                        current_floor[4][8] = 35;
+                        current_floor[4][3] = 1;
+                        current_floor[4][9] = 1;
+                        refresh_ctr = true;
+                    } else if (act == 10) {
+                        sleep(200);
+                        act++;
+                        current_floor[4][5] = 35;
+                        current_floor[4][7] = 35;
+                        current_floor[4][3] = 35;
+                        current_floor[4][9] = 35;
+                        current_floor[4][4] = 1;
+                        current_floor[4][8] = 1;
+                        current_floor[4][2] = 1;
+                        current_floor[4][10] = 1;
+                        refresh_ctr = true;
+                    } else if (act == 11) {
+                        sleep(200);
+                        act++;
+                        current_floor[5][5] = 35;
+                        current_floor[5][7] = 35;
+                        current_floor[4][4] = 35;
+                        current_floor[4][8] = 35;
+                        current_floor[4][2] = 35;
+                        current_floor[4][10] = 35;
+                        current_floor[4][5] = 1;
+                        current_floor[4][7] = 1;
+                        current_floor[4][3] = 1;
+                        current_floor[4][9] = 1;
+                        current_floor[4][1] = 1;
+                        current_floor[4][11] = 1;
+                        refresh_ctr = true;
+                    } else if (act == 12) {
+                        sleep(200);
+                        act++;
+                        current_floor[6][5] = 35;
+                        current_floor[6][7] = 35;
+                        current_floor[4][5] = 35;
+                        current_floor[4][7] = 35;
+                        current_floor[4][3] = 35;
+                        current_floor[4][9] = 35;
+                        current_floor[5][5] = 1;
+                        current_floor[5][7] = 1;
+                        current_floor[4][4] = 1;
+                        current_floor[4][8] = 1;
+                        current_floor[4][2] = 1;
+                        current_floor[4][10] = 1;
+                        refresh_ctr = true;
+                    } else if (act == 13) {
+                        sleep(200);
+                        act++;
+                        current_floor[5][5] = 35;
+                        current_floor[5][7] = 35;
+                        current_floor[4][4] = 35;
+                        current_floor[4][8] = 35;
+                        current_floor[4][5] = 1;
+                        current_floor[4][7] = 1;
+                        current_floor[4][3] = 1;
+                        current_floor[4][9] = 1;
+                        refresh_ctr = true;
+                    } else if (act == 14) {
+                        sleep(200);
+                        act++;
+                        current_floor[4][5] = 35;
+                        current_floor[4][7] = 35;
+                        current_floor[4][4] = 1;
+                        current_floor[4][8] = 1;
+                        refresh_ctr = true;
+                    } else if (act == 15) {
+                        sleep(200);
+                        act++;
+                        current_floor[4][4] = 8;
+                        current_floor[4][8] = 8;
+                        refresh_ctr = true;
+                        isEvent = false;
+                    } else if (act == 16) {
+                        act++;
+                        current_floor[3][6] = 1;
+                        refresh_ctr = true;
+                        isEvent = false;
+                    } else if (act == 17) {
+                        act++;
+                        current_floor[3][1] = 76;
+                        current_floor[3][2] = 76;
+                        current_floor[3][3] = 76;
+                        refresh_ctr = true;
+                    } else if (act == 18) {
+                        sleep(200);
+                        act++;
+                        current_floor[3][9] = 77;
+                        current_floor[3][10] = 77;
+                        current_floor[3][11] = 77;
+                        refresh_ctr = true;
+                    } else if (act == 19) {
+                        sleep(200);
+                        act++;
+                        current_floor[4][1] = 75;
+                        current_floor[4][2] = 75;
+                        current_floor[4][3] = 75;
+                        refresh_ctr = true;
+                    } else if (act == 20) {
+                        sleep(200);
+                        act++;
+                        current_floor[4][9] = 71;
+                        current_floor[4][10] = 71;
+                        current_floor[4][11] = 71;
+                        refresh_ctr = true;
+                    } else if (act == 21) {
+                        sleep(200);
+                        act++;
+                        current_floor[11][6] = 3;
+                        current_floor[9][6] = -4;
+                        refresh_ctr = true;
+                    } else if (act == 22) {
+                        sleep(200);
+                        act++;
+                        current_floor[4][4] = 1;
+                        current_floor[4][8] = 1;
+                        current_floor[7][6] = 1;
+                        refresh_ctr = true;
+                        isEvent = false;
+                    } else if (act == 23) {
+                        act++;
+                        current_floor[10][1] = 21;
+                        refresh_ctr = true;
+                    } else if (act == 24) {
+                        sleep(200);
+                        act++;
+                        current_floor[9][1] = 21;
+                        current_floor[10][1] = 1;
+                        refresh_ctr = true;
+                    } else if (act == 25) {
+                        sleep(200);
+                        act++;
+                        current_floor[8][1] = 21;
+                        current_floor[9][1] = 1;
+                        refresh_ctr = true;
+                    } else if (act == 26) {
+                        sleep(200);
+                        act++;
+                        current_floor[8][2] = 21;
+                        current_floor[8][1] = 1;
+                        refresh_ctr = true;
+                    } else if (act == 27) {
+                        sleep(200);
+                        act++;
+                        current_floor[8][3] = 21;
+                        current_floor[8][2] = 1;
+                        refresh_ctr = true;
+                    } else if (act == 28) {
+                        sleep(200);
+                        act++;
+                        current_floor[9][3] = 21;
+                        current_floor[8][3] = 1;
+                        refresh_ctr = true;
+                    } else if (act == 29) {
+                        sleep(200);
+                        act++;
+                        current_floor[10][3] = 21;
+                        current_floor[9][3] = 1;
+                        refresh_ctr = true;
+                    } else if (act == 30) {
+                        sleep(200);
+                        act++;
+                        current_floor[11][3] = 21;
+                        current_floor[10][3] = 1;
+                        refresh_ctr = true;
+                    } else if (act == 31) {
+                        sleep(200);
+                        act++;
+                        current_floor[11][4] = 21;
+                        current_floor[11][3] = 1;
+                        refresh_ctr = true;
+                    } else if (act == 32) {
+                        sleep(200);
+                        act++;
+                        current_floor[11][5] = 21;
+                        current_floor[11][4] = 1;
+                        refresh_ctr = true;
+                    } else if (act == 33) {
+                        sleep(200);
+                        act++;
+                        current_floor[10][5] = 21;
+                        current_floor[11][5] = 1;
+                        refresh_ctr = true;
+                    } else if (act == 34) {
+                        sleep(200);
+                        act++;
+                        current_floor[10][6] = 21;
+                        current_floor[10][5] = 1;
+                        refresh_ctr = true;
+                        isEvent = false;
+                    } else {
+                        if (!proceed)
+                            return;
+                        act = 0;
+                        current_floor[10][6] = 1;
+                        refresh_ctr = true;
+                        isEvent = false;
+                    }
+                    break;
+                default:
+                    isEvent = true;
+                    break;
+            }
+        }
+
+        private void button_logic(int inButton) {
+            switch (inButton) {
+                case UP:
+                    hero_sprite.set_direction(UP);
+                    walk_result = move(UP);
+                    if (walk_result != 0)
+                        hero_y--;
+                    break;
+                case DOWN:
+                    hero_sprite.set_direction(DOWN);
+                    walk_result = move(DOWN);
+                    if (walk_result != 0)
+                        hero_y++;
+                    break;
+                case LEFT:
+                    hero_sprite.set_direction(LEFT);
+                    walk_result = move(LEFT);
+                    if (walk_result != 0)
+                        hero_x--;
+                    break;
+                case RIGHT:
+                    hero_sprite.set_direction(RIGHT);
+                    walk_result = move(RIGHT);
+                    if (walk_result != 0)
+                        hero_x++;
+                    break;
+                case FLY_UP:
+                    try {
+                        Thread.sleep(150);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                    if (floor_num < 50) {
+                        current_game.put_one_floor(floor_num, current_floor);
+                        floor_num++;
+                        int pairup[] = find_hero_next_floor(true, floor_num);
+                        refresh_ctr = true;
+                        hero_y = pairup[0];
+                        hero_x = pairup[1];
+                    }
+                    break;
+                case FLY_DOWN:
+                    try {
+                        Thread.sleep(150);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                    if (floor_num > 0) {
+                        current_game.put_one_floor(floor_num, current_floor);
+                        floor_num--;
+                        int pairup[] = find_hero_next_floor(false, floor_num);
+                        refresh_ctr = true;
+                        hero_y = pairup[0];
+                        hero_x = pairup[1];
+                    }
+                    break;
+                default:
+                    break;
+
+            }
         }
 
         private void load_objects(byte[][] curr_floor){
@@ -1078,68 +1682,6 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
             }
         }
 
-        private void button_logic(int inButton) {
-            switch (inButton) {
-                case UP:
-                    hero_sprite.set_direction(UP);
-                    walk_result = move(UP);
-                    if (walk_result != 0)
-                        hero_y--;
-                    break;
-                case DOWN:
-                    hero_sprite.set_direction(DOWN);
-                    walk_result = move(DOWN);
-                    if (walk_result != 0)
-                        hero_y++;
-                    break;
-                case LEFT:
-                    hero_sprite.set_direction(LEFT);
-                    walk_result = move(LEFT);
-                    if (walk_result != 0)
-                        hero_x--;
-                    break;
-                case RIGHT:
-                    hero_sprite.set_direction(RIGHT);
-                    walk_result = move(RIGHT);
-                    if (walk_result != 0)
-                        hero_x++;
-                    break;
-                case FLY_UP:
-                    try {
-                        Thread.sleep(150);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
-                    if (floor_num < 50) {
-                        current_game.put_one_floor(floor_num, current_floor);
-                        floor_num++;
-                        int pairup[] = find_hero_next_floor(true, floor_num);
-                        refresh_ctr = true;
-                        hero_y = pairup[0];
-                        hero_x = pairup[1];
-                    }
-                    break;
-                case FLY_DOWN:
-                    try {
-                        Thread.sleep(150);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
-                    if (floor_num > 0) {
-                        current_game.put_one_floor(floor_num, current_floor);
-                        floor_num--;
-                        int pairup[] = find_hero_next_floor(false, floor_num);
-                        refresh_ctr = true;
-                        hero_y = pairup[0];
-                        hero_x = pairup[1];
-                    }
-                    break;
-                default:
-                    break;
-
-            }
-        }
-
         private void draw_game(Canvas canvas) {
             if (blackout) {
                 canvas.drawARGB(255, 0,0,0);
@@ -1302,6 +1844,31 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
             canvas.drawBitmap(ball, x - ball.getWidth()/2, y - ball.getHeight()/2, null);
         }
 
+        private void check_complete() {
+            switch (floor_num) {
+                case 8:
+                    if (hero_y != 5)
+                        break;
+                    if (hero_x != 9 && hero_x != 11)
+                        break;
+                    if (current_floor[5][9] == 1 && current_floor[5][11] == 1)
+                        current_floor[4][10] = 1;
+                    break;
+                case 10:
+                    if (hero_x != 6 && current_floor[1][6] != 38)
+                        break;
+                    boolean condition = current_floor[4][5] == 1 && current_floor[4][6] == 1;
+                    condition &= current_floor[4][7] == 1 && current_floor[5][5] == 1;
+                    condition &= current_floor[5][7] == 1 && current_floor[6][5] == 1;
+                    condition &= current_floor[6][6] == 1 && current_floor[6][7] == 1;
+                    if (condition)
+                        isEvent = true;
+                    break;
+                default:
+                    break;
+            }
+        }
+
         private int move(int direction) {
             int i, j;
             switch (direction) {
@@ -1322,7 +1889,6 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
             }
             switch (current_floor[i][j]) {
                 case -4:        // event floor
-                    current_floor[i][j] = 1;
                     isEvent = true;
                     return 1;
                 case -2:        // fake floor
@@ -1640,65 +2206,6 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
             }
         }
 
-        private void event(int in_floor_num){
-            switch (in_floor_num) {
-                case 3:
-                    if (act == 0) {
-                        if (!proceed)
-                            return;
-                        act++;
-                        current_floor[7][5] = 60;
-                        refresh_ctr = true;
-                    } else if (act == 1) {
-                        try {
-                            Thread.sleep(900);
-                        } catch (InterruptedException e) {
-                            e.printStackTrace();
-                        }
-                        act++;
-                        current_floor[8][5] = 57;
-                        current_floor[10][5] = 57;
-                        current_floor[9][4] = 57;
-                        current_floor[9][6] = 57;
-                        refresh_ctr = true;
-                    } else if (act == 2) {
-                        try {
-                            Thread.sleep(900);
-                        } catch (InterruptedException e) {
-                            e.printStackTrace();
-                        }
-                        act++;
-                        show_fight = true;
-                        hp = 0;
-                    } else if (act == 3) {
-                        try {
-                            Thread.sleep(900);
-                        } catch (InterruptedException e) {
-                            e.printStackTrace();
-                        }
-                        act++;
-                        show_fight = false;
-                    } else {
-                        try {
-                            Thread.sleep(500);
-                        } catch (InterruptedException e) {
-                            e.printStackTrace();
-                        }
-                        act = 0;
-                        floor_num = 2;
-                        hero_x = 4; hero_y = 8;
-                        hp = 200; atk = 10; def = 10;
-                        refresh_ctr = true;
-                        isEvent = false;
-                        blackout = true;
-                    }
-                    break;
-                default:
-                    isEvent = true;
-                    break;
-            }
-        }
-
         private int[] find_hero_next_floor(boolean dir, int in_floor_num) {
             byte[][] floor = current_game.get_one_floor(in_floor_num);
             int i = 6,j = 6;
@@ -1773,40 +2280,7 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
 
         }
 
-        private void battle_animation(boolean isHero, int i, int j){
-            int a_damage_b = atk - m_def;
-            int b_damage_a = m_atk - def;
-            if (b_damage_a < 0)
-                b_damage_a = 0;
-            if (m_hp <= 0){
-                isBattle = false;
-                show_hero = true;
-                show_fight = false;
-                current_floor[i][j] = 1;
-                refresh_ctr = true;
-                if (lucky_gold)
-                    gold += m_gold * 2;
-                else
-                    gold += m_gold;
-            } else {
-                isBattle = true;
-            }
-            if (isHero) {
-                show_hero = false;
-                show_fight = true;
-                m_hp -= a_damage_b;
-            }
-            else {
-                show_hero = true;
-                show_fight = false;
-                hp -= b_damage_a;
-            }
-            hero_attack = !hero_attack;
-        }
-
-
     }
-
 
 }
 
