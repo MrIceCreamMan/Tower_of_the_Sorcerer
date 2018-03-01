@@ -48,7 +48,7 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
     private boolean             m_mattock, wing_cent, e_mattock, bomb, wing_up;
     private boolean             key_enhac, wing_down, lucky_gold, dragonsbane, snow_cryst;
     private int                 thief_event_count = 0;
-    private int[]               merchant_history = {0,0,0};
+    private int[]               merchant_history = {0,0,0,0,0,0,0,0,0,0,0,0};
     // game pictures and stats table
     private Bitmap              ball, kid, pic_debug, hero;
     private Sprite              kid_sprite, hero_sprite, red_star_sprite;
@@ -436,17 +436,64 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
                 AlertDialog.Builder saint_builder = new AlertDialog.Builder(v.getContext());
                 switch (floor_num) {
                     case 2:
-                        saint_builder.setMessage("i am saint 2f");
+                        saint_builder.setMessage(R.string.saint_2f);
                         break;
                     case 3:
-                        saint_builder.setMessage("here is staff of wisdom, it shows you stats");
+                        saint_builder.setMessage(R.string.saint_3f);
                         stf_wsdm = true;
                         break;
                     case 4:
-                        saint_builder.setMessage("i am saint 4f");
+                        saint_builder.setMessage(R.string.saint_4f);
                         break;
                     case 6:
-                        saint_builder.setMessage("i am saint 6f");
+                        saint_builder.setMessage(R.string.saint_6f);
+                        break;
+                    case 16:
+                        if (j == 1)
+                            saint_builder.setMessage(R.string.saint_16f);
+                        else {
+                            saint_builder.setMessage(R.string.saint_16fh);
+                            elixir = true;
+                        }
+                        break;
+                    case 18:
+                        saint_builder.setMessage(R.string.saint_18f);
+                        break;
+                    case 21:
+                        saint_builder.setMessage(R.string.saint_21f);
+                        break;
+                    case 23:
+                        saint_builder.setMessage(R.string.saint_23f);
+                        break;
+                    case 27:
+                        saint_builder.setMessage(R.string.saint_27f);
+                        break;
+                    case 31:
+                        saint_builder.setMessage(R.string.saint_31f);
+                        break;
+                    case 33:
+                        saint_builder.setMessage(R.string.saint_33f);
+                        break;
+                    case 36:
+                        saint_builder.setMessage(R.string.saint_36f);
+                        break;
+                    case 37:
+                        saint_builder.setMessage(R.string.saint_37f);
+                        break;
+                    case 39:
+                        saint_builder.setMessage(R.string.saint_39f);
+                        break;
+                    case 42:
+                        saint_builder.setMessage(R.string.saint_42f);
+                        break;
+                    case 45:
+                        saint_builder.setMessage(R.string.saint_45f);
+                        break;
+                    case 46:
+                        saint_builder.setMessage(R.string.saint_46f);
+                        break;
+                    case 48:
+                        saint_builder.setMessage(R.string.saint_48f);
                         break;
                     default:
                         break;

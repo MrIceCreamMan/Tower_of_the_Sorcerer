@@ -17,7 +17,10 @@
     <string name="info_button">Info</string>
     <string name="back_button">Back</string>
     <string name="saint_2f">Back</string>
-    <string name="saint_3f">Back</string>
+    <string name="saint_3f">Alas, my age is catching up to me. I can fight no more. Brave young man,
+you should take this Staff of Wisdom since I have no use for it. It will reveal
+the strength of monsters so you could better prepare your fight against them. Take
+care and good luck.</string>
     <string name="saint_4f">There are doors which cannot be opened with a key. To open them, you will have
  to defeat the monsters which guard them.</string>
     <string name="saint_6f">After you make a purchase from a merchant, go talk to him again because he
