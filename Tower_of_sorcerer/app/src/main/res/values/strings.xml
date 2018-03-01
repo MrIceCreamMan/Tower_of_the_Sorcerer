@@ -16,4 +16,80 @@
     <string name="finished_button">End Game</string>
     <string name="info_button">Info</string>
     <string name="back_button">Back</string>
+    <string name="saint_2f">Back</string>
+    <string name="saint_3f">Back</string>
+    <string name="saint_4f">There are doors which cannot be opened with a key. To open them, you will have
+ to defeat the monsters which guard them.</string>
+    <string name="saint_6f">After you make a purchase from a merchant, go talk to him again because he
+will tell you some important information.</string>
+    <string name="saint_16f">I heard that there are two hidden red keys hidden in this area.</string>
+    <string name="saint_16fh">Back</string>
+    <string name="saint_18f">Many knights had failed to pass this area because of those Rock Monsters.
+Their defenses are just too high. Maybe you should increase your offense at the
+altar a few time in this area.</string>
+    <string name="saint_21f">Do you know the Archmage in this area is the owner of this tower? He is way
+too strong for you now. Fighting him is suicide. You should go to higher floors
+and get stronger first.</string>
+    <string name="saint_23f">It is said that there is a hidden message in this floor.</string>
+    <string name="saint_27f">At this current stage, if you have 1500 health, 80 attack, 98 defense, 5
+yellow keys and 1 blue key, you are almost ideal.</string>
+    <string name="saint_31f">The attack power of the swordsmen is too high. You should only fight them when
+you can one shot them, or you will lose a lot of health.</string>
+    <string name="saint_33f">More haste, less speed.</string>
+    <string name="saint_36f">If you find the four secret tunnels in this floor, you will be able to go
+upstairs without fighting strong enemies.</string>
+    <string name="saint_37f">This floor is an item warehouse, but to get the treasure, you will have to use
+the mattock.</string>
+    <string name="saint_39f">At three o\'clock, the secret treasure which allows you to teleport three time
+will appear.</string>
+    <string name="saint_42f">The magic powers of Mages allows them to attack from a distance, so don\'t get
+near them. The magic power of Demon Sergeant cannot work alone, but when they
+appear in pairs, they can form an invisible demon gate which cut your health in
+half when you pass by.</string>
+    <string name="saint_45f">The 44th floor is in a different dimension, and you can\'t get there with
+stairs. But you may try teleporting.</string>
+    <string name="saint_46f">There is a secret about the 41st floor - it is perfectly symmetrical even
+though it doesn't seem to be.</string>
+    <string name="saint_48f">The shape of five on a dice is actually an ancient symbol for sealing magic.
+Remember the symbol because it will help you in the future.</string>
+    <string name="saint_default">Good luck young man!</string>
+    <string name="merchant_2f0">Thank you so much for freeing me. Please take this 1000 gold as a gift.</string>
+    <string name="merchant_6f0">I have a blue key for 50 gold. Would you like to buy it?</string>
+    <string name="merchant_7f0">I have 5 yellow keys for 50 gold. Would you like to buy them?</string>
+    <string name="merchant_12f0">I have a red key for 800 gold. Would you like to buy it?</string>
+    <string name="merchant_12fh0">I have lots of yellow keys, 1000 gold each. Would you like to buy one?</string>
+    <string name="merchant_15f0">I have a blue key for 200 gold. Would you like to buy it?</string>
+    <string name="merchant_28f0">Back</string>
+    <string name="merchant_31f0">I have 1 blue key and 4 yellow keys for 1000 gold. Would you like to buy them?</string>
+    <string name="merchant_38f0">I have 3 yellow keys for 200 gold. Would you like to buy them?</string>
+    <string name="merchant_39f0">I have 3 blue keys for 2000 gold. Would you like to buy them?</string>
+    <string name="merchant_45f0">I can recover you 2000 health for 1000 gold. Would you let me do it?</string>
+    <string name="merchant_47f0">I have a enhanced mattock for 4000 gold. Would you like to buy it?</string>
+    <string name="merchant_2f1">Thank you. Take care.</string>
+    <string name="merchant_6f1">This tower consists of 50 floors. Every 10 floors form one area, and each area
+ has one boss guarding the entrance to the next area. To proceed, you must defeat
+ these bosses.</string>
+    <string name="merchant_7f1">When you offer gold in exchange for strength at an alter, you should put your
+priority on defense. However, you cannot completely ignore offense either.</string>
+    <string name="merchant_12f1">Have you found the secret tunnels on the 9th, 16th, and 18th floor? I heard
+that there are more of them on higher floors.</string>
+    <string name="merchant_12fh1">Back</string>
+    <string name="merchant_15f1">When you carry a cross, your attacks will be twice as effective against
+zombies and the Vampire, and I don\'t think you can defeat the Vampire without it.
+There is a cross hidden on floors higher than this one.</string>
+    <string name="merchant_28f1">Back</string>
+    <string name="merchant_31f1">Even though the tower is said to have 50 floors, I have never heard anyone
+reaching to the 50th floor.</string>
+    <string name="merchant_38f1">There is never a gate without Gate-Keepers, and there is always a gate when
+you see Gate-Keepers.</string>
+    <string name="merchant_39f1">There is a Lucky Gold hidden in this tower. If you carry it with you, you will
+get twice as much money from battles.</string>
+    <string name="merchant_45f1">I heard that the Sacred Shield can protect you against all kinds of magic
+powers. But I also heard that this shield is hidden on a floor which doesn't
+exist.</string>
+    <string name="merchant_47f1">I heard that to kill the Dragon, you must have a holy sword, a holy
+shield, and most importantly the Dragonsbane, which doubles your attack against
+the Dragon.</string>
+    <string name="merchant_default">Keep it secret, and don\'t tell others</string>
+
 </resources>

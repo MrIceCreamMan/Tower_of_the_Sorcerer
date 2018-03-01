@@ -73,18 +73,95 @@ m33b3_archmage          4500        560         310         1000
 91- dragonsbane 92 - snow_cryst
 
 ----------------------------------------------------------------------------------
-----------------------------------------------------------------------------------
-----------------------------------------------------------------------------------
-							
 -----------------------------    My translation    -------------------------------
+----------------------------------------------------------------------------------
  1. There are doors which cannot be opened with a key. To open them, you will have
- to defeat the monsters who guard them.
- 2. 
+ to defeat the monsters which guard them.
+
+ 2. After you make a purchase from a merchant, go talk to him again because he 
+will tell you some important information.
+
  3. This tower consists of 50 floors. Every 10 floors form one area, and each area
  has one boss guarding the entrance to the next area. To proceed, you must defeat
  these bosses.
 
+ 4. When you offer gold in exchange for strength at an alter, you should put your 
+priority on defense. However, you cannot completely ignore offense either.
+
+ 5. Have you found the secret tunnels on the 9th, 16th, and 18th floor? I heard 
+that there are more of them on higher floors.
+
+ 6. When you carry a cross, your attacks will be twice as effective against 
+zombies and the Vampire, and I don't think you can defeat the Vampire without it. 
+There is a cross hidden on floors higher than this one.
+
+ 7. I heard that there are two hidden red keys hidden in this area.
+
+ 8. Many knights had failed to pass this area because of those Rock Monsters. 
+Their defenses are just too high. Maybe you should increase your offense at the 
+altar a few time in this area.
+
+ 9. Do you know the Archmage in this area is the owner of this tower? He is way 
+too strong for you now. Fighting him is suicide. You should go to higher floors 
+and get stronger first. 
+
+10. At this current stage, if you have 1500 health, 80 attack, 98 defense, 5 
+yellow keys and 1 blue key, you are almost ideal.
+
+11. The attack power of the swordsmen is too high. You should only fight them when 
+you can one shot them, or you will lose a lot of health. 
+
+12. Even though the tower is said to have 50 floors, I have never heard anyone 
+reaching to the 50th floor.
+
+13. More haste, less speed.
+
+14. If you find the four secret tunnels in this floor, you will be able to go 
+upstairs without fighting strong enemies.
+
+15. This floor is an item warehouse, but to get the treasure, you will have to use 
+the mattock.
+
+16. There is never a gate without Gate-Keepers, and there is always a gate when 
+you see Gate-Keepers. 
+
+17. At three o'clock, the secret treasure which allows you to teleport three time 
+will appear.
+
+18. There is a Lucky Gold hidden in this tower. If you carry it with you, you will 
+get twice as much money from battles.
+
+19. The magic powers of Mages allows them to attack from a distance, so don't get 
+near them. The magic power of Demon Sergeant cannot work alone, but when they 
+appear in pairs, they can form an invisible demon gate which cut your health in 
+half when you pass by.
+
+20. The 44th floor is in a different dimension, and you can't get there with 
+stairs. But you may try teleporting. 
+
+21. I heard that the Sacred Shield can protect you against all kinds of magic 
+powers. But I also heard that this shield is hidden on a floor which doesn't 
+exist.
+
+22. There is a secret about the 41st floor - it is perfectly symmetrical even 
+though it doesn't seem to be.
+
+23. I heard that to kill the Dragon, you must have a holy sword, a holy 
+shield, and most importantly the Dragonsbane, which doubles your attack against 
+the Dragon. 
+
+24. The shape of five on a dice is actually an ancient symbol for sealing magic.
+Remember the symbol because it will help you in the future.
+
+default:
+Saint:		Good luck young man.
+Merchant:	Keep it secret, and don't tell others. 
+
+It is said that there is a hidden message in this floor. 
+
+----------------------------------------------------------------------------------
 -----------------------------    Original text    --------------------------------
+----------------------------------------------------------------------------------
  1. There are doors which cannot be opened with a key; these doors can only open 
  by beating the monsters which guard them.
 
@@ -108,14 +185,14 @@ m33b3_archmage          4500        560         310         1000
  7. I heard that you can find a red key at two places in this area. 
 
  8. In this area, if you don't raise your offensive power at an altar a few times,
- you mayy not be able to destroy 'Rock' monsters. Be careful!
+ you may not be able to destroy 'Rock' monsters. Be careful!
 
  9. The Great Magic Master is in this area. He is a proprietor of this magic 
  tower. At your strenght, to attack him means death. It stands to reason that you 
  should not face him, but rather, get items on higher levels first. 
 
 10. In the stage of this floor, if your strength is 1500, offensive power is 80,
-defensive power is 98, you have five keys, and one bluee key, you are almost 
+defensive power is 98, you have five keys, and one blue key, you are almost 
 ideal.
 
 11. The offensive power of the swordsman who uses two swords is too high. He can 
@@ -160,10 +237,13 @@ shield is hidden on a floor that doesn't exist.
 and a Dragon slayer, and also you must be high level.
 
 24. It is said that the symbol of 5 on a pair of dice has the force of sealing 
-magic. You had better memorize it till you fight the boss of theis area.
+magic. You had better memorize it till you fight the boss of this area.
 
 default: 
 Saint:	  I have done what I can. Good luck!
 Merchant: Be careful. I have nothing more to say.
 
 I have nothing to say. A certain message may be hidden in this room.
+----------------------------------------------------------------------------------
+----------------------------------------------------------------------------------
+----------------------------------------------------------------------------------
