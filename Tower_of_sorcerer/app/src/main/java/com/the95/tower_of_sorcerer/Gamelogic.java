@@ -23,7 +23,6 @@ import static android.graphics.Bitmap.createScaledBitmap;
 public class Gamelogic extends Activity implements View.OnTouchListener {
     // constants for convenience
     public final int            UP = 3, DOWN = 0, RIGHT = 2, LEFT = 1, FLY_UP = 4, FLY_DOWN = 5;
-    public final int            THIEF = 1, SAINT = 2, MERCHANGT = 3, FAIRTY = 4, SHOP = 5, PRINCESS = 6;
     //  general game controls
     private GameView            gameview;
     private float               x, y;
@@ -49,6 +48,8 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
     private boolean             key_enhac, wing_down, lucky_gold, dragonsbane, snow_cryst;
     private int                 thief_event_count = 0;
     private int[]               merchant_history = {0,0,0,0,0,0,0,0,0,0,0,0};
+    private int[]               saint_history = {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
+    private int[]               echo_history = {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
     // game pictures and stats table
     private Bitmap              ball, kid, pic_debug, hero;
     private Sprite              kid_sprite, hero_sprite, red_star_sprite;
@@ -399,7 +400,7 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
                 break;
         }
     }
-    // interactions with npc: thief, saint, merchant, shop, and princess)
+    // interactions with npc: thief, saint, merchant, altar, and princess)
     public void checkNextPosition(View v, int j, int i){
         //Log.v(TAG, "next called  " + String.valueOf(current_floor[i][j]));
         switch (current_floor[i][j]) {
@@ -435,162 +436,545 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
             case 22:        // saint
                 AlertDialog.Builder saint_builder = new AlertDialog.Builder(v.getContext());
                 switch (floor_num) {
-                    case 2:
+                    case 2:     // ********************************************
                         saint_builder.setMessage(R.string.saint_2f);
                         break;
                     case 3:
-                        saint_builder.setMessage(R.string.saint_3f);
-                        stf_wsdm = true;
+                        if (saint_history[1] == 0) {
+                            saint_history[1]++;
+                            saint_builder.setMessage(R.string.saint_3f);
+                            stf_wsdm = true;
+                        } else
+                            saint_builder.setMessage(R.string.saint_default);
                         break;
                     case 4:
-                        saint_builder.setMessage(R.string.saint_4f);
+                        if (saint_history[2] == 0) {
+                            saint_history[2]++;
+                            echo_history[0]++;
+                            saint_builder.setMessage(R.string.saint_4f);
+                        } else
+                            saint_builder.setMessage(R.string.saint_default);
                         break;
                     case 6:
-                        saint_builder.setMessage(R.string.saint_6f);
+                        if (saint_history[3] == 0) {
+                            saint_history[3]++;
+                            echo_history[1]++;
+                            saint_builder.setMessage(R.string.saint_6f);
+                        } else
+                            saint_builder.setMessage(R.string.saint_default);
                         break;
                     case 16:
                         if (j == 1)
-                            saint_builder.setMessage(R.string.saint_16f);
+                            if (saint_history[4] == 0) {
+                                saint_history[4]++;
+                                echo_history[6]++;
+                                saint_builder.setMessage(R.string.saint_16f);
+                            } else
+                                saint_builder.setMessage(R.string.saint_default);
                         else {
-                            saint_builder.setMessage(R.string.saint_16fh);
-                            elixir = true;
+                            if (saint_history[5] == 0) {
+                                saint_history[5]++; // 8*******************************************
+                                saint_builder.setMessage(R.string.saint_16fh);
+                                elixir = true;
+                            } else
+                                saint_builder.setMessage(R.string.saint_default);
                         }
                         break;
                     case 18:
-                        saint_builder.setMessage(R.string.saint_18f);
+                        if (saint_history[6] == 0) {
+                            saint_history[6]++;
+                            echo_history[7]++;
+                            saint_builder.setMessage(R.string.saint_18f);
+                        } else
+                            saint_builder.setMessage(R.string.saint_default);
                         break;
                     case 21:
-                        saint_builder.setMessage(R.string.saint_21f);
+                        if (saint_history[7] == 0) {
+                            saint_history[7]++;
+                            echo_history[8]++;
+                            saint_builder.setMessage(R.string.saint_21f);
+                        } else
+                            saint_builder.setMessage(R.string.saint_default);
                         break;
                     case 23:
-                        saint_builder.setMessage(R.string.saint_23f);
+                        if (saint_history[8] == 0) {
+                            saint_history[8]++;
+                            saint_builder.setMessage(R.string.saint_23f);
+                        } else
+                            saint_builder.setMessage(R.string.saint_default);
                         break;
                     case 27:
-                        saint_builder.setMessage(R.string.saint_27f);
+                        if (saint_history[9] == 0) {
+                            saint_history[9]++;
+                            echo_history[9]++;
+                            saint_builder.setMessage(R.string.saint_27f);
+                        } else
+                            saint_builder.setMessage(R.string.saint_default);
                         break;
                     case 31:
-                        saint_builder.setMessage(R.string.saint_31f);
+                        if (saint_history[10] == 0) {
+                            saint_history[10]++;
+                            echo_history[10]++;
+                            saint_builder.setMessage(R.string.saint_31f);
+                        } else
+                            saint_builder.setMessage(R.string.saint_default);
                         break;
                     case 33:
-                        saint_builder.setMessage(R.string.saint_33f);
+                        if (saint_history[11] == 0) {
+                            saint_history[11]++;
+                            echo_history[12]++;
+                            saint_builder.setMessage(R.string.saint_33f);
+                        } else
+                            saint_builder.setMessage(R.string.saint_default);
                         break;
                     case 36:
-                        saint_builder.setMessage(R.string.saint_36f);
+                        if (saint_history[12] == 0) {
+                            saint_history[12]++;
+                            echo_history[13]++;
+                            saint_builder.setMessage(R.string.saint_36f);
+                        } else
+                            saint_builder.setMessage(R.string.saint_default);
                         break;
                     case 37:
-                        saint_builder.setMessage(R.string.saint_37f);
+                        if (saint_history[13] == 0) {
+                            saint_history[13]++;
+                            echo_history[14]++;
+                            saint_builder.setMessage(R.string.saint_37f);
+                        } else
+                            saint_builder.setMessage(R.string.saint_default);
                         break;
                     case 39:
-                        saint_builder.setMessage(R.string.saint_39f);
+                        if (saint_history[14] == 0) {
+                            saint_history[14]++;
+                            echo_history[16]++;
+                            saint_builder.setMessage(R.string.saint_39f);
+                        } else
+                            saint_builder.setMessage(R.string.saint_default);
                         break;
                     case 42:
-                        saint_builder.setMessage(R.string.saint_42f);
+                        if (saint_history[15] == 0) {
+                            saint_history[15]++;
+                            echo_history[18]++;
+                            saint_builder.setMessage(R.string.saint_42f);
+                        } else
+                            saint_builder.setMessage(R.string.saint_default);
                         break;
                     case 45:
-                        saint_builder.setMessage(R.string.saint_45f);
+                        if (saint_history[16] == 0) {
+                            saint_history[16]++;
+                            echo_history[19]++;
+                            saint_builder.setMessage(R.string.saint_45f);
+                        } else
+                            saint_builder.setMessage(R.string.saint_default);
                         break;
                     case 46:
-                        saint_builder.setMessage(R.string.saint_46f);
+                        if (saint_history[17] == 0) {
+                            saint_history[17]++;
+                            echo_history[21]++;
+                            saint_builder.setMessage(R.string.saint_46f);
+                        } else
+                            saint_builder.setMessage(R.string.saint_default);
                         break;
                     case 48:
-                        saint_builder.setMessage(R.string.saint_48f);
+                        if (saint_history[18] == 0) {
+                            saint_history[18]++;
+                            echo_history[23]++;
+                            saint_builder.setMessage(R.string.saint_48f);
+                        } else
+                            saint_builder.setMessage(R.string.saint_default);
                         break;
                     default:
+                        saint_builder.setMessage("Saint dialog bug in checkNextPostion()");
                         break;
                 }
                 AlertDialog saint_dialog = saint_builder.create();
                 saint_dialog.show();
                 break;
             case 23:        // merchant
-                AlertDialog.Builder merchant_builder = new AlertDialog.Builder(v.getContext());
-                switch (floor_num){
+                final AlertDialog.Builder merchant_builder = new AlertDialog.Builder(v.getContext());
+                final AlertDialog.Builder no_gold_builder = new AlertDialog.Builder(v.getContext());
+                switch (floor_num) {
                     case 2:
                         if (merchant_history[0] == 0) {
-                            merchant_builder.setMessage("thank you! 1000 gold");
                             merchant_history[0]++;
+                            merchant_builder.setMessage(R.string.merchant_2f0);
+                            gold += 1000;
                         } else {
-                            merchant_builder.setMessage("no more money");
+                            merchant_builder.setMessage(R.string.merchant_2f1);
                         }
                         break;
                     case 6:
-                        if (merchant_history[0] == 0) {
-                            merchant_builder.setMessage("buy!");
-                            merchant_builder.setPositiveButton("yes", new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialogInterface, int i) {
-                                    merchant_history[0]++;
-                                    gold = 1000;
-                                }
-                            });
-                            merchant_builder.setNegativeButton("no", new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialogInterface, int i) {
-                                    gold = 10;
-                                }
-                            });
-                        } else if (merchant_history[0] == 1) {
-                            merchant_history[0]++;
-                            merchant_builder.setMessage("tell you something");
-                        } else {
-                            merchant_builder.setMessage("can't tell you, sorry");
-                        }
-                        break;
-                    case 7:
                         if (merchant_history[1] == 0) {
-                            merchant_builder.setMessage("buy!");
+                            merchant_builder.setMessage(R.string.merchant_6f0);
                             merchant_builder.setPositiveButton("yes", new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialogInterface, int i) {
-                                    merchant_history[1]++;
-                                    gold = 1000;
+                                    if (gold >= 50) {
+                                        merchant_history[1]++;
+                                        gold -= 50;
+                                        count_b++;
+                                    } else {
+                                        no_gold_builder.setMessage(R.string.purchase_fail);
+                                        AlertDialog no_gold_dialog = no_gold_builder.create();
+                                        no_gold_dialog.show();
+                                    }
                                 }
                             });
                             merchant_builder.setNegativeButton("no", new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialogInterface, int i) {
-                                    gold = 10;
                                 }
                             });
                         } else if (merchant_history[1] == 1) {
                             merchant_history[1]++;
-                            merchant_builder.setMessage("tell you something");
+                            echo_history[2]++;
+                            merchant_builder.setMessage(R.string.merchant_6f1);
                         } else {
-                            merchant_builder.setMessage("can't tell you, sorry");
+                            merchant_builder.setMessage(R.string.merchant_default);
+                        }
+                        break;
+                    case 7:
+                        if (merchant_history[2] == 0) {
+                            merchant_builder.setMessage(R.string.merchant_7f0);
+                            merchant_builder.setPositiveButton("yes", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialogInterface, int i) {
+                                    if (gold >= 50) {
+                                        merchant_history[2]++;
+                                        gold -= 50;
+                                        count_y += 5;
+                                    } else {
+                                        no_gold_builder.setMessage(R.string.purchase_fail);
+                                        AlertDialog no_gold_dialog = no_gold_builder.create();
+                                        no_gold_dialog.show();
+                                    }
+                                }
+                            });
+                            merchant_builder.setNegativeButton("no", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialogInterface, int i) {
+                                }
+                            });
+                        } else if (merchant_history[2] == 1) {
+                            merchant_history[2]++;
+                            echo_history[3]++;
+                            merchant_builder.setMessage(R.string.merchant_7f1);
+                        } else {
+                            merchant_builder.setMessage(R.string.merchant_default);
+                        }
+                        break;
+                    case 12:
+                        if (hero_x < 6) {
+                            if (merchant_history[3] == 0) {
+                                merchant_builder.setMessage(R.string.merchant_12f0);
+                                merchant_builder.setPositiveButton("yes", new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialogInterface, int i) {
+                                        if (gold >= 800) {
+                                            merchant_history[3]++;
+                                            gold -= 800;
+                                            count_r++;
+                                        } else {
+                                            no_gold_builder.setMessage(R.string.purchase_fail);
+                                            AlertDialog no_gold_dialog = no_gold_builder.create();
+                                            no_gold_dialog.show();
+                                        }
+                                    }
+                                });
+                                merchant_builder.setNegativeButton("no", new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialogInterface, int i) {
+                                    }
+                                });
+                            } else if (merchant_history[3] == 1) {
+                                merchant_history[3]++;
+                                echo_history[4]++;
+                                merchant_builder.setMessage(R.string.merchant_12f1);
+                            } else {
+                                merchant_builder.setMessage(R.string.merchant_default);
+                            }
+                        } else {
+                            merchant_builder.setMessage(R.string.merchant_12fh);
+                            merchant_builder.setPositiveButton("yes", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialogInterface, int i) {
+                                    if (gold >= 1000) {
+                                        merchant_history[4]++;
+                                        gold -= 1000;
+                                        count_y++;
+                                    } else {
+                                        no_gold_builder.setMessage(R.string.purchase_fail);
+                                        AlertDialog no_gold_dialog = no_gold_builder.create();
+                                        no_gold_dialog.show();
+                                    }
+                                }
+                            });
+                            merchant_builder.setNegativeButton("no", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialogInterface, int i) {
+                                }
+                            });
+                        }
+                        break;
+                    case 15:
+                        if (merchant_history[5] == 0) {
+                            merchant_builder.setMessage(R.string.merchant_15f0);
+                            merchant_builder.setPositiveButton("yes", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialogInterface, int i) {
+                                    if (gold >= 200) {
+                                        merchant_history[5]++;
+                                        gold -= 200;
+                                        count_b++;
+                                    } else {
+                                        no_gold_builder.setMessage(R.string.purchase_fail);
+                                        AlertDialog no_gold_dialog = no_gold_builder.create();
+                                        no_gold_dialog.show();
+                                    }
+                                }
+                            });
+                            merchant_builder.setNegativeButton("no", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialogInterface, int i) {
+                                }
+                            });
+                        } else if (merchant_history[5] == 1) {
+                            merchant_history[5]++;
+                            echo_history[5]++;
+                            merchant_builder.setMessage(R.string.merchant_15f1);
+                        } else {
+                            merchant_builder.setMessage(R.string.merchant_default);
+                        }
+                        break;
+                    case 28:
+                        merchant_builder.setMessage(R.string.merchant_28f);
+                        merchant_builder.setPositiveButton("yes", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                if (count_y > 0) {
+                                    gold += 100;
+                                    count_y--;
+                                } else {
+                                    no_gold_builder.setMessage(R.string.purchase_fail_28f);
+                                    AlertDialog no_gold_dialog = no_gold_builder.create();
+                                    no_gold_dialog.show();
+                                }
+                            }
+                        });
+                        merchant_builder.setNegativeButton("no", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                            }
+                        });
+                        break;
+                    case 31:
+                        if (merchant_history[7] == 0) {
+                            merchant_builder.setMessage(R.string.merchant_31f0);
+                            merchant_builder.setPositiveButton("yes", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialogInterface, int i) {
+                                    if (gold >= 1000) {
+                                        merchant_history[7]++;
+                                        gold -= 1000;
+                                        count_y += 4;
+                                        count_b++;
+                                    } else {
+                                        no_gold_builder.setMessage(R.string.purchase_fail);
+                                        AlertDialog no_gold_dialog = no_gold_builder.create();
+                                        no_gold_dialog.show();
+                                    }
+                                }
+                            });
+                            merchant_builder.setNegativeButton("no", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialogInterface, int i) {
+                                }
+                            });
+                        } else if (merchant_history[7] == 1) {
+                            merchant_history[7]++;
+                            echo_history[11]++;
+                            merchant_builder.setMessage(R.string.merchant_31f1);
+                        } else {
+                            merchant_builder.setMessage(R.string.merchant_default);
+                        }
+                        break;
+                    case 38:
+                        if (merchant_history[8] == 0) {
+                            merchant_builder.setMessage(R.string.merchant_38f0);
+                            merchant_builder.setPositiveButton("yes", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialogInterface, int i) {
+                                    if (gold >= 200) {
+                                        merchant_history[8]++;
+                                        gold -= 200;
+                                        count_y += 3;
+                                    } else {
+                                        no_gold_builder.setMessage(R.string.purchase_fail);
+                                        AlertDialog no_gold_dialog = no_gold_builder.create();
+                                        no_gold_dialog.show();
+                                    }
+                                }
+                            });
+                            merchant_builder.setNegativeButton("no", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialogInterface, int i) {
+                                }
+                            });
+                        } else if (merchant_history[8] == 1) {
+                            merchant_history[8]++;
+                            echo_history[15]++;
+                            merchant_builder.setMessage(R.string.merchant_38f1);
+                        } else {
+                            merchant_builder.setMessage(R.string.merchant_default);
+                        }
+                        break;
+                    case 39:
+                        if (merchant_history[9] == 0) {
+                            merchant_builder.setMessage(R.string.merchant_39f0);
+                            merchant_builder.setPositiveButton("yes", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialogInterface, int i) {
+                                    if (gold >= 2000) {
+                                        merchant_history[9]++;
+                                        gold -= 2000;
+                                        count_b += 3;
+                                    } else {
+                                        no_gold_builder.setMessage(R.string.purchase_fail);
+                                        AlertDialog no_gold_dialog = no_gold_builder.create();
+                                        no_gold_dialog.show();
+                                    }
+                                }
+                            });
+                            merchant_builder.setNegativeButton("no", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialogInterface, int i) {
+                                }
+                            });
+                        } else if (merchant_history[9] == 1) {
+                            merchant_history[9]++;
+                            echo_history[17]++;
+                            merchant_builder.setMessage(R.string.merchant_39f1);
+                        } else {
+                            merchant_builder.setMessage(R.string.merchant_default);
+                        }
+                        break;
+                    case 45:
+                        if (merchant_history[10] == 0) {
+                            merchant_builder.setMessage(R.string.merchant_45f0);
+                            merchant_builder.setPositiveButton("yes", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialogInterface, int i) {
+                                    if (gold >= 1000) {
+                                        merchant_history[10]++;
+                                        gold -= 1000;
+                                        hp += 2000;
+                                    } else {
+                                        no_gold_builder.setMessage(R.string.purchase_fail);
+                                        AlertDialog no_gold_dialog = no_gold_builder.create();
+                                        no_gold_dialog.show();
+                                    }
+                                }
+                            });
+                            merchant_builder.setNegativeButton("no", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialogInterface, int i) {
+                                }
+                            });
+                        } else if (merchant_history[10] == 1) {
+                            merchant_history[10]++;
+                            echo_history[20]++;
+                            merchant_builder.setMessage(R.string.merchant_45f1);
+                        } else {
+                            merchant_builder.setMessage(R.string.merchant_default);
+                        }
+                        break;
+                    case 47:
+                        if (merchant_history[11] == 0) {
+                            merchant_builder.setMessage(R.string.merchant_47f0);
+                            merchant_builder.setPositiveButton("yes", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialogInterface, int i) {
+                                    if (gold >= 4000) {
+                                        merchant_history[11]++;
+                                        gold -= 4000;
+                                        e_mattock = true;
+                                    } else {
+                                        no_gold_builder.setMessage(R.string.purchase_fail);
+                                        AlertDialog no_gold_dialog = no_gold_builder.create();
+                                        no_gold_dialog.show();
+                                    }
+                                }
+                            });
+                            merchant_builder.setNegativeButton("no", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialogInterface, int i) {
+                                }
+                            });
+                        } else if (merchant_history[11] == 1) {
+                            merchant_history[11]++;
+                            echo_history[22]++;
+                            merchant_builder.setMessage(R.string.merchant_47f1);
+                        } else {
+                            merchant_builder.setMessage(R.string.merchant_default);
                         }
                         break;
                     default:
-                        merchant_builder.setMessage("dude");
+                        merchant_builder.setMessage("Merchant dialog bug in checkNextPostion()");
                         break;
                 }
                 AlertDialog merchant_dialog = merchant_builder.create();
                 merchant_dialog.show();
                 break;
-            case 26:        // shop
+            case 26:        // altar
+                final int price = 10*price_idx*price_idx+10*price_idx+20;
                 String item_atk = "Attack \t+ " + String.valueOf(2 + 2 * (floor_num/10));
                 String item_def = "Defence \t+ " + String.valueOf(4 + 4 * (floor_num/10));
-                String price = "Would you like to spend " + String.valueOf(10*price_idx*price_idx+10*price_idx+20)+ " gold for one of the following items";
+                String offer = "Would you like to offer " + String.valueOf(price)+ " gold for one of the following items";
                 String[] item_list = {"Health \t+ 1000", item_atk, item_def, "Not this time"};
-                AlertDialog.Builder shop_builder = new AlertDialog.Builder(v.getContext());
-                shop_builder.setTitle(price);
-                shop_builder.setItems(item_list, new DialogInterface.OnClickListener() {
+                final AlertDialog.Builder altar_builder = new AlertDialog.Builder(v.getContext());
+                final AlertDialog.Builder fail_offer_builder = new AlertDialog.Builder(v.getContext());
+                altar_builder.setTitle(offer);
+                altar_builder.setItems(item_list, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int item) {
                         if (item == 0) {
-                            count_y += 10;
+                            if (gold > price) {
+                                gold -= price;
+                                price_idx++;
+                                hp += 1000;
+                            } else {
+                                fail_offer_builder.setMessage(R.string.purchase_fail);
+                                AlertDialog no_gold_dialog = fail_offer_builder.create();
+                                no_gold_dialog.show();
+                            }
                         } else if (item == 1) {
-                            count_b += 10;
+                            if (gold > price) {
+                                gold -= price;
+                                price_idx++;
+                                atk += (2 + 2 * (floor_num/10));
+                            } else {
+                                fail_offer_builder.setMessage(R.string.purchase_fail);
+                                AlertDialog no_gold_dialog = fail_offer_builder.create();
+                                no_gold_dialog.show();
+                            }
                         } else if (item == 2){
-                            count_r += 10;
-                        } else {
-                            count_y = 100;
-                        }
+                            if (gold > price) {
+                                gold -= price;
+                                price_idx++;
+                                def += (4 + 4 * (floor_num/10));
+                            } else {
+                                fail_offer_builder.setMessage(R.string.purchase_fail);
+                                AlertDialog no_gold_dialog = fail_offer_builder.create();
+                                no_gold_dialog.show();
+                            }
+                        } else { }
                     }
                 });
-                AlertDialog shop_list = shop_builder.create();
-                shop_list.show();
+                AlertDialog altar_list = altar_builder.create();
+                altar_list.show();
                 break;
             case 28:
                 AlertDialog.Builder princess_builder = new AlertDialog.Builder(v.getContext());
-                princess_builder.setMessage("I am fake, fuck you!");
+                princess_builder.setMessage(R.string.princess_dialog);
                 AlertDialog princess_dialog = princess_builder.create();
                 princess_dialog.show();
                 break;

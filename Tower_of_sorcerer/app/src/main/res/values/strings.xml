@@ -60,15 +60,15 @@ Remember the symbol because it will help you in the future.</string>
     <string name="merchant_6f0">I have a blue key for 50 gold. Would you like to buy it?</string>
     <string name="merchant_7f0">I have 5 yellow keys for 50 gold. Would you like to buy them?</string>
     <string name="merchant_12f0">I have a red key for 800 gold. Would you like to buy it?</string>
-    <string name="merchant_12fh0">I have lots of yellow keys, 1000 gold each. Would you like to buy one?</string>
+    <string name="merchant_12fh">I have lots of yellow keys, 1000 gold each. Would you like to buy one?</string>
     <string name="merchant_15f0">I have a blue key for 200 gold. Would you like to buy it?</string>
-    <string name="merchant_28f0">Back</string>
+    <string name="merchant_28f">Back</string>
     <string name="merchant_31f0">I have 1 blue key and 4 yellow keys for 1000 gold. Would you like to buy them?</string>
     <string name="merchant_38f0">I have 3 yellow keys for 200 gold. Would you like to buy them?</string>
     <string name="merchant_39f0">I have 3 blue keys for 2000 gold. Would you like to buy them?</string>
     <string name="merchant_45f0">I can recover you 2000 health for 1000 gold. Would you let me do it?</string>
     <string name="merchant_47f0">I have a enhanced mattock for 4000 gold. Would you like to buy it?</string>
-    <string name="merchant_2f1">Thank you. Take care.</string>
+    <string name="merchant_2f1">Thank you. Good luck on your journey</string>
     <string name="merchant_6f1">This tower consists of 50 floors. Every 10 floors form one area, and each area
  has one boss guarding the entrance to the next area. To proceed, you must defeat
  these bosses.</string>
@@ -76,11 +76,9 @@ Remember the symbol because it will help you in the future.</string>
 priority on defense. However, you cannot completely ignore offense either.</string>
     <string name="merchant_12f1">Have you found the secret tunnels on the 9th, 16th, and 18th floor? I heard
 that there are more of them on higher floors.</string>
-    <string name="merchant_12fh1">Back</string>
     <string name="merchant_15f1">When you carry a cross, your attacks will be twice as effective against
 zombies and the Vampire, and I don\'t think you can defeat the Vampire without it.
 There is a cross hidden on floors higher than this one.</string>
-    <string name="merchant_28f1">Back</string>
     <string name="merchant_31f1">Even though the tower is said to have 50 floors, I have never heard anyone
 reaching to the 50th floor.</string>
     <string name="merchant_38f1">There is never a gate without Gate-Keepers, and there is always a gate when
@@ -94,5 +92,10 @@ exist.</string>
 shield, and most importantly the Dragonsbane, which doubles your attack against
 the Dragon.</string>
     <string name="merchant_default">Keep it secret, and don\'t tell others</string>
+    <string name="purchase_fail">You don\'t have enough gold.</string>
+    <string name="purchase_fail_28f">You don\'t have any yellow key.</string>
+    <string name="princess_dialog">I am fake. See you on 50th floor.</string>
+
+
 
 </resources>
