@@ -1,6 +1,7 @@
 <resources>
     <string name="app_name">Tower_of_sorcerer</string>
-    <string name="game_title">Tower of \n\t\t\t\t\t Sorcerer</string>
+    <string name="game_title1">Tower of the</string>
+    <string name="game_title2">Sorcerer</string>
     <string name="new_game">New Game</string>
     <string name="load">Load</string>
     <string name="settings">Settings</string>
@@ -78,7 +79,7 @@ priority on defense. However, you cannot completely ignore offense either.</stri
 that there are more of them on higher floors.</string>
     <string name="merchant_15f1">When you carry a cross, your attacks will be twice as effective against
 zombies and the Vampire, and I don\'t think you can defeat the Vampire without it.
-There is a cross hidden on floors higher than this one.</string>
+There is a cross hidden on a floor higher than this one.</string>
     <string name="merchant_31f1">Even though the tower is said to have 50 floors, I have never heard anyone
 reaching to the 50th floor.</string>
     <string name="merchant_38f1">There is never a gate without Gate-Keepers, and there is always a gate when
@@ -95,7 +96,33 @@ the Dragon.</string>
     <string name="purchase_fail">You don\'t have enough gold.</string>
     <string name="purchase_fail_28f">You don\'t have any yellow key.</string>
     <string name="princess_dialog">I am fake. See you on 50th floor.</string>
-
+    <string name="echo_btn1"> 4F Saint</string>
+    <string name="echo_btn2"> 6F Saint</string>
+    <string name="echo_btn3"> 6F Merchant</string>
+    <string name="echo_btn4"> 7F Merchant</string>
+    <string name="echo_btn5">12F Merchant</string>
+    <string name="echo_btn6">15F Merchant</string>
+    <string name="echo_btn7">16F Saint</string>
+    <string name="echo_btn8">18F Saint</string>
+    <string name="echo_btn9">21F Saint</string>
+    <string name="echo_btn10">27F Saint</string>
+    <string name="echo_btn11">31F Saint</string>
+    <string name="echo_btn12">31F Merchant</string>
+    <string name="echo_btn13">33F Saint</string>
+    <string name="echo_btn14">36F Saint</string>
+    <string name="echo_btn15">37F Saint</string>
+    <string name="echo_btn16">38F Merchant</string>
+    <string name="echo_btn17">39F Saint</string>
+    <string name="echo_btn18">39F Merchant</string>
+    <string name="echo_btn19">42F Saint</string>
+    <string name="echo_btn20">45F Saint</string>
+    <string name="echo_btn21">45F Merchant</string>
+    <string name="echo_btn22">46F Saint</string>
+    <string name="echo_btn23">47F Merchant</string>
+    <string name="echo_btn24">48F Saint</string>
+    <string name="no_echo">Echo has not been collected yet.</string>
+    <string name="staff_of_echo_menu_select">Choose an echo to listen</string>
+    <string name="background_picture">Backgroud Picture</string>
 
 
 </resources>

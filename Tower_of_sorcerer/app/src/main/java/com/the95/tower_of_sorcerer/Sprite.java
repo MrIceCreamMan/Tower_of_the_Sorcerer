@@ -5,7 +5,7 @@ import android.graphics.Canvas;
 import android.graphics.Rect;
 import android.util.Log;
 
-public class Sprite {
+class Sprite {
 
     private int x, y;
     private byte id;
@@ -20,7 +20,7 @@ public class Sprite {
 
     private static final String TAG = "debuuuuuuuuuuuuuuuuuug";
 
-    public Sprite(Gamelogic.GameView ourView, Bitmap in_sheet) {
+    Sprite(Gamelogic.GameView ourView, Bitmap in_sheet) {
         sprite_sheet = in_sheet;
         ov = ourView;
         height = sprite_sheet.getHeight() / 4;
@@ -32,7 +32,7 @@ public class Sprite {
         src = new Rect(0,0,0,0);
         dst = new Rect(0,0,0,0);
     }
-    public Sprite(Gamelogic.GameView ourView, Bitmap in_sheet, int in_xloc, int in_yloc, byte in_id) {
+    Sprite(Gamelogic.GameView ourView, Bitmap in_sheet, int in_xloc, int in_yloc, byte in_id) {
         sprite_sheet = in_sheet;
         x = in_xloc;
         y = in_yloc;
@@ -61,14 +61,14 @@ public class Sprite {
         }
     }
 
-    public void display(Canvas canvas){
+    private void display(Canvas canvas){
 
         src.set(0, 0, width, height);
         dst.set(x, y, x + width, y + height);
         canvas.drawBitmap(sprite_sheet, src, dst, null);
     }
 
-    public void blink_x3(Canvas canvas) {
+    private void blink_x3(Canvas canvas) {
 
         timer = ++timer % 4;
         if (timer == 1) {
@@ -80,7 +80,7 @@ public class Sprite {
         dst.set(x, y, x + width, y + height);
         canvas.drawBitmap(sprite_sheet, src, dst, null);
     }
-    public void blink_x4(Canvas canvas) {
+    private void blink_x4(Canvas canvas) {
 
         timer = ++timer % 4;
         if (timer == 1) {
@@ -93,7 +93,7 @@ public class Sprite {
         canvas.drawBitmap(sprite_sheet, src, dst, null);
     }
 
-    public void loopRun(Canvas canvas) {
+    void loopRun(Canvas canvas) {
         // 0 = up
         // 1 = down
         // 2 = left
@@ -144,14 +144,14 @@ public class Sprite {
     }
 
 
-    public void set_location(int in_x, int in_y) {
+    void set_location(int in_x, int in_y) {
         x = in_x;
         y = in_y;
     }
-    public void set_direction(int in_d) {
+    void set_direction(int in_d) {
         direction = in_d;
     }
-    public void walk(Canvas canvas) {
+    void walk(Canvas canvas) {
 
         if (direction == 0) {
             // going down
@@ -181,14 +181,14 @@ public class Sprite {
         dst.set(x, y, x + width, y + height);
         canvas.drawBitmap(sprite_sheet, src, dst, null);
     }
-    public void stand(Canvas canvas) {
+    void stand(Canvas canvas) {
         int srcY = direction * height;
         src.set(width, srcY, 2 * width, srcY + height);
         dst.set(x, y, x + width, y + height);
         canvas.drawBitmap(sprite_sheet, src, dst, null);
     }
 
-    public void update(Canvas canvas){
+    void update(Canvas canvas){
 /*
         try {
             Thread.sleep(50);
