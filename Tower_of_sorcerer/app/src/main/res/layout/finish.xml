@@ -15,7 +15,7 @@
     android:layout_gravity="center_horizontal"
     android:background="@color/colorPrimaryDark">
     <TextView
-        android:text="@string/finished_text"
+        android:text="@string/merchant_default"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textStyle="bold"
@@ -23,7 +23,7 @@
         android:textSize="30sp" />
     <Button
         android:id="@+id/closeGame"
-        android:text="@string/finished_button"
+        android:text="@string/merchant_default"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textStyle="bold"
