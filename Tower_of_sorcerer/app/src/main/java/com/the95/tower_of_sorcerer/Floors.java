@@ -883,6 +883,8 @@ public class Floors {
         return current_game[floor_num];
     }
 
+    byte[][][] get_game() { return current_game; }
+
     void put_one_floor(int floor_num, byte[][] in_one_floor){
         current_game[floor_num] = in_one_floor;
     }

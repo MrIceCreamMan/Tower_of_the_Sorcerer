@@ -4,6 +4,7 @@
     <string name="game_title2">Sorcerer</string>
     <string name="new_game">New Game</string>
     <string name="load">Load</string>
+    <string name="save">Save</string>
     <string name="settings">Settings</string>
     <string name="exit">Exit</string>
     <string name="saint_2f">Back</string>
@@ -123,6 +124,9 @@ the Dragon.</string>
     <string name="thief8">Background Picture</string>
     <string name="thief9">Background Picture</string>
     <string name="thief10">Background Picture</string>
+    <string name="Load_img_description">Load Activity Image</string>
+    <string name="Load_default">----</string>
+    <string name="Load_floor_number">20 F</string>
 
 
 </resources>

@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
@@ -17,7 +18,6 @@ import android.view.SurfaceView;
 import android.view.View;
 import android.util.Log;
 import android.widget.Button;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -53,6 +53,7 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
     private String              instruction;
     private static Gamelogic    parent;
     private float               x, y;
+    private String              game_data = "1\n0";
     //  current game data
     private Floors  current_game;
     private byte[][] current_floor;
@@ -813,6 +814,10 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
                     which_button = ITEM12;
                 } else if (x > sq_size*4 + margin*4 && y > sq_size*13 + origin + offset && x < sq_size*6 - margin && y < sq_size * 14 + origin - margin + offset) {
                     temp_y = hero_y; temp_x = hero_x;
+                    Intent save_game = new Intent(Gamelogic.this, SaveActivity.class);
+                    prepare_to_save_game();
+                    save_game.putExtra("Game_Data", game_data);
+                    startActivity(save_game);
                     which_button = SAVE;
                 } else {
                     temp_y = hero_y; temp_x = hero_x;
@@ -824,6 +829,7 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
                     return true;
                 }
                 button_click = false;
+                //Log.v(TAG, game_data);
                 pt1.setColor(Color.rgb(220, 220, 220));
                 pt2.setColor(Color.rgb(220, 220, 220));
                 pt3.setColor(Color.rgb(220, 220, 220));
@@ -840,6 +846,53 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
                 }
                 return true;
         }
+    }
+
+    // prepare to save to game
+    private void prepare_to_save_game(){
+        current_game.put_one_floor(floor_num, current_floor);
+        game_data = "";
+        game_data += String.valueOf(hp) + "\n"          + String.valueOf(atk) + "\n";
+        game_data += String.valueOf(def) + "\n"         + String.valueOf(gold) + "\n";
+        game_data += String.valueOf(floor_num) + "\n"   + String.valueOf(count_y) + "\n";
+        game_data += String.valueOf(count_b) + "\n"     + String.valueOf(count_r) + "\n";
+        game_data += String.valueOf(hero_x) + "\n"      + String.valueOf(hero_y) + "\n";
+        game_data += String.valueOf(temp_x) + "\n"      + String.valueOf(temp_y) + "\n";
+        game_data += String.valueOf(price_idx) + "\n"   + String.valueOf(act) + "\n";
+        game_data += String.valueOf(count_wing) + "\n"  + String.valueOf(sacred_shield) + "\n";
+        game_data += String.valueOf(thief_event_count) + "\n" + String.valueOf(highest_floor) + "\n";
+        game_data += String.valueOf(stf_wsdm) + "\n"    + String.valueOf(stf_echo) + "\n";
+        game_data += String.valueOf(stf_space) + "\n"   + String.valueOf(cross) + "\n";
+        game_data += String.valueOf(elixir) + "\n"      + String.valueOf(m_mattock) + "\n";
+        game_data += String.valueOf(wing_cent) + "\n"   + String.valueOf(e_mattock) + "\n";
+        game_data += String.valueOf(bomb) + "\n"        + String.valueOf(wing_up) + "\n";
+        game_data += String.valueOf(key_enhac) + "\n"   + String.valueOf(wing_down) + "\n";
+        game_data += String.valueOf(lucky_gold) + "\n"  + String.valueOf(dragonsbane) + "\n";
+        game_data += String.valueOf(snow_cryst) + "\n";
+        StringBuilder sb = new StringBuilder(game_data);
+
+        for (int i = 0; i < 12; i++) {
+            sb.append(String.valueOf(merchant_history[i]));
+            sb.append("\n");
+        }
+        for (int j = 0; j < 19; j++) {
+            sb.append(String.valueOf(saint_history[j]));
+            sb.append("\n");
+        }
+        for (int k = 0; k < 24; k++) {
+            sb.append(String.valueOf(echo_history[k]));
+            sb.append("\n");
+        }
+        byte[][][] floors = current_game.get_game();
+        for (int a = 0; a < 51; a++) {
+            for (int b = 0; b < 13; b++) {
+                for (int c = 0; c < 13; c++) {
+                    sb.append(String.valueOf(floors[a][b][c]));
+                    sb.append("\n");
+                }
+            }
+        }
+        game_data = sb.toString();
     }
 
     // interactions with npc: thief, saint, merchant, altar, and princess)

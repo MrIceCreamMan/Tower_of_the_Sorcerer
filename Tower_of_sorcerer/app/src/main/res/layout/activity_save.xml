@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:background="@color/back"
     android:orientation="vertical"
-    tools:context="com.the95.tower_of_sorcerer.LoadActivity">
+    tools:context="com.the95.tower_of_sorcerer.SaveActivity">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -33,6 +33,10 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:contentDescription="@string/Load_img_description"
+                android:paddingEnd="0dp"
+                android:paddingLeft="@dimen/my_margin"
+                android:paddingRight="0dp"
+                android:paddingStart="@dimen/my_margin"
                 app:srcCompat="@drawable/menu_health" />
 
             <TextView
@@ -142,14 +146,14 @@
                 android:textStyle="bold" />
 
             <Button
-                android:id="@+id/load_1"
+                android:id="@+id/save_1"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="@dimen/my_margin"
                 android:layout_marginRight="@dimen/my_margin"
                 android:paddingLeft="@dimen/my_margin"
                 android:paddingRight="@dimen/my_margin"
-                android:text="@string/load"
+                android:text="@string/save"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
         </LinearLayout>
@@ -180,6 +184,10 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:contentDescription="@string/Load_img_description"
+                android:paddingEnd="0dp"
+                android:paddingLeft="@dimen/my_margin"
+                android:paddingRight="0dp"
+                android:paddingStart="@dimen/my_margin"
                 app:srcCompat="@drawable/menu_health" />
 
             <TextView
@@ -289,14 +297,14 @@
                 android:textStyle="bold" />
 
             <Button
-                android:id="@+id/load_2"
+                android:id="@+id/save_2"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="@dimen/my_margin"
                 android:layout_marginRight="@dimen/my_margin"
                 android:paddingLeft="@dimen/my_margin"
                 android:paddingRight="@dimen/my_margin"
-                android:text="@string/load"
+                android:text="@string/save"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
         </LinearLayout>
@@ -327,6 +335,10 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:contentDescription="@string/Load_img_description"
+                android:paddingEnd="0dp"
+                android:paddingLeft="@dimen/my_margin"
+                android:paddingRight="0dp"
+                android:paddingStart="@dimen/my_margin"
                 app:srcCompat="@drawable/menu_health" />
 
             <TextView
@@ -436,14 +448,14 @@
                 android:textStyle="bold" />
 
             <Button
-                android:id="@+id/load_3"
+                android:id="@+id/save_3"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="@dimen/my_margin"
                 android:layout_marginRight="@dimen/my_margin"
                 android:paddingLeft="@dimen/my_margin"
                 android:paddingRight="@dimen/my_margin"
-                android:text="@string/load"
+                android:text="@string/save"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
         </LinearLayout>
@@ -474,6 +486,10 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:contentDescription="@string/Load_img_description"
+                android:paddingEnd="0dp"
+                android:paddingLeft="@dimen/my_margin"
+                android:paddingRight="0dp"
+                android:paddingStart="@dimen/my_margin"
                 app:srcCompat="@drawable/menu_health" />
 
             <TextView
@@ -583,14 +599,14 @@
                 android:textStyle="bold" />
 
             <Button
-                android:id="@+id/load_4"
+                android:id="@+id/save_4"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="@dimen/my_margin"
                 android:layout_marginRight="@dimen/my_margin"
                 android:paddingLeft="@dimen/my_margin"
                 android:paddingRight="@dimen/my_margin"
-                android:text="@string/load"
+                android:text="@string/save"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
         </LinearLayout>
