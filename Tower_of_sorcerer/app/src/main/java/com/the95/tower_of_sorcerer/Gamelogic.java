@@ -180,7 +180,7 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
         sacred_shield = false;
         thief_event_count = 0; highest_floor = 1;
 
-        set_all_true();
+        //set_all_true();
 
         // initialize pictures
         ball = BitmapFactory.decodeResource(getResources(), R.drawable.brokeearth);
