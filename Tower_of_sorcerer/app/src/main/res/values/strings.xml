@@ -7,6 +7,9 @@
     <string name="save">Save</string>
     <string name="settings">Settings</string>
     <string name="exit">Exit</string>
+    <string name="back">Back</string>
+    <string name="cancel">Cancel</string>
+    <string name="ok">OK</string>
     <string name="saint_2f">Back</string>
     <string name="saint_3f">Alas, my age is catching up to me. I can fight no more. Brave young man,
 you should take this Staff of Wisdom since I have no use for it. It will reveal
@@ -126,7 +129,30 @@ the Dragon.</string>
     <string name="thief10">Background Picture</string>
     <string name="Load_img_description">Load Activity Image</string>
     <string name="Load_default">----</string>
-    <string name="Load_floor_number">20 F</string>
-
+    <string name="Load_floor_number">-- F</string>
+    <string name="item_description_cross">Passive item. It doubles your attack when you are fighting against zombies and vampires.</string>
+    <string name="item_description_elixir">It can be used only once. It increases your health points by 10 x Attack + 5 x Defence. Would you like to use it now?</string>
+    <string name="item_description_mattock">It can be used only once. It destroys the walls next to you. Would you like to use it now?</string>
+    <string name="item_description_wing_center">It can be used 3 times. It teleports you to an unoccupied block which is symerical to the center of the current floor. Would you like to use it now?</string>
+    <string name="item_description_enhanced_mattock">It can be used only once. It destroys all the walls at the current floor. Would you like to use it now?</string>
+    <string name="item_description_bomb">It can be used only once. It destroys all the monsters standing next to you, but it does not work against bosses. Would you like to use it now?</string>
+    <string name="item_description_wing_up">It can be used only once. It teleports you to one floor above the current floor when you are next to the stairs. Would you like to use it now?</string>
+    <string name="item_description_enhanced_key">It can be used only once. It opens all the yellow doors at the current floor. Would you like to use it now?</string>
+    <string name="item_description_wing_down">It can be used only once. It teleports you to one floor below the current floor when you are next to the stairs. Would you like to use it now?</string>
+    <string name="item_description_lucky_gold">Passive item. It doubles the money you get from battle.</string>
+    <string name="item_description_dragonsbane">Passive item. It doubles your attack when you are fighting against the Dragon.</string>
+    <string name="item_description_snow_crystal">Passive item. It freezes lava into solid ground.</string>
+    <string name="item_title_cross">Cross</string>
+    <string name="item_title_elixir">Elixir</string>
+    <string name="item_title_mattock">Mattock</string>
+    <string name="item_title_wing_center">Magic Wing - Center</string>
+    <string name="item_title_enhanced_mattock">Enhanced Mattock</string>
+    <string name="item_title_bomb">Bomb</string>
+    <string name="item_title_wing_up">Magic Wing - Up</string>
+    <string name="item_title_enhanced_key">Enhanced Yellow Key</string>
+    <string name="item_title_wing_down">Magic Wing - Down </string>
+    <string name="item_title_lucky_gold">Lucky Gold</string>
+    <string name="item_title_dragonsbane">Dragonsbane</string>
+    <string name="item_title_snow_crystal">Snow Crystal</string>
 
 </resources>

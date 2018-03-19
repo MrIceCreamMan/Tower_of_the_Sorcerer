@@ -154,6 +154,7 @@
                 android:paddingLeft="@dimen/my_margin"
                 android:paddingRight="@dimen/my_margin"
                 android:text="@string/save"
+                android:textAllCaps="false"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
         </LinearLayout>
@@ -305,6 +306,7 @@
                 android:paddingLeft="@dimen/my_margin"
                 android:paddingRight="@dimen/my_margin"
                 android:text="@string/save"
+                android:textAllCaps="false"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
         </LinearLayout>
@@ -456,6 +458,7 @@
                 android:paddingLeft="@dimen/my_margin"
                 android:paddingRight="@dimen/my_margin"
                 android:text="@string/save"
+                android:textAllCaps="false"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
         </LinearLayout>
@@ -464,7 +467,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_marginBottom="@dimen/my_margin"
+        android:layout_marginBottom="@dimen/small_margin"
         android:layout_marginEnd="@dimen/my_margin"
         android:layout_marginLeft="@dimen/my_margin"
         android:layout_marginRight="@dimen/my_margin"
@@ -607,9 +610,44 @@
                 android:paddingLeft="@dimen/my_margin"
                 android:paddingRight="@dimen/my_margin"
                 android:text="@string/save"
+                android:textAllCaps="false"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
         </LinearLayout>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginBottom="@dimen/small_margin"
+        android:layout_marginEnd="@dimen/my_margin"
+        android:layout_marginLeft="@dimen/my_margin"
+        android:layout_marginRight="@dimen/my_margin"
+        android:layout_marginStart="@dimen/my_margin"
+        android:layout_marginTop="0dp"
+        android:layout_weight="0.4"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/text_filler_1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1" />
+
+        <Button
+            android:id="@+id/cancel"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:text="@string/cancel"
+            android:textAllCaps="false" />
+
+        <TextView
+            android:id="@+id/text_filler_2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1" />
     </LinearLayout>
 
 

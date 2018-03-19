@@ -1,6 +1,6 @@
 package com.the95.tower_of_sorcerer;
 
-public class Floors {
+class Floors {
 
     private byte[][][] current_game;
 
@@ -875,7 +875,7 @@ public class Floors {
         }; current_game[50] = f50;
     }
 
-    public Floors (byte[][][] saved_game){
+    Floors (byte[][][] saved_game){
         current_game = saved_game;
     }
 

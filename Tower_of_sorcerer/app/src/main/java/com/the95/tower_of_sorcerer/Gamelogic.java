@@ -2,7 +2,6 @@ package com.the95.tower_of_sorcerer;
 
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -27,73 +26,11 @@ import static android.graphics.Bitmap.createScaledBitmap;
 
 public class Gamelogic extends Activity implements View.OnTouchListener {
     // constants for convenience
-    public final int DOWN = 0, LEFT = 1, RIGHT = 2, UP = 3;
-    public final int STAFF1 = 4, STAFF2 = 5, FLY_UP = 6, FLY_DOWN = 7;
-    public final int ITEM1 = 8, ITEM2 = 9, ITEM3 = 10, ITEM4 = 11, ITEM5 = 12;
-    public final int ITEM6 = 13, ITEM7 = 14, ITEM8 = 15, ITEM9 = 16, ITEM10 = 17;
-    public final int ITEM11 = 18, ITEM12 = 19, SAVE = 20;
-    //  general game controls
-    private GameView            gameview;
-    private ArrayList<Sprite>   all_sprites;
-    private int                 sq_size, extra_height;
-    private int                 walk_result, walk_count;
-    private int                 which_button;
-    private int                 m_hp, m_atk, m_def, m_gold;
-    private boolean             refresh_ctr, load_ctr;
-    private boolean             isWalk, isBattle, isEvent, cantMove, battle_coming;
-    private boolean             button_click;
-    private boolean             show_hero, not_show_hero, show_fight, hero_attack;
-    private boolean             blackout = false, proceed = false;
-    private boolean             which_surface_view = true;
-    private List<Byte>          monsters_to_draw = new ArrayList<>();
-    private ArrayList<Sprite>   monsters_picture = new ArrayList<>();
-    private ArrayList<String>   monsters_name1 = new ArrayList<>();
-    private ArrayList<String>   monsters_name2 = new ArrayList<>();
-    private int                 page = 0, total_page = 1;
-    private String              instruction;
-    private static Gamelogic    parent;
-    private float               x, y;
-    private String              game_data = "1\n0";
-    //  current game data
-    private Floors  current_game;
-    private byte[][] current_floor;
-    private int     floor_num;
-    private int     hero_x, hero_y, temp_x, temp_y;
-    private int     count_y, count_b, count_r, count_wing;
-    private int     atk, def, hp, gold;
-    private boolean stf_wsdm, stf_echo, stf_space, cross, elixir;
-    private boolean m_mattock, wing_cent, e_mattock, bomb, wing_up;
-    private boolean key_enhac, wing_down, lucky_gold, dragonsbane, snow_cryst;
-    private boolean sacred_shield;
-    private int     price_idx, act;
-    private int     thief_event_count = 6, highest_floor = 1;
-    private int[]   merchant_history = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
-    private int[]   saint_history = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
-    private int[]   echo_history = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
-    // game pictures and stats table
-    private Bitmap hero;
-    private Sprite hero_sprite, red_star_sprite, octopus_sprite, dragon_sprite;
-
-    private Bitmap menu_health, menu_gold, menu_background, menu_stf1, menu_stf2;
-    private Bitmap menu_stf3, menu_up, menu_down, menu_left, menu_right;
-    private Bitmap t__floor, t___wall, t___star, t_ustair, t_dstair;
-    private Bitmap t_door_y, t_door_b, t_door_r, t_door_m, t_prison, t___logo;
-    private Bitmap w___ironw, w_silverw, w_knightw, w_divinew, w_sacredw;
-    private Bitmap w___ironh, w_silverh, w_knighth, w_divineh, w_sacredh;
-    private Bitmap n___thief, n___saint, n_merchat, n___fairy, n_shop__l;
-    private Bitmap n_shop__m, n_shop__r, n_princes, n____lava;
-    private Bitmap m__slime_g, m__slime_r, m_bat_fier, m___priest, m_skeleton;
-    private Bitmap m_skelet_w, m_gatekeep, m_skelet_c, m__slime_b, m_bat_gian;
-    private Bitmap m_priest_m, m___zombie, m_stone_gd, m_zombie_w, m__vampire;
-    private Bitmap m__slime_m, m_skelet_e, m___knight, m_gatekp_e, m_swordsmn;
-    private Bitmap m_knight_e, m_knight_c, m_slimelod, m_bat_vamp, m_____mage;
-    private Bitmap m_mage_mas, m_demo_sgt, m_d_knight, m_gate_gdn, m_demozeno;
-    private Bitmap m__octopus, m___dragon, m_archmage;
-    private Bitmap i____key_y, i____key_b, i____key_r, i_potion_r, i_potion_b;
-    private Bitmap i_crystl_r, i_crystl_b, i_stf_wsdm, i_stf_echo, i_stf_spce;
-    private Bitmap i____cross, i___elixir, i_m_mattok, i_wing_cen, i_e_mattok;
-    private Bitmap i_____bomb, i__wing_up, i_key_ehac, i_wing_dow, i_lucky_gd;
-    private Bitmap i_dra_bane, i_snow_crs;
+    public final int DOWN = 0,     LEFT = 1,     RIGHT = 2,   UP = 3;
+    public final int STAFF1 = 4,   STAFF2 = 5,   FLY_UP = 6,  FLY_DOWN = 7;
+    public final int ITEM1 = 8,    ITEM2 = 9,    ITEM3 = 10,  ITEM4 = 11,    ITEM5 = 12;
+    public final int ITEM6 = 13,   ITEM7 = 14,   ITEM8 = 15,  ITEM9 = 16,    ITEM10 = 17;
+    public final int ITEM11 = 18,  ITEM12 = 19,  SAVE = 20;
     public final int[][] m_table = new int[][]{
             {  35,   18,    1,    1},   // 0    green slime
             {  45,   20,    2,    2},   // 1    red slime
@@ -131,6 +68,60 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
             {4500,  560,  310, 1000},   //33    archmage
             {1000,  625,  125, 1000}    //34    real zeno
     };
+    //  general game controls
+    private GameView            gameview;
+    private ArrayList<Sprite>   all_sprites;
+    private List<Byte>          monsters_to_draw;
+    private ArrayList<Sprite>   monsters_picture;
+    private ArrayList<String>   monsters_name1, monsters_name2;
+    private static Gamelogic    parent;
+    private byte[]              game_data_to_save;
+    private String              instruction;
+    private int                 walk_result,    walk_count,     which_button,       sq_size;
+    private int                 m_hp,           m_atk,          m_def,              m_gold;
+    private float               x,              y,              page,               total_page;
+    private int                 extra_height;
+    private boolean             refresh_ctr,    load_ctr,       battle_coming,      button_click;
+    private boolean             isWalk,         isBattle,       isEvent,            cantMove;
+    private boolean             hero_attack,    show_hero,      not_show_hero,      show_fight;
+    private boolean             blackout,       proceed,        no_dialog,          which_surface_view;
+    //  current game data
+    private Floors      current_game;
+    private byte[][]    current_floor;
+    private int         hp,                 atk,                def,                gold;
+    private int         floor_num,          act,                thief_event_count,  highest_floor;
+    private int         count_y,            count_b,            count_r,            count_wing;
+    private int         hero_x,             hero_y,             temp_x,             temp_y;
+    private int         price_idx;
+    private boolean     stf_wsdm,           stf_echo,           stf_space,          cross;
+    private boolean     elixir,             m_mattock,          wing_cent,          e_mattock;
+    private boolean     bomb,               wing_up,            key_enhac,          wing_down;
+    private boolean     lucky_gold,         dragonsbane,        snow_cryst,         sacred_shield;
+    private int[]       merchant_history,   saint_history,      echo_history;
+    // game pictures and stats table
+    private Bitmap hero;
+    private Sprite hero_sprite, red_star_sprite, octopus_sprite, dragon_sprite;
+    private Bitmap menu_health, menu_gold, menu_background, menu_stf1, menu_stf2;
+    private Bitmap menu_stf3, menu_up, menu_down, menu_left, menu_right;
+    private Bitmap t__floor, t___wall, t___star, t_ustair, t_dstair;
+    private Bitmap t_door_y, t_door_b, t_door_r, t_door_m, t_prison, t___logo;
+    private Bitmap w___ironw, w_silverw, w_knightw, w_divinew, w_sacredw;
+    private Bitmap w___ironh, w_silverh, w_knighth, w_divineh, w_sacredh;
+    private Bitmap n___thief, n___saint, n_merchat, n___fairy, n_shop__l;
+    private Bitmap n_shop__m, n_shop__r, n_princes, n____lava;
+    private Bitmap m__slime_g, m__slime_r, m_bat_fier, m___priest, m_skeleton;
+    private Bitmap m_skelet_w, m_gatekeep, m_skelet_c, m__slime_b, m_bat_gian;
+    private Bitmap m_priest_m, m___zombie, m_stone_gd, m_zombie_w, m__vampire;
+    private Bitmap m__slime_m, m_skelet_e, m___knight, m_gatekp_e, m_swordsmn;
+    private Bitmap m_knight_e, m_knight_c, m_slimelod, m_bat_vamp, m_____mage;
+    private Bitmap m_mage_mas, m_demo_sgt, m_d_knight, m_gate_gdn, m_demozeno;
+    private Bitmap m__octopus, m___dragon, m_archmage;
+    private Bitmap i____key_y, i____key_b, i____key_r, i_potion_r, i_potion_b;
+    private Bitmap i_crystl_r, i_crystl_b, i_stf_wsdm, i_stf_echo, i_stf_spce;
+    private Bitmap i____cross, i___elixir, i_m_mattok, i_wing_cen, i_e_mattok;
+    private Bitmap i_____bomb, i__wing_up, i_key_ehac, i_wing_dow, i_lucky_gd;
+    private Bitmap i_dra_bane, i_snow_crs;
+
     //  debug purpose
     private Paint pt1, pt2, pt3, pt4, pt5, pt6, pt7, pt8;
     private Bitmap ball, pic_debug, pic_d1, pic_d2, pic_d3, pic_dh;
@@ -139,48 +130,55 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        //set_all_true();
         super.onCreate(savedInstanceState);
+
         // initialize general game controls
         gameview = new GameView(Gamelogic.this);
         gameview.setOnTouchListener(this);
-        x = y = 0;
         all_sprites = new ArrayList<>();
-        sq_size = 32;
-        walk_result = 0;
-        walk_count = 0;
-        which_button = 6;
-        m_hp = 0;
-        m_atk = 0;
-        m_def = 0;
-        m_gold = 0;
-        price_idx = 0;
-        act = 0;
-        refresh_ctr = true; load_ctr = true;
-        isWalk = false;
-        isBattle = false;
-        isEvent = false;
-        cantMove = false;
-        battle_coming = false;
-        button_click = false;
-        show_hero = true; not_show_hero = false;
-        show_fight = false;
-        hero_attack = true;
-
+        monsters_to_draw = new ArrayList<>();           monsters_picture = new ArrayList<>();
+        monsters_name1 = new ArrayList<>();             monsters_name2 = new ArrayList<>();
+        walk_result = 0;        walk_count = 0;         which_button = 6;       sq_size = 32;
+        m_hp =      0;          m_atk = 0;              m_def = 0;              m_gold = 0;
+        x = 0;                  y = 0;                  page = 0;               total_page = 1;
+        extra_height = 0;
+        refresh_ctr = true;     load_ctr = true;        battle_coming = false;  button_click = false;
+        isWalk = false;         isBattle = false;       isEvent = false;        cantMove = false;
+        hero_attack = true;     show_hero = true;       not_show_hero = false;  show_fight = false;
+        blackout = false;       proceed = false;        no_dialog = true;       which_surface_view = true;
         // initialize current game data
         current_game = new Floors();
         current_floor = current_game.get_one_floor(1);
-        floor_num = 3;
-        hero_x = 6; hero_y = 11; temp_x = 6; temp_y = 10;
-        count_y = 10; count_b = 10; count_r = 10; count_wing = 0;
-        atk = 470; def = 370; hp = 8000; gold = 1000;
-        stf_wsdm = stf_echo = stf_space = cross = elixir = false;
-        m_mattock = wing_cent = e_mattock = bomb = wing_up = false;
-        key_enhac = wing_down = lucky_gold = dragonsbane = snow_cryst = false;
-        sacred_shield = false;
-        thief_event_count = 0; highest_floor = 1;
-
-        //set_all_true();
+        hp = 8000;              atk = 470;              def = 370;              gold = 1000;
+        floor_num = 3;          act = 0;                thief_event_count = 0;  highest_floor = 1;
+        count_y = 10;           count_b = 10;           count_r = 10;           count_wing = 0;
+        hero_x = 6;             hero_y = 11;            temp_x = 6;             temp_y = 11;
+        price_idx = 0;
+        stf_wsdm = false;       stf_echo = false;       stf_space = false;      cross = false;
+        elixir = false;         m_mattock = false;      wing_cent = false;      e_mattock = false;
+        bomb = false;           wing_up = false;        key_enhac = false;      wing_down = false;
+        lucky_gold = false;     dragonsbane = false;    snow_cryst = false;     sacred_shield = false;
+        merchant_history = new int[]{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+        saint_history    = new int[]{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+        echo_history     = new int[]{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+        // check if needs to load game
+        byte[] game_data_to_load;
+        Bundle extras = getIntent().getExtras();
+        if (extras != null) {
+            game_data_to_load = extras.getByteArray("Game_File_1");
+            if (game_data_to_load == null)
+                game_data_to_load = extras.getByteArray("Game_File_2");
+            if (game_data_to_load == null)
+                game_data_to_load = extras.getByteArray("Game_File_3");
+            if (game_data_to_load == null)
+                game_data_to_load = extras.getByteArray("Game_File_4");
+            if (game_data_to_load == null) {
+                Log.v(TAG, "Load file null problem at onCreate in Gamelogic");
+                finish();
+            } else
+                load_game(game_data_to_load);
+        }
+        set_all_true();
 
         // initialize pictures
         ball = BitmapFactory.decodeResource(getResources(), R.drawable.brokeearth);
@@ -284,31 +282,31 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
         i_lucky_gd = BitmapFactory.decodeResource(getResources(), R.drawable.i20_lucky_gold);
         i_dra_bane = BitmapFactory.decodeResource(getResources(), R.drawable.i21_dragonsbane);
         i_snow_crs = BitmapFactory.decodeResource(getResources(), R.drawable.i22_snow_crystal);
-        // debug purpose
+        // button background color to show if buttons are clicked
         pt1 = new Paint();
         pt1.setColor(Color.rgb(220, 220, 220));
         pt1.setStrokeWidth(10);
         pt2 = new Paint();
         pt2.setColor(Color.rgb(220, 220, 220));
-        pt1.setStrokeWidth(10);
+        pt2.setStrokeWidth(10);
         pt3 = new Paint();
         pt3.setColor(Color.rgb(220, 220, 220));
-        pt1.setStrokeWidth(10);
+        pt3.setStrokeWidth(10);
         pt4 = new Paint();
         pt4.setColor(Color.rgb(220, 220, 220));
-        pt1.setStrokeWidth(10);
+        pt4.setStrokeWidth(10);
         pt5 = new Paint();
         pt5.setColor(Color.rgb(220, 220, 220));
-        pt1.setStrokeWidth(10);
+        pt5.setStrokeWidth(10);
         pt6 = new Paint();
         pt6.setColor(Color.rgb(180, 150, 180));
-        pt1.setStrokeWidth(10);
+        pt6.setStrokeWidth(10);
         pt7 = new Paint();
         pt7.setColor(Color.rgb(150, 150, 150));
-        pt1.setStrokeWidth(10);
+        pt7.setStrokeWidth(10);
         pt8 = new Paint();
         pt8.setColor(Color.rgb(220, 220, 220));
-        pt1.setStrokeWidth(10);
+        pt8.setStrokeWidth(10);
         //Log.v(TAG, "width = " + sq_wall.getWidth() + " y = " + sq_wall.getHeight());
         setContentView(gameview);
     }
@@ -317,6 +315,7 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
         stf_wsdm = stf_echo = stf_space = cross = elixir = true;
         m_mattock = wing_cent = e_mattock = bomb = wing_up = true;
         key_enhac = wing_down = lucky_gold = dragonsbane = snow_cryst = true;
+        count_wing = 3;
     }
 
     @Override
@@ -363,7 +362,6 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
                 }
                 if (isEvent)
                     return true;
-                button_click = true;
                 x = me.getX();
                 y = me.getY();
                 final int origin = 0 - sq_size / 2;
@@ -776,59 +774,57 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
                     pt8.setColor(Color.rgb(255, 255, 255));
                     temp_y = hero_y; temp_x = hero_x;
                     which_button = FLY_DOWN;
-                } else if (x > origin && y > sq_size * 17 + offset*3 && x < sq_size + origin && y < sq_size * 18 + offset*3) {
-                    temp_y = hero_y; temp_x = hero_x;
-                    which_button = ITEM1;
                 } else if (x > origin + sq_size && y > sq_size * 17 + offset*3 && x < sq_size*2 + origin && y < sq_size * 18 + offset*3) {
                     temp_y = hero_y; temp_x = hero_x;
-                    which_button = ITEM2;
+                    which_button = ITEM1;
                 } else if (x > origin + sq_size*2 && y > sq_size * 17 + offset*3 && x < sq_size*3 + origin && y < sq_size * 18 + offset*3) {
                     temp_y = hero_y; temp_x = hero_x;
-                    which_button = ITEM3;
+                    which_button = ITEM2;
                 } else if (x > origin + sq_size*3 && y > sq_size * 17 + offset*3 && x < sq_size*4 + origin && y < sq_size * 18 + offset*3) {
                     temp_y = hero_y; temp_x = hero_x;
-                    which_button = ITEM4;
+                    which_button = ITEM3;
                 } else if (x > origin + sq_size*4 && y > sq_size * 17 + offset*3 && x < sq_size*5 + origin && y < sq_size * 18 + offset*3) {
                     temp_y = hero_y; temp_x = hero_x;
-                    which_button = ITEM5;
+                    which_button = ITEM4;
                 } else if (x > origin + sq_size*5 && y > sq_size * 17 + offset*3 && x < sq_size*6 + origin && y < sq_size * 18 + offset*3) {
                     temp_y = hero_y; temp_x = hero_x;
-                    which_button = ITEM6;
-                } else if (x > origin && y > sq_size * 18 + offset*3 && x < sq_size + origin && y < sq_size * 19 + offset*3) {
+                    which_button = ITEM5;
+                } else if (x > origin + sq_size*6 && y > sq_size * 17 + offset*3 && x < sq_size*7 + origin && y < sq_size * 18 + offset*3) {
                     temp_y = hero_y; temp_x = hero_x;
-                    which_button = ITEM7;
+                    which_button = ITEM6;
                 } else if (x > origin + sq_size && y > sq_size * 18 + offset*3 && x < sq_size*2 + origin && y < sq_size * 19 + offset*3) {
                     temp_y = hero_y; temp_x = hero_x;
-                    which_button = ITEM8;
+                    which_button = ITEM7;
                 } else if (x > origin + sq_size*2 && y > sq_size * 18 + offset*3 && x < sq_size*3 + origin && y < sq_size * 19 + offset*3) {
                     temp_y = hero_y; temp_x = hero_x;
-                    which_button = ITEM9;
+                    which_button = ITEM8;
                 } else if (x > origin + sq_size*3 && y > sq_size * 18 + offset*3 && x < sq_size*4 + origin && y < sq_size * 19 + offset*3) {
                     temp_y = hero_y; temp_x = hero_x;
-                    which_button = ITEM10;
+                    which_button = ITEM9;
                 } else if (x > origin + sq_size*4 && y > sq_size * 18 + offset*3 && x < sq_size*5 + origin && y < sq_size * 19 + offset*3) {
                     temp_y = hero_y; temp_x = hero_x;
-                    which_button = ITEM11;
+                    which_button = ITEM10;
                 } else if (x > origin + sq_size*5 && y > sq_size * 18 + offset*3 && x < sq_size*6 + origin && y < sq_size * 19 + offset*3) {
+                    temp_y = hero_y; temp_x = hero_x;
+                    which_button = ITEM11;
+                } else if (x > origin + sq_size*6 && y > sq_size * 18 + offset*3 && x < sq_size*7 + origin && y < sq_size * 19 + offset*3) {
                     temp_y = hero_y; temp_x = hero_x;
                     which_button = ITEM12;
                 } else if (x > sq_size*4 + margin*4 && y > sq_size*13 + origin + offset && x < sq_size*6 - margin && y < sq_size * 14 + origin - margin + offset) {
                     temp_y = hero_y; temp_x = hero_x;
-                    Intent save_game = new Intent(Gamelogic.this, SaveActivity.class);
-                    prepare_to_save_game();
-                    save_game.putExtra("Game_Data", game_data);
-                    startActivity(save_game);
                     which_button = SAVE;
                 } else {
                     temp_y = hero_y; temp_x = hero_x;
                     which_button = 21;
                 }
+                button_click = true;
                 return true;
             case MotionEvent.ACTION_UP:
                 if (!which_surface_view) {
                     return true;
                 }
                 button_click = false;
+                no_dialog = true;
                 //Log.v(TAG, game_data);
                 pt1.setColor(Color.rgb(220, 220, 220));
                 pt2.setColor(Color.rgb(220, 220, 220));
@@ -848,51 +844,214 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
         }
     }
 
+    // boolean type to char type '0' and '1',
+    // helper function for "prepare_to_save_game()"
+    private char bool_to_0n1(boolean in_val) {
+        if (in_val)
+            return '1';
+        else
+            return '0';
+    }
+
     // prepare to save to game
     private void prepare_to_save_game(){
         current_game.put_one_floor(floor_num, current_floor);
-        game_data = "";
+
+        String game_data = "";
         game_data += String.valueOf(hp) + "\n"          + String.valueOf(atk) + "\n";
         game_data += String.valueOf(def) + "\n"         + String.valueOf(gold) + "\n";
         game_data += String.valueOf(floor_num) + "\n"   + String.valueOf(count_y) + "\n";
         game_data += String.valueOf(count_b) + "\n"     + String.valueOf(count_r) + "\n";
         game_data += String.valueOf(hero_x) + "\n"      + String.valueOf(hero_y) + "\n";
         game_data += String.valueOf(temp_x) + "\n"      + String.valueOf(temp_y) + "\n";
-        game_data += String.valueOf(price_idx) + "\n"   + String.valueOf(act) + "\n";
-        game_data += String.valueOf(count_wing) + "\n"  + String.valueOf(sacred_shield) + "\n";
-        game_data += String.valueOf(thief_event_count) + "\n" + String.valueOf(highest_floor) + "\n";
-        game_data += String.valueOf(stf_wsdm) + "\n"    + String.valueOf(stf_echo) + "\n";
-        game_data += String.valueOf(stf_space) + "\n"   + String.valueOf(cross) + "\n";
-        game_data += String.valueOf(elixir) + "\n"      + String.valueOf(m_mattock) + "\n";
-        game_data += String.valueOf(wing_cent) + "\n"   + String.valueOf(e_mattock) + "\n";
-        game_data += String.valueOf(bomb) + "\n"        + String.valueOf(wing_up) + "\n";
-        game_data += String.valueOf(key_enhac) + "\n"   + String.valueOf(wing_down) + "\n";
-        game_data += String.valueOf(lucky_gold) + "\n"  + String.valueOf(dragonsbane) + "\n";
-        game_data += String.valueOf(snow_cryst) + "\n";
+        game_data += String.valueOf(price_idx) + "\n"   + String.valueOf(count_wing) + "\n";
+        game_data += String.valueOf(act) + "\n"         + String.valueOf(highest_floor) + "\n";
+        game_data += String.valueOf(thief_event_count) + "\n";
+        game_data += bool_to_0n1(stf_wsdm) + "\n"    + bool_to_0n1(stf_echo) + "\n";
+        game_data += bool_to_0n1(stf_space) + "\n"   + bool_to_0n1(cross) + "\n";
+        game_data += bool_to_0n1(elixir) + "\n"      + bool_to_0n1(m_mattock) + "\n";
+        game_data += bool_to_0n1(wing_cent) + "\n"   + bool_to_0n1(e_mattock) + "\n";
+        game_data += bool_to_0n1(bomb) + "\n"        + bool_to_0n1(wing_up) + "\n";
+        game_data += bool_to_0n1(key_enhac) + "\n"   + bool_to_0n1(wing_down) + "\n";
+        game_data += bool_to_0n1(lucky_gold) + "\n"  + bool_to_0n1(dragonsbane) + "\n";
+        game_data += bool_to_0n1(snow_cryst) + "\n"  + bool_to_0n1(sacred_shield) + "\n";
         StringBuilder sb = new StringBuilder(game_data);
-
-        for (int i = 0; i < 12; i++) {
+        //
+        for (int i = 0; i < 12; i++)
             sb.append(String.valueOf(merchant_history[i]));
-            sb.append("\n");
-        }
-        for (int j = 0; j < 19; j++) {
+        for (int j = 0; j < 19; j++)
             sb.append(String.valueOf(saint_history[j]));
-            sb.append("\n");
-        }
-        for (int k = 0; k < 24; k++) {
+        for (int k = 0; k < 24; k++)
             sb.append(String.valueOf(echo_history[k]));
-            sb.append("\n");
-        }
+
+
+        byte[] temp_array = sb.toString().getBytes();
+        game_data_to_save = new byte[temp_array.length + 8619];
+        int offset;
+        for (offset = 0; offset < temp_array.length; offset++)
+            game_data_to_save[offset] = temp_array[offset];
+
         byte[][][] floors = current_game.get_game();
         for (int a = 0; a < 51; a++) {
             for (int b = 0; b < 13; b++) {
                 for (int c = 0; c < 13; c++) {
-                    sb.append(String.valueOf(floors[a][b][c]));
-                    sb.append("\n");
+                    game_data_to_save[offset] = floors[a][b][c];
+                    offset++;
                 }
             }
         }
-        game_data = sb.toString();
+        //*/
+    }
+
+    // load game from save file
+    private void load_game(byte[] game_data_to_load) {
+        int offset = 0;
+        StringBuilder temp_sb = new StringBuilder();
+        while(game_data_to_load[offset] != 10 && offset < game_data_to_load.length){
+            temp_sb.append((char)game_data_to_load[offset]);
+            offset++;
+        } offset++;
+        //Log.v(TAG, "hp " + temp_sb.toString());
+        hp = Integer.parseInt(temp_sb.toString());
+        temp_sb.delete(0,temp_sb.length());
+        while(game_data_to_load[offset] != 10 && offset < game_data_to_load.length){
+            temp_sb.append((char)game_data_to_load[offset]);
+            offset++;
+        } offset++;
+        atk = Integer.parseInt(temp_sb.toString());
+        temp_sb.delete(0,temp_sb.length());
+        while(game_data_to_load[offset] != 10 && offset < game_data_to_load.length){
+            temp_sb.append((char)game_data_to_load[offset]);
+            offset++;
+        } offset++;
+        def = Integer.parseInt(temp_sb.toString());
+        temp_sb.delete(0,temp_sb.length());
+        while(game_data_to_load[offset] != 10 && offset < game_data_to_load.length){
+            temp_sb.append((char)game_data_to_load[offset]);
+            offset++;
+        } offset++;
+        gold = Integer.parseInt(temp_sb.toString());
+        temp_sb.delete(0,temp_sb.length());
+        while(game_data_to_load[offset] != 10 && offset < game_data_to_load.length){
+            temp_sb.append((char)game_data_to_load[offset]);
+            offset++;
+        } offset++;
+        floor_num = Integer.parseInt(temp_sb.toString());
+        temp_sb.delete(0,temp_sb.length());
+        while(game_data_to_load[offset] != 10 && offset < game_data_to_load.length){
+            temp_sb.append((char)game_data_to_load[offset]);
+            offset++;
+        } offset++;
+        count_y = Integer.parseInt(temp_sb.toString());
+        temp_sb.delete(0,temp_sb.length());
+        while(game_data_to_load[offset] != 10 && offset < game_data_to_load.length){
+            temp_sb.append((char)game_data_to_load[offset]);
+            offset++;
+        } offset++;
+        count_b = Integer.parseInt(temp_sb.toString());
+        temp_sb.delete(0,temp_sb.length());
+        while(game_data_to_load[offset] != 10 && offset < game_data_to_load.length){
+            temp_sb.append((char)game_data_to_load[offset]);
+            offset++;
+        } offset++;
+        count_r = Integer.parseInt(temp_sb.toString());
+        temp_sb.delete(0,temp_sb.length());
+        while(game_data_to_load[offset] != 10 && offset < game_data_to_load.length){
+            temp_sb.append((char)game_data_to_load[offset]);
+            offset++;
+        } offset++;
+        hero_x = Integer.parseInt(temp_sb.toString());
+        temp_sb.delete(0,temp_sb.length());
+        while(game_data_to_load[offset] != 10 && offset < game_data_to_load.length){
+            temp_sb.append((char)game_data_to_load[offset]);
+            offset++;
+        } offset++;
+        hero_y = Integer.parseInt(temp_sb.toString());
+        temp_sb.delete(0,temp_sb.length());
+        while(game_data_to_load[offset] != 10 && offset < game_data_to_load.length){
+            temp_sb.append((char)game_data_to_load[offset]);
+            offset++;
+        } offset++;
+        temp_x = Integer.parseInt(temp_sb.toString());
+        temp_sb.delete(0,temp_sb.length());
+        while(game_data_to_load[offset] != 10 && offset < game_data_to_load.length){
+            temp_sb.append((char)game_data_to_load[offset]);
+            offset++;
+        } offset++;
+        temp_y = Integer.parseInt(temp_sb.toString());
+        temp_sb.delete(0,temp_sb.length());
+        while(game_data_to_load[offset] != 10 && offset < game_data_to_load.length){
+            temp_sb.append((char)game_data_to_load[offset]);
+            offset++;
+        } offset++;
+        price_idx = Integer.parseInt(temp_sb.toString());
+        temp_sb.delete(0,temp_sb.length());
+        while(game_data_to_load[offset] != 10 && offset < game_data_to_load.length){
+            temp_sb.append((char)game_data_to_load[offset]);
+            offset++;
+        } offset++;
+        count_wing = Integer.parseInt(temp_sb.toString());
+        temp_sb.delete(0,temp_sb.length());
+        while(game_data_to_load[offset] != 10 && offset < game_data_to_load.length){
+            temp_sb.append((char)game_data_to_load[offset]);
+            offset++;
+        } offset++;
+        act = Integer.parseInt(temp_sb.toString());
+        temp_sb.delete(0,temp_sb.length());
+        while(game_data_to_load[offset] != 10 && offset < game_data_to_load.length){
+            temp_sb.append((char)game_data_to_load[offset]);
+            offset++;
+        } offset++;
+        highest_floor = Integer.parseInt(temp_sb.toString());
+        temp_sb.delete(0,temp_sb.length());
+        while(game_data_to_load[offset] != 10 && offset < game_data_to_load.length){
+            temp_sb.append((char)game_data_to_load[offset]);
+            offset++;
+        } offset++;
+        thief_event_count = Integer.parseInt(temp_sb.toString());
+        temp_sb.delete(0,temp_sb.length());
+        stf_wsdm      = (game_data_to_load[offset] == '1');  offset += 2;
+        stf_echo      = (game_data_to_load[offset] == '1');  offset += 2;
+        stf_space     = (game_data_to_load[offset] == '1');  offset += 2;
+        cross         = (game_data_to_load[offset] == '1');  offset += 2;
+        elixir        = (game_data_to_load[offset] == '1');  offset += 2;
+        m_mattock     = (game_data_to_load[offset] == '1');  offset += 2;
+        wing_cent     = (game_data_to_load[offset] == '1');  offset += 2;
+        e_mattock     = (game_data_to_load[offset] == '1');  offset += 2;
+        bomb          = (game_data_to_load[offset] == '1');  offset += 2;
+        wing_up       = (game_data_to_load[offset] == '1');  offset += 2;
+        key_enhac     = (game_data_to_load[offset] == '1');  offset += 2;
+        wing_down     = (game_data_to_load[offset] == '1');  offset += 2;
+        lucky_gold    = (game_data_to_load[offset] == '1');  offset += 2;
+        dragonsbane   = (game_data_to_load[offset] == '1');  offset += 2;
+        snow_cryst    = (game_data_to_load[offset] == '1');  offset += 2;
+        sacred_shield = (game_data_to_load[offset] == '1');  offset += 2;
+        for (int i = 0; i < 12; i++) {
+            merchant_history[i] = game_data_to_load[offset] - '0';
+            offset++;
+        }
+        /*
+        for (int deb = 0; deb < 19; deb++)
+            Log.v(TAG, "bools " + (game_data_to_load[offset+deb] - '0') + " " + String.valueOf(deb));
+            */
+        for (int j = 0; j < 19; j++) {
+            saint_history[j] = game_data_to_load[offset] - '0';
+            offset++;
+        }
+        for (int k = 0; k < 24; k++) {
+            echo_history[k] = game_data_to_load[offset] - '0';
+            offset++;
+        }
+        byte[][][] temp_floors = new byte[51][13][13];
+        for (int a = 0; a < 51; a++) {
+            for (int b = 0; b < 13; b++) {
+                for (int c = 0; c < 13; c++) {
+                    temp_floors[a][b][c] = game_data_to_load[offset];
+                    offset++;
+                }
+            }
+        }
+        current_game = new Floors(temp_floors);
     }
 
     // interactions with npc: thief, saint, merchant, altar, and princess)
@@ -3927,6 +4086,27 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
         }
 
         private void button_logic(int inButton) {
+            final int xu, yu, xd, yd, xl, yl, xr, yr;
+            if (hero_x > 1)
+                xl = hero_x - 1;
+            else
+                xl = hero_x;
+            if (hero_x < 11)
+                xr = hero_x + 1;
+            else
+                xr = hero_x;
+            xu = hero_x;
+            xd = hero_x;
+            if (hero_y > 1)
+                yu = hero_y - 1;
+            else
+                yu = hero_y;
+            if (hero_y < 11)
+                yd = hero_y + 1;
+            else
+                yd = hero_y;
+            yl = hero_y;
+            yr = hero_y;
             switch (inButton) {
                 case UP:
                     hero_sprite.set_direction(UP);
@@ -3957,11 +4137,7 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
                 case STAFF2:
                     break;
                 case FLY_UP:
-                    try {
-                        Thread.sleep(150);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
+                    sleep(150);
                     if (floor_num < 50) {
                         current_game.put_one_floor(floor_num, current_floor);
                         floor_num++;
@@ -3972,11 +4148,7 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
                     }
                     break;
                 case FLY_DOWN:
-                    try {
-                        Thread.sleep(150);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
+                    sleep(150);
                     if (floor_num > 0) {
                         current_game.put_one_floor(floor_num, current_floor);
                         floor_num--;
@@ -3984,6 +4156,426 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
                         refresh_ctr = true;
                         hero_y = pairup[0];
                         hero_x = pairup[1];
+                    }
+                    break;
+                case ITEM1:     // cross
+                    if (cross && no_dialog) {
+                        no_dialog = false;
+                        parent.runOnUiThread(new Runnable() {
+                            public void run() {
+                                AlertDialog.Builder cross_builder = new AlertDialog.Builder(parent);
+                                cross_builder.setTitle(R.string.item_title_cross);
+                                cross_builder.setMessage(R.string.item_description_cross);
+                                cross_builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialogInterface, int i) {
+                                    }
+                                });
+                                AlertDialog cross_dialog = cross_builder.create();
+                                cross_dialog.setCanceledOnTouchOutside(true);
+                                cross_dialog.show();
+                            }
+                        });
+                    }
+                    break;
+                case ITEM2:     // lucky gold
+                    if (lucky_gold && no_dialog) {
+                        no_dialog = false;
+                        parent.runOnUiThread(new Runnable() {
+                            public void run() {
+                                AlertDialog.Builder lucky_gold_builder = new AlertDialog.Builder(parent);
+                                lucky_gold_builder.setTitle(R.string.item_title_lucky_gold);
+                                lucky_gold_builder.setMessage(R.string.item_description_lucky_gold);
+                                lucky_gold_builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialogInterface, int i) {
+                                    }
+                                });
+                                AlertDialog lucky_gold_dialog = lucky_gold_builder.create();
+                                lucky_gold_dialog.setCanceledOnTouchOutside(true);
+                                lucky_gold_dialog.show();
+                            }
+                        });
+                    }
+                    break;
+                case ITEM3:     // mattock
+                    if (m_mattock && no_dialog) {
+                        no_dialog = false;
+                        parent.runOnUiThread(new Runnable() {
+                            public void run() {
+                                AlertDialog.Builder m_mattock_builder = new AlertDialog.Builder(parent);
+                                m_mattock_builder.setTitle(R.string.item_title_mattock);
+                                m_mattock_builder.setMessage(R.string.item_description_mattock);
+                                m_mattock_builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialogInterface, int i) {
+                                        boolean wall_nearby = false;
+                                        if (current_floor[yu][xu] == 0) {
+                                            current_floor[yu][xu] = 1;
+                                            wall_nearby = true;
+                                        }
+                                        if (current_floor[yd][xd] == 0) {
+                                            current_floor[yd][xd] = 1;
+                                            wall_nearby = true;
+                                        }
+                                        if (current_floor[yl][xl] == 0) {
+                                            current_floor[yl][xl] = 1;
+                                            wall_nearby = true;
+                                        }
+                                        if (current_floor[yr][xr] == 0) {
+                                            current_floor[yr][xr] = 1;
+                                            wall_nearby = true;
+                                        }
+                                        if (wall_nearby) {
+                                            m_mattock = false;
+                                            refresh_ctr = true;
+                                        }
+                                    }
+                                });
+                                m_mattock_builder.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialogInterface, int i) {
+                                    }
+                                });
+                                AlertDialog m_mattock_dialog = m_mattock_builder.create();
+                                m_mattock_dialog.setCanceledOnTouchOutside(true);
+                                m_mattock_dialog.show();
+                            }
+                        });
+                    }
+                    break;
+                case ITEM4:     // wing up
+                    if (wing_up && no_dialog) {
+                        no_dialog = false;
+                        parent.runOnUiThread(new Runnable() {
+                            public void run() {
+                                AlertDialog.Builder wing_up_builder = new AlertDialog.Builder(parent);
+                                wing_up_builder.setTitle(R.string.item_title_wing_up);
+                                wing_up_builder.setMessage(R.string.item_description_wing_up);
+                                wing_up_builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialogInterface, int i) {
+                                        boolean can_teleport = false;
+                                        if (current_floor[yu][xu] == 3 || current_floor[yu][xu] == 4) {
+                                            can_teleport = true;
+                                        } else if (current_floor[yd][xd] == 3 || current_floor[yd][xd] == 4) {
+                                            can_teleport = true;
+                                        } else if (current_floor[yl][xl] == 3 || current_floor[yl][xl] == 4) {
+                                            can_teleport = true;
+                                        } else if (current_floor[yr][xr] == 3 || current_floor[yr][xr] == 4) {
+                                            can_teleport = true;
+                                        }
+                                        if (can_teleport) {
+                                            sleep(150);
+                                            if (floor_num < 49) {
+                                                current_game.put_one_floor(floor_num, current_floor);
+                                                floor_num++;
+                                                int pairup[] = find_hero_next_floor(true, floor_num);
+                                                refresh_ctr = true;
+                                                hero_y = pairup[0];
+                                                hero_x = pairup[1];
+                                            }
+                                            wing_up = false;
+                                        }
+                                    }
+                                });
+                                wing_up_builder.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialogInterface, int i) {
+                                    }
+                                });
+                                AlertDialog wing_up_dialog = wing_up_builder.create();
+                                wing_up_dialog.setCanceledOnTouchOutside(true);
+                                wing_up_dialog.show();
+                            }
+                        });
+                    }
+                    break;
+                case ITEM5:     // wing center
+                    if (wing_cent && no_dialog) {
+                        no_dialog = false;
+                        parent.runOnUiThread(new Runnable() {
+                            public void run() {
+                                AlertDialog.Builder wing_cent_builder = new AlertDialog.Builder(parent);
+                                wing_cent_builder.setTitle(R.string.item_title_wing_center);
+                                String full_message = getString(R.string.item_description_wing_center) + " (teleport left: " + String.valueOf(count_wing) + ")";
+                                wing_cent_builder.setMessage(full_message);
+                                wing_cent_builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialogInterface, int i) {
+                                        boolean can_teleport = current_floor[12-hero_y][12-hero_x] == -9 || current_floor[12-hero_y][12-hero_x] == -8;
+                                        can_teleport |= current_floor[12-hero_y][12-hero_x] == -7 || current_floor[12-hero_y][12-hero_x] == -6;
+                                        can_teleport |= current_floor[12-hero_y][12-hero_x] == 1;
+                                        if (can_teleport) {
+                                            sleep(150);
+                                            hero_y = 12 - hero_y;
+                                            hero_x = 12 - hero_x;
+                                            count_wing--;
+                                            if (count_wing == 0)
+                                                wing_cent = false;
+                                        }
+                                    }
+                                });
+                                wing_cent_builder.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialogInterface, int i) {
+                                    }
+                                });
+                                AlertDialog wing_cent_dialog = wing_cent_builder.create();
+                                wing_cent_dialog.setCanceledOnTouchOutside(true);
+                                wing_cent_dialog.show();
+                            }
+                        });
+                    }
+                    break;
+                case ITEM6:     // wing down
+                    if (wing_down && no_dialog) {
+                        no_dialog = false;
+                        parent.runOnUiThread(new Runnable() {
+                            public void run() {
+                                AlertDialog.Builder wing_down_builder = new AlertDialog.Builder(parent);
+                                wing_down_builder.setTitle(R.string.item_title_wing_down);
+                                wing_down_builder.setMessage(R.string.item_description_wing_down);
+                                wing_down_builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialogInterface, int i) {
+                                        boolean can_teleport = false;
+                                        if (current_floor[yu][xu] == 3 || current_floor[yu][xu] == 4) {
+                                            can_teleport = true;
+                                        } else if (current_floor[yd][xd] == 3 || current_floor[yd][xd] == 4) {
+                                            can_teleport = true;
+                                        } else if (current_floor[yl][xl] == 3 || current_floor[yl][xl] == 4) {
+                                            can_teleport = true;
+                                        } else if (current_floor[yr][xr] == 3 || current_floor[yr][xr] == 4) {
+                                            can_teleport = true;
+                                        }
+                                        if (can_teleport) {
+                                            sleep(150);
+                                            if (floor_num > 0) {
+                                                current_game.put_one_floor(floor_num, current_floor);
+                                                floor_num--;
+                                                int pairup[] = find_hero_next_floor(false, floor_num);
+                                                refresh_ctr = true;
+                                                hero_y = pairup[0];
+                                                hero_x = pairup[1];
+                                            }
+                                            wing_down = false;
+                                        }
+                                    }
+                                });
+                                wing_down_builder.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialogInterface, int i) {
+                                    }
+                                });
+                                AlertDialog wing_down_dialog = wing_down_builder.create();
+                                wing_down_dialog.setCanceledOnTouchOutside(true);
+                                wing_down_dialog.show();
+                            }
+                        });
+                    }
+                    break;
+                case ITEM7:     // dragonsbane
+                    if (dragonsbane && no_dialog) {
+                        no_dialog = false;
+                        parent.runOnUiThread(new Runnable() {
+                            public void run() {
+                                AlertDialog.Builder dragonsbane_builder = new AlertDialog.Builder(parent);
+                                dragonsbane_builder.setTitle(R.string.item_title_dragonsbane);
+                                dragonsbane_builder.setMessage(R.string.item_description_dragonsbane);
+                                dragonsbane_builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialogInterface, int i) {
+                                    }
+                                });
+                                AlertDialog dragonsbane_dialog = dragonsbane_builder.create();
+                                dragonsbane_dialog.setCanceledOnTouchOutside(true);
+                                dragonsbane_dialog.show();
+                            }
+                        });
+                    }
+                    break;
+                case ITEM8:     // snow crystal
+                    if (snow_cryst && no_dialog) {
+                        no_dialog = false;
+                        parent.runOnUiThread(new Runnable() {
+                            public void run() {
+                                AlertDialog.Builder snow_cryst_builder = new AlertDialog.Builder(parent);
+                                snow_cryst_builder.setTitle(R.string.item_title_snow_crystal);
+                                snow_cryst_builder.setMessage(R.string.item_description_snow_crystal);
+                                snow_cryst_builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialogInterface, int i) {
+                                    }
+                                });
+                                AlertDialog snow_cryst_dialog = snow_cryst_builder.create();
+                                snow_cryst_dialog.setCanceledOnTouchOutside(true);
+                                snow_cryst_dialog.show();
+                            }
+                        });
+                    }
+                    break;
+                case ITEM9:     // enhanced mattock
+                    if (e_mattock && no_dialog) {
+                        no_dialog = false;
+                        parent.runOnUiThread(new Runnable() {
+                            public void run() {
+                                AlertDialog.Builder e_mattock_builder = new AlertDialog.Builder(parent);
+                                e_mattock_builder.setTitle(R.string.item_title_enhanced_mattock);
+                                e_mattock_builder.setMessage(R.string.item_description_enhanced_mattock);
+                                e_mattock_builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialogInterface, int in_int) {
+                                        for (int i = 1; i < 12; i++) {
+                                            for (int j = 1; j < 12; j++) {
+                                                if (current_floor[i][j] == 0) {
+                                                    current_floor[i][j] = 1;
+                                                }
+                                            }
+                                        }
+                                        refresh_ctr = true;
+                                        e_mattock = false;
+                                    }
+                                });
+                                e_mattock_builder.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialogInterface, int i) {
+                                    }
+                                });
+                                AlertDialog e_mattock_dialog = e_mattock_builder.create();
+                                e_mattock_dialog.setCanceledOnTouchOutside(true);
+                                e_mattock_dialog.show();
+                            }
+                        });
+                    }
+                    break;
+                case ITEM10:     // elixir
+                    if (elixir && no_dialog) {
+                        no_dialog = false;
+                        parent.runOnUiThread(new Runnable() {
+                            public void run() {
+                                AlertDialog.Builder elixir_builder = new AlertDialog.Builder(parent);
+                                elixir_builder.setTitle(R.string.item_title_elixir);
+                                elixir_builder.setMessage(R.string.item_description_elixir);
+                                elixir_builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialogInterface, int in_int) {
+                                        hp += 10*atk + 5*def;
+                                        elixir = false;
+                                    }
+                                });
+                                elixir_builder.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialogInterface, int i) {
+                                    }
+                                });
+                                AlertDialog elixir_dialog = elixir_builder.create();
+                                elixir_dialog.setCanceledOnTouchOutside(true);
+                                elixir_dialog.show();
+                            }
+                        });
+                    }
+                    break;
+                case ITEM11:     // enhanced yellow key
+                    if (key_enhac && no_dialog) {
+                        no_dialog = false;
+                        parent.runOnUiThread(new Runnable() {
+                            public void run() {
+                                AlertDialog.Builder key_enhac_builder = new AlertDialog.Builder(parent);
+                                key_enhac_builder.setTitle(R.string.item_title_enhanced_key);
+                                key_enhac_builder.setMessage(R.string.item_description_enhanced_key);
+                                key_enhac_builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialogInterface, int in_int) {
+                                        for (int i = 1; i < 12; i++) {
+                                            for (int j = 1; j < 12; j++) {
+                                                if (current_floor[i][j] == 5) {
+                                                    current_floor[i][j] = 1;
+                                                }
+                                            }
+                                        }
+                                        refresh_ctr = true;
+                                        key_enhac = false;
+                                    }
+                                });
+                                key_enhac_builder.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialogInterface, int i) {
+                                    }
+                                });
+                                AlertDialog key_enhac_dialog = key_enhac_builder.create();
+                                key_enhac_dialog.setCanceledOnTouchOutside(true);
+                                key_enhac_dialog.show();
+                            }
+                        });
+                    }
+                    break;
+                case ITEM12:     // bomb
+                    if (bomb && no_dialog) {
+                        no_dialog = false;
+                        parent.runOnUiThread(new Runnable() {
+                            public void run() {
+                                AlertDialog.Builder bomb_builder = new AlertDialog.Builder(parent);
+                                bomb_builder.setTitle(R.string.item_title_bomb);
+                                bomb_builder.setMessage(R.string.item_description_bomb);
+                                bomb_builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialogInterface, int in_int) {
+                                        if (current_floor[yu][xu] > 30 && current_floor[yu][xu] < 60 && current_floor[yu][xu] != 52) {
+                                            if (lucky_gold)
+                                                gold += 2*m_table[current_floor[yu][xu]-31][3];
+                                            else
+                                                gold += m_table[current_floor[yu][xu]-31][3];
+                                            current_floor[yu][xu] = 1;
+                                            bomb = false;
+                                        }
+                                        if (current_floor[yd][xd] > 30 && current_floor[yd][xd] < 60 && current_floor[yd][xd] != 52) {
+                                            if (lucky_gold)
+                                                gold += 2*m_table[current_floor[yd][xd]-31][3];
+                                            else
+                                                gold += m_table[current_floor[yd][xd]-31][3];
+                                            current_floor[yd][xd] = 1;
+                                            bomb = false;
+                                        }
+                                        if (current_floor[yl][xl] > 30 && current_floor[yl][xl] < 60 && current_floor[yl][xl] != 52) {
+                                            if (lucky_gold)
+                                                gold += 2*m_table[current_floor[yl][xl]-31][3];
+                                            else
+                                                gold += m_table[current_floor[yl][xl]-31][3];
+                                            current_floor[yl][xl] = 1;
+                                            bomb = false;
+                                        }
+                                        if (current_floor[yr][xr] > 30 && current_floor[yr][xr] < 60 && current_floor[yr][xr] != 52) {
+                                            if (lucky_gold)
+                                                gold += 2*m_table[current_floor[yr][xr]-31][3];
+                                            else
+                                                gold += m_table[current_floor[yr][xr]-31][3];
+                                            current_floor[yr][xr] = 1;
+                                            bomb = false;
+                                        }
+                                        check_complete();
+                                        refresh_ctr = true;
+                                    }
+                                });
+                                bomb_builder.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialogInterface, int i) {
+                                    }
+                                });
+                                AlertDialog bomb_dialog = bomb_builder.create();
+                                bomb_dialog.setCanceledOnTouchOutside(true);
+                                bomb_dialog.show();
+                            }
+                        });
+                    }
+                    break;
+                case SAVE:
+                    if (no_dialog) {
+                        no_dialog = false;
+                        Intent save_game = new Intent(Gamelogic.this, SaveActivity.class);
+                        prepare_to_save_game();
+                        save_game.putExtra("Game_Data", game_data_to_save);
+                        startActivity(save_game);
                     }
                     break;
                 default:
