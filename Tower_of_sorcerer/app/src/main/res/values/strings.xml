@@ -10,6 +10,9 @@
     <string name="back">Back</string>
     <string name="cancel">Cancel</string>
     <string name="ok">OK</string>
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
+    <string name="back_btn_alert">Do you want to exit the game?</string>
     <string name="saint_2f">Back</string>
     <string name="saint_3f">Alas, my age is catching up to me. I can fight no more. Brave young man,
 you should take this Staff of Wisdom since I have no use for it. It will reveal

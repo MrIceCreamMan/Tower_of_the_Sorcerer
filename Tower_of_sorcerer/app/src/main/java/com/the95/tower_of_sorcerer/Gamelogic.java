@@ -103,7 +103,7 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
     private Sprite hero_sprite, red_star_sprite, octopus_sprite, dragon_sprite;
     private Bitmap menu_health, menu_gold, menu_background, menu_stf1, menu_stf2;
     private Bitmap menu_stf3, menu_up, menu_down, menu_left, menu_right;
-    private Bitmap t__floor, t___wall, t___star, t_ustair, t_dstair;
+    private Bitmap t__floor, t___wall, t___star, t_ustair, t_dstair, t_r_star;
     private Bitmap t_door_y, t_door_b, t_door_r, t_door_m, t_prison, t___logo;
     private Bitmap w___ironw, w_silverw, w_knightw, w_divinew, w_sacredw;
     private Bitmap w___ironh, w_silverh, w_knighth, w_divineh, w_sacredh;
@@ -149,8 +149,8 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
         // initialize current game data
         current_game = new Floors();
         current_floor = current_game.get_one_floor(1);
-        hp = 8000;              atk = 470;              def = 370;              gold = 1000;
-        floor_num = 3;          act = 0;                thief_event_count = 0;  highest_floor = 1;
+        hp = 1000;              atk = 100;              def = 100;              gold = 0;
+        floor_num = 1;          act = 0;                thief_event_count = 0;  highest_floor = 1;
         count_y = 10;           count_b = 10;           count_r = 10;           count_wing = 0;
         hero_x = 6;             hero_y = 11;            temp_x = 6;             temp_y = 11;
         price_idx = 0;
@@ -181,7 +181,7 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
         set_all_true();
 
         // initialize pictures
-        ball = BitmapFactory.decodeResource(getResources(), R.drawable.brokeearth);
+        ball = BitmapFactory.decodeResource(getResources(), R.drawable.newearth);
         pic_debug = BitmapFactory.decodeResource(getResources(), R.drawable.z1_debug);
         pic_d1 = BitmapFactory.decodeResource(getResources(), R.drawable.z3);
         pic_d2 = BitmapFactory.decodeResource(getResources(), R.drawable.z4);
@@ -208,6 +208,7 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
         t_door_m = BitmapFactory.decodeResource(getResources(), R.drawable.tile9_door_m);
         t_prison = BitmapFactory.decodeResource(getResources(), R.drawable.tile10_prison);
         t___logo = BitmapFactory.decodeResource(getResources(), R.drawable.tile11_logo);
+        t_r_star = BitmapFactory.decodeResource(getResources(), R.drawable.tile12_red_star);
         w___ironw = BitmapFactory.decodeResource(getResources(), R.drawable.w01_iron_sword);
         w___ironh = BitmapFactory.decodeResource(getResources(), R.drawable.w02_iron_shield);
         w_silverw = BitmapFactory.decodeResource(getResources(), R.drawable.w03_silver_sword);
@@ -311,13 +312,6 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
         setContentView(gameview);
     }
 
-    private void set_all_true() {
-        stf_wsdm = stf_echo = stf_space = cross = elixir = true;
-        m_mattock = wing_cent = e_mattock = bomb = wing_up = true;
-        key_enhac = wing_down = lucky_gold = dragonsbane = snow_cryst = true;
-        count_wing = 3;
-    }
-
     @Override
     protected void onPause() {
         super.onPause();
@@ -387,406 +381,416 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
                     pt5.setColor(Color.rgb(255, 255, 255));
                     which_button = STAFF1;
                     temp_y = hero_y; temp_x = hero_x;
-                    load_ctr = true;
-                    which_surface_view = false;
+                    if (stf_wsdm) {
+                        load_ctr = true;
+                        which_surface_view = false;
+                    }
                 } else if (x > sq_size * 9 + origin && y > sq_size * 17 + offset*3 && x < sq_size * 10 && y < sq_size * 19 + offset*3) {
                     pt6.setColor(Color.rgb(255, 255, 255));
                     temp_y = hero_y; temp_x = hero_x;
                     which_button = STAFF2;
+                    if (stf_echo) {
+                        LayoutInflater staff_echo_inflater = LayoutInflater.from(Gamelogic.this);
+                        View staff_of_echo_view = staff_echo_inflater.inflate(R.layout.staff_of_echo_menu, null);
+                        AlertDialog.Builder staff_echo_builder = new AlertDialog.Builder(Gamelogic.this);
+                        final AlertDialog staff_echo_dialog = staff_echo_builder.create();
+                        staff_echo_dialog.setCanceledOnTouchOutside(true);
+                        final AlertDialog.Builder echo_builder = new AlertDialog.Builder(Gamelogic.this);
 
-                    LayoutInflater staff_echo_inflater = LayoutInflater.from(Gamelogic.this);
-                    View staff_of_echo_view = staff_echo_inflater.inflate(R.layout.staff_of_echo_menu, null);
-                    AlertDialog.Builder staff_echo_builder = new AlertDialog.Builder(Gamelogic.this);
-                    final AlertDialog staff_echo_dialog = staff_echo_builder.create();
-                    staff_echo_dialog.setCanceledOnTouchOutside(true);
-                    final AlertDialog.Builder echo_builder = new AlertDialog.Builder(Gamelogic.this);
-
-                    Button btn1 = staff_of_echo_view.findViewById(R.id.button1);
-                    btn1.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View view) {
-                            if (echo_history[0] == 0) {
-                                echo_builder.setMessage(R.string.no_echo);
-                                staff_echo_dialog.dismiss();
-                            } else {
-                                echo_builder.setMessage(R.string.saint_4f);
-                                staff_echo_dialog.dismiss();
+                        Button btn1 = staff_of_echo_view.findViewById(R.id.button1);
+                        btn1.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                if (echo_history[0] == 0) {
+                                    echo_builder.setMessage(R.string.no_echo);
+                                    staff_echo_dialog.dismiss();
+                                } else {
+                                    echo_builder.setMessage(R.string.saint_4f);
+                                    staff_echo_dialog.dismiss();
+                                }
+                                AlertDialog echo_dialog = echo_builder.create();
+                                echo_dialog.setCanceledOnTouchOutside(true);
+                                echo_dialog.show();
                             }
-                            AlertDialog echo_dialog = echo_builder.create();
-                            echo_dialog.setCanceledOnTouchOutside(true);
-                            echo_dialog.show();
-                        }
-                    });
-                    Button btn2 = staff_of_echo_view.findViewById(R.id.button2);
-                    btn2.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View view) {
-                            if (echo_history[1] == 0) {
-                                echo_builder.setMessage(R.string.no_echo);
-                                staff_echo_dialog.dismiss();
-                            } else {
-                                echo_builder.setMessage(R.string.saint_6f);
-                                staff_echo_dialog.dismiss();
+                        });
+                        Button btn2 = staff_of_echo_view.findViewById(R.id.button2);
+                        btn2.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                if (echo_history[1] == 0) {
+                                    echo_builder.setMessage(R.string.no_echo);
+                                    staff_echo_dialog.dismiss();
+                                } else {
+                                    echo_builder.setMessage(R.string.saint_6f);
+                                    staff_echo_dialog.dismiss();
+                                }
+                                AlertDialog echo_dialog = echo_builder.create();
+                                echo_dialog.setCanceledOnTouchOutside(true);
+                                echo_dialog.show();
                             }
-                            AlertDialog echo_dialog = echo_builder.create();
-                            echo_dialog.setCanceledOnTouchOutside(true);
-                            echo_dialog.show();
-                        }
-                    });
-                    Button btn3 = staff_of_echo_view.findViewById(R.id.button3);
-                    btn3.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View view) {
-                            if (echo_history[2] == 0) {
-                                echo_builder.setMessage(R.string.no_echo);
-                                staff_echo_dialog.dismiss();
-                            } else {
-                                echo_builder.setMessage(R.string.merchant_6f1);
-                                staff_echo_dialog.dismiss();
+                        });
+                        Button btn3 = staff_of_echo_view.findViewById(R.id.button3);
+                        btn3.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                if (echo_history[2] == 0) {
+                                    echo_builder.setMessage(R.string.no_echo);
+                                    staff_echo_dialog.dismiss();
+                                } else {
+                                    echo_builder.setMessage(R.string.merchant_6f1);
+                                    staff_echo_dialog.dismiss();
+                                }
+                                AlertDialog echo_dialog = echo_builder.create();
+                                echo_dialog.setCanceledOnTouchOutside(true);
+                                echo_dialog.show();
                             }
-                            AlertDialog echo_dialog = echo_builder.create();
-                            echo_dialog.setCanceledOnTouchOutside(true);
-                            echo_dialog.show();
-                        }
-                    });
-                    Button btn4 = staff_of_echo_view.findViewById(R.id.button4);
-                    btn4.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View view) {
-                            if (echo_history[3] == 0) {
-                                echo_builder.setMessage(R.string.no_echo);
-                                staff_echo_dialog.dismiss();
-                            } else {
-                                echo_builder.setMessage(R.string.merchant_7f1);
-                                staff_echo_dialog.dismiss();
+                        });
+                        Button btn4 = staff_of_echo_view.findViewById(R.id.button4);
+                        btn4.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                if (echo_history[3] == 0) {
+                                    echo_builder.setMessage(R.string.no_echo);
+                                    staff_echo_dialog.dismiss();
+                                } else {
+                                    echo_builder.setMessage(R.string.merchant_7f1);
+                                    staff_echo_dialog.dismiss();
+                                }
+                                AlertDialog echo_dialog = echo_builder.create();
+                                echo_dialog.setCanceledOnTouchOutside(true);
+                                echo_dialog.show();
                             }
-                            AlertDialog echo_dialog = echo_builder.create();
-                            echo_dialog.setCanceledOnTouchOutside(true);
-                            echo_dialog.show();
-                        }
-                    });
-                    Button btn5 = staff_of_echo_view.findViewById(R.id.button5);
-                    btn5.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View view) {
-                            if (echo_history[4] == 0) {
-                                echo_builder.setMessage(R.string.no_echo);
-                                staff_echo_dialog.dismiss();
-                            } else {
-                                echo_builder.setMessage(R.string.merchant_12f1);
-                                staff_echo_dialog.dismiss();
+                        });
+                        Button btn5 = staff_of_echo_view.findViewById(R.id.button5);
+                        btn5.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                if (echo_history[4] == 0) {
+                                    echo_builder.setMessage(R.string.no_echo);
+                                    staff_echo_dialog.dismiss();
+                                } else {
+                                    echo_builder.setMessage(R.string.merchant_12f1);
+                                    staff_echo_dialog.dismiss();
+                                }
+                                AlertDialog echo_dialog = echo_builder.create();
+                                echo_dialog.setCanceledOnTouchOutside(true);
+                                echo_dialog.show();
                             }
-                            AlertDialog echo_dialog = echo_builder.create();
-                            echo_dialog.setCanceledOnTouchOutside(true);
-                            echo_dialog.show();
-                        }
-                    });
-                    Button btn6 = staff_of_echo_view.findViewById(R.id.button6);
-                    btn6.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View view) {
-                            if (echo_history[5] == 0) {
-                                echo_builder.setMessage(R.string.no_echo);
-                                staff_echo_dialog.dismiss();
-                            } else {
-                                echo_builder.setMessage(R.string.merchant_15f1);
-                                staff_echo_dialog.dismiss();
+                        });
+                        Button btn6 = staff_of_echo_view.findViewById(R.id.button6);
+                        btn6.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                if (echo_history[5] == 0) {
+                                    echo_builder.setMessage(R.string.no_echo);
+                                    staff_echo_dialog.dismiss();
+                                } else {
+                                    echo_builder.setMessage(R.string.merchant_15f1);
+                                    staff_echo_dialog.dismiss();
+                                }
+                                AlertDialog echo_dialog = echo_builder.create();
+                                echo_dialog.setCanceledOnTouchOutside(true);
+                                echo_dialog.show();
                             }
-                            AlertDialog echo_dialog = echo_builder.create();
-                            echo_dialog.setCanceledOnTouchOutside(true);
-                            echo_dialog.show();
-                        }
-                    });
-                    Button btn7 = staff_of_echo_view.findViewById(R.id.button7);
-                    btn7.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View view) {
-                            if (echo_history[6] == 0) {
-                                echo_builder.setMessage(R.string.no_echo);
-                                staff_echo_dialog.dismiss();
-                            } else {
-                                echo_builder.setMessage(R.string.saint_16f);
-                                staff_echo_dialog.dismiss();
+                        });
+                        Button btn7 = staff_of_echo_view.findViewById(R.id.button7);
+                        btn7.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                if (echo_history[6] == 0) {
+                                    echo_builder.setMessage(R.string.no_echo);
+                                    staff_echo_dialog.dismiss();
+                                } else {
+                                    echo_builder.setMessage(R.string.saint_16f);
+                                    staff_echo_dialog.dismiss();
+                                }
+                                AlertDialog echo_dialog = echo_builder.create();
+                                echo_dialog.setCanceledOnTouchOutside(true);
+                                echo_dialog.show();
                             }
-                            AlertDialog echo_dialog = echo_builder.create();
-                            echo_dialog.setCanceledOnTouchOutside(true);
-                            echo_dialog.show();
-                        }
-                    });
-                    Button btn8 = staff_of_echo_view.findViewById(R.id.button8);
-                    btn8.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View view) {
-                            if (echo_history[7] == 0) {
-                                echo_builder.setMessage(R.string.no_echo);
-                                staff_echo_dialog.dismiss();
-                            } else {
-                                echo_builder.setMessage(R.string.saint_18f);
-                                staff_echo_dialog.dismiss();
+                        });
+                        Button btn8 = staff_of_echo_view.findViewById(R.id.button8);
+                        btn8.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                if (echo_history[7] == 0) {
+                                    echo_builder.setMessage(R.string.no_echo);
+                                    staff_echo_dialog.dismiss();
+                                } else {
+                                    echo_builder.setMessage(R.string.saint_18f);
+                                    staff_echo_dialog.dismiss();
+                                }
+                                AlertDialog echo_dialog = echo_builder.create();
+                                echo_dialog.setCanceledOnTouchOutside(true);
+                                echo_dialog.show();
                             }
-                            AlertDialog echo_dialog = echo_builder.create();
-                            echo_dialog.setCanceledOnTouchOutside(true);
-                            echo_dialog.show();
-                        }
-                    });
-                    Button btn9 = staff_of_echo_view.findViewById(R.id.button9);
-                    btn9.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View view) {
-                            if (echo_history[8] == 0) {
-                                echo_builder.setMessage(R.string.no_echo);
-                                staff_echo_dialog.dismiss();
-                            } else {
-                                echo_builder.setMessage(R.string.saint_21f);
-                                staff_echo_dialog.dismiss();
+                        });
+                        Button btn9 = staff_of_echo_view.findViewById(R.id.button9);
+                        btn9.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                if (echo_history[8] == 0) {
+                                    echo_builder.setMessage(R.string.no_echo);
+                                    staff_echo_dialog.dismiss();
+                                } else {
+                                    echo_builder.setMessage(R.string.saint_21f);
+                                    staff_echo_dialog.dismiss();
+                                }
+                                AlertDialog echo_dialog = echo_builder.create();
+                                echo_dialog.setCanceledOnTouchOutside(true);
+                                echo_dialog.show();
                             }
-                            AlertDialog echo_dialog = echo_builder.create();
-                            echo_dialog.setCanceledOnTouchOutside(true);
-                            echo_dialog.show();
-                        }
-                    });
-                    Button btn10 = staff_of_echo_view.findViewById(R.id.button10);
-                    btn10.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View view) {
-                            if (echo_history[9] == 0) {
-                                echo_builder.setMessage(R.string.no_echo);
-                                staff_echo_dialog.dismiss();
-                            } else {
-                                echo_builder.setMessage(R.string.saint_27f);
-                                staff_echo_dialog.dismiss();
+                        });
+                        Button btn10 = staff_of_echo_view.findViewById(R.id.button10);
+                        btn10.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                if (echo_history[9] == 0) {
+                                    echo_builder.setMessage(R.string.no_echo);
+                                    staff_echo_dialog.dismiss();
+                                } else {
+                                    echo_builder.setMessage(R.string.saint_27f);
+                                    staff_echo_dialog.dismiss();
+                                }
+                                AlertDialog echo_dialog = echo_builder.create();
+                                echo_dialog.setCanceledOnTouchOutside(true);
+                                echo_dialog.show();
                             }
-                            AlertDialog echo_dialog = echo_builder.create();
-                            echo_dialog.setCanceledOnTouchOutside(true);
-                            echo_dialog.show();
-                        }
-                    });
-                    Button btn11 = staff_of_echo_view.findViewById(R.id.button11);
-                    btn11.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View view) {
-                            if (echo_history[10] == 0) {
-                                echo_builder.setMessage(R.string.no_echo);
-                                staff_echo_dialog.dismiss();
-                            } else {
-                                echo_builder.setMessage(R.string.saint_31f);
-                                staff_echo_dialog.dismiss();
+                        });
+                        Button btn11 = staff_of_echo_view.findViewById(R.id.button11);
+                        btn11.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                if (echo_history[10] == 0) {
+                                    echo_builder.setMessage(R.string.no_echo);
+                                    staff_echo_dialog.dismiss();
+                                } else {
+                                    echo_builder.setMessage(R.string.saint_31f);
+                                    staff_echo_dialog.dismiss();
+                                }
+                                AlertDialog echo_dialog = echo_builder.create();
+                                echo_dialog.setCanceledOnTouchOutside(true);
+                                echo_dialog.show();
                             }
-                            AlertDialog echo_dialog = echo_builder.create();
-                            echo_dialog.setCanceledOnTouchOutside(true);
-                            echo_dialog.show();
-                        }
-                    });
-                    Button btn12 = staff_of_echo_view.findViewById(R.id.button12);
-                    btn12.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View view) {
-                            if (echo_history[11] == 0) {
-                                echo_builder.setMessage(R.string.no_echo);
-                                staff_echo_dialog.dismiss();
-                            } else {
-                                echo_builder.setMessage(R.string.merchant_31f1);
-                                staff_echo_dialog.dismiss();
+                        });
+                        Button btn12 = staff_of_echo_view.findViewById(R.id.button12);
+                        btn12.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                if (echo_history[11] == 0) {
+                                    echo_builder.setMessage(R.string.no_echo);
+                                    staff_echo_dialog.dismiss();
+                                } else {
+                                    echo_builder.setMessage(R.string.merchant_31f1);
+                                    staff_echo_dialog.dismiss();
+                                }
+                                AlertDialog echo_dialog = echo_builder.create();
+                                echo_dialog.setCanceledOnTouchOutside(true);
+                                echo_dialog.show();
                             }
-                            AlertDialog echo_dialog = echo_builder.create();
-                            echo_dialog.setCanceledOnTouchOutside(true);
-                            echo_dialog.show();
-                        }
-                    });
-                    Button btn13 = staff_of_echo_view.findViewById(R.id.button13);
-                    btn13.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View view) {
-                            if (echo_history[12] == 0) {
-                                echo_builder.setMessage(R.string.no_echo);
-                                staff_echo_dialog.dismiss();
-                            } else {
-                                echo_builder.setMessage(R.string.saint_33f);
-                                staff_echo_dialog.dismiss();
+                        });
+                        Button btn13 = staff_of_echo_view.findViewById(R.id.button13);
+                        btn13.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                if (echo_history[12] == 0) {
+                                    echo_builder.setMessage(R.string.no_echo);
+                                    staff_echo_dialog.dismiss();
+                                } else {
+                                    echo_builder.setMessage(R.string.saint_33f);
+                                    staff_echo_dialog.dismiss();
+                                }
+                                AlertDialog echo_dialog = echo_builder.create();
+                                echo_dialog.setCanceledOnTouchOutside(true);
+                                echo_dialog.show();
                             }
-                            AlertDialog echo_dialog = echo_builder.create();
-                            echo_dialog.setCanceledOnTouchOutside(true);
-                            echo_dialog.show();
-                        }
-                    });
-                    Button btn14 = staff_of_echo_view.findViewById(R.id.button14);
-                    btn14.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View view) {
-                            if (echo_history[13] == 0) {
-                                echo_builder.setMessage(R.string.no_echo);
-                                staff_echo_dialog.dismiss();
-                            } else {
-                                echo_builder.setMessage(R.string.saint_36f);
-                                staff_echo_dialog.dismiss();
+                        });
+                        Button btn14 = staff_of_echo_view.findViewById(R.id.button14);
+                        btn14.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                if (echo_history[13] == 0) {
+                                    echo_builder.setMessage(R.string.no_echo);
+                                    staff_echo_dialog.dismiss();
+                                } else {
+                                    echo_builder.setMessage(R.string.saint_36f);
+                                    staff_echo_dialog.dismiss();
+                                }
+                                AlertDialog echo_dialog = echo_builder.create();
+                                echo_dialog.setCanceledOnTouchOutside(true);
+                                echo_dialog.show();
                             }
-                            AlertDialog echo_dialog = echo_builder.create();
-                            echo_dialog.setCanceledOnTouchOutside(true);
-                            echo_dialog.show();
-                        }
-                    });
-                    Button btn15 = staff_of_echo_view.findViewById(R.id.button15);
-                    btn15.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View view) {
-                            if (echo_history[14] == 0) {
-                                echo_builder.setMessage(R.string.no_echo);
-                                staff_echo_dialog.dismiss();
-                            } else {
-                                echo_builder.setMessage(R.string.saint_37f);
-                                staff_echo_dialog.dismiss();
+                        });
+                        Button btn15 = staff_of_echo_view.findViewById(R.id.button15);
+                        btn15.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                if (echo_history[14] == 0) {
+                                    echo_builder.setMessage(R.string.no_echo);
+                                    staff_echo_dialog.dismiss();
+                                } else {
+                                    echo_builder.setMessage(R.string.saint_37f);
+                                    staff_echo_dialog.dismiss();
+                                }
+                                AlertDialog echo_dialog = echo_builder.create();
+                                echo_dialog.setCanceledOnTouchOutside(true);
+                                echo_dialog.show();
                             }
-                            AlertDialog echo_dialog = echo_builder.create();
-                            echo_dialog.setCanceledOnTouchOutside(true);
-                            echo_dialog.show();
-                        }
-                    });
-                    Button btn16 = staff_of_echo_view.findViewById(R.id.button16);
-                    btn16.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View view) {
-                            if (echo_history[15] == 0) {
-                                echo_builder.setMessage(R.string.no_echo);
-                                staff_echo_dialog.dismiss();
-                            } else {
-                                echo_builder.setMessage(R.string.merchant_38f1);
-                                staff_echo_dialog.dismiss();
+                        });
+                        Button btn16 = staff_of_echo_view.findViewById(R.id.button16);
+                        btn16.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                if (echo_history[15] == 0) {
+                                    echo_builder.setMessage(R.string.no_echo);
+                                    staff_echo_dialog.dismiss();
+                                } else {
+                                    echo_builder.setMessage(R.string.merchant_38f1);
+                                    staff_echo_dialog.dismiss();
+                                }
+                                AlertDialog echo_dialog = echo_builder.create();
+                                echo_dialog.setCanceledOnTouchOutside(true);
+                                echo_dialog.show();
                             }
-                            AlertDialog echo_dialog = echo_builder.create();
-                            echo_dialog.setCanceledOnTouchOutside(true);
-                            echo_dialog.show();
-                        }
-                    });
-                    Button btn17 = staff_of_echo_view.findViewById(R.id.button17);
-                    btn17.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View view) {
-                            if (echo_history[16] == 0) {
-                                echo_builder.setMessage(R.string.no_echo);
-                                staff_echo_dialog.dismiss();
-                            } else {
-                                echo_builder.setMessage(R.string.saint_39f);
-                                staff_echo_dialog.dismiss();
+                        });
+                        Button btn17 = staff_of_echo_view.findViewById(R.id.button17);
+                        btn17.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                if (echo_history[16] == 0) {
+                                    echo_builder.setMessage(R.string.no_echo);
+                                    staff_echo_dialog.dismiss();
+                                } else {
+                                    echo_builder.setMessage(R.string.saint_39f);
+                                    staff_echo_dialog.dismiss();
+                                }
+                                AlertDialog echo_dialog = echo_builder.create();
+                                echo_dialog.setCanceledOnTouchOutside(true);
+                                echo_dialog.show();
                             }
-                            AlertDialog echo_dialog = echo_builder.create();
-                            echo_dialog.setCanceledOnTouchOutside(true);
-                            echo_dialog.show();
-                        }
-                    });
-                    Button btn18 = staff_of_echo_view.findViewById(R.id.button18);
-                    btn18.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View view) {
-                            if (echo_history[17] == 0) {
-                                echo_builder.setMessage(R.string.no_echo);
-                                staff_echo_dialog.dismiss();
-                            } else {
-                                echo_builder.setMessage(R.string.saint_45f);
-                                staff_echo_dialog.dismiss();
+                        });
+                        Button btn18 = staff_of_echo_view.findViewById(R.id.button18);
+                        btn18.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                if (echo_history[17] == 0) {
+                                    echo_builder.setMessage(R.string.no_echo);
+                                    staff_echo_dialog.dismiss();
+                                } else {
+                                    echo_builder.setMessage(R.string.saint_45f);
+                                    staff_echo_dialog.dismiss();
+                                }
+                                AlertDialog echo_dialog = echo_builder.create();
+                                echo_dialog.setCanceledOnTouchOutside(true);
+                                echo_dialog.show();
                             }
-                            AlertDialog echo_dialog = echo_builder.create();
-                            echo_dialog.setCanceledOnTouchOutside(true);
-                            echo_dialog.show();
-                        }
-                    });
-                    Button btn19 = staff_of_echo_view.findViewById(R.id.button19);
-                    btn19.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View view) {
-                            if (echo_history[18] == 0) {
-                                echo_builder.setMessage(R.string.no_echo);
-                                staff_echo_dialog.dismiss();
-                            } else {
-                                echo_builder.setMessage(R.string.saint_42f);
-                                staff_echo_dialog.dismiss();
+                        });
+                        Button btn19 = staff_of_echo_view.findViewById(R.id.button19);
+                        btn19.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                if (echo_history[18] == 0) {
+                                    echo_builder.setMessage(R.string.no_echo);
+                                    staff_echo_dialog.dismiss();
+                                } else {
+                                    echo_builder.setMessage(R.string.saint_42f);
+                                    staff_echo_dialog.dismiss();
+                                }
+                                AlertDialog echo_dialog = echo_builder.create();
+                                echo_dialog.setCanceledOnTouchOutside(true);
+                                echo_dialog.show();
                             }
-                            AlertDialog echo_dialog = echo_builder.create();
-                            echo_dialog.setCanceledOnTouchOutside(true);
-                            echo_dialog.show();
-                        }
-                    });
-                    Button btn20 = staff_of_echo_view.findViewById(R.id.button20);
-                    btn20.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View view) {
-                            if (echo_history[19] == 0) {
-                                echo_builder.setMessage(R.string.no_echo);
-                                staff_echo_dialog.dismiss();
-                            } else {
-                                echo_builder.setMessage(R.string.saint_45f);
-                                staff_echo_dialog.dismiss();
+                        });
+                        Button btn20 = staff_of_echo_view.findViewById(R.id.button20);
+                        btn20.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                if (echo_history[19] == 0) {
+                                    echo_builder.setMessage(R.string.no_echo);
+                                    staff_echo_dialog.dismiss();
+                                } else {
+                                    echo_builder.setMessage(R.string.saint_45f);
+                                    staff_echo_dialog.dismiss();
+                                }
+                                AlertDialog echo_dialog = echo_builder.create();
+                                echo_dialog.setCanceledOnTouchOutside(true);
+                                echo_dialog.show();
                             }
-                            AlertDialog echo_dialog = echo_builder.create();
-                            echo_dialog.setCanceledOnTouchOutside(true);
-                            echo_dialog.show();
-                        }
-                    });
-                    Button btn21 = staff_of_echo_view.findViewById(R.id.button21);
-                    btn21.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View view) {
-                            if (echo_history[20] == 0) {
-                                echo_builder.setMessage(R.string.no_echo);
-                                staff_echo_dialog.dismiss();
-                            } else {
-                                echo_builder.setMessage(R.string.merchant_45f1);
-                                staff_echo_dialog.dismiss();
+                        });
+                        Button btn21 = staff_of_echo_view.findViewById(R.id.button21);
+                        btn21.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                if (echo_history[20] == 0) {
+                                    echo_builder.setMessage(R.string.no_echo);
+                                    staff_echo_dialog.dismiss();
+                                } else {
+                                    echo_builder.setMessage(R.string.merchant_45f1);
+                                    staff_echo_dialog.dismiss();
+                                }
+                                AlertDialog echo_dialog = echo_builder.create();
+                                echo_dialog.setCanceledOnTouchOutside(true);
+                                echo_dialog.show();
                             }
-                            AlertDialog echo_dialog = echo_builder.create();
-                            echo_dialog.setCanceledOnTouchOutside(true);
-                            echo_dialog.show();
-                        }
-                    });
-                    Button btn22 = staff_of_echo_view.findViewById(R.id.button22);
-                    btn22.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View view) {
-                            if (echo_history[21] == 0) {
-                                echo_builder.setMessage(R.string.no_echo);
-                                staff_echo_dialog.dismiss();
-                            } else {
-                                echo_builder.setMessage(R.string.saint_46f);
-                                staff_echo_dialog.dismiss();
+                        });
+                        Button btn22 = staff_of_echo_view.findViewById(R.id.button22);
+                        btn22.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                if (echo_history[21] == 0) {
+                                    echo_builder.setMessage(R.string.no_echo);
+                                    staff_echo_dialog.dismiss();
+                                } else {
+                                    echo_builder.setMessage(R.string.saint_46f);
+                                    staff_echo_dialog.dismiss();
+                                }
+                                AlertDialog echo_dialog = echo_builder.create();
+                                echo_dialog.setCanceledOnTouchOutside(true);
+                                echo_dialog.show();
                             }
-                            AlertDialog echo_dialog = echo_builder.create();
-                            echo_dialog.setCanceledOnTouchOutside(true);
-                            echo_dialog.show();
-                        }
-                    });
-                    Button btn23 = staff_of_echo_view.findViewById(R.id.button23);
-                    btn23.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View view) {
-                            if (echo_history[22] == 0) {
-                                echo_builder.setMessage(R.string.no_echo);
-                                staff_echo_dialog.dismiss();
-                            } else {
-                                echo_builder.setMessage(R.string.merchant_47f1);
-                                staff_echo_dialog.dismiss();
+                        });
+                        Button btn23 = staff_of_echo_view.findViewById(R.id.button23);
+                        btn23.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                if (echo_history[22] == 0) {
+                                    echo_builder.setMessage(R.string.no_echo);
+                                    staff_echo_dialog.dismiss();
+                                } else {
+                                    echo_builder.setMessage(R.string.merchant_47f1);
+                                    staff_echo_dialog.dismiss();
+                                }
+                                AlertDialog echo_dialog = echo_builder.create();
+                                echo_dialog.setCanceledOnTouchOutside(true);
+                                echo_dialog.show();
                             }
-                            AlertDialog echo_dialog = echo_builder.create();
-                            echo_dialog.setCanceledOnTouchOutside(true);
-                            echo_dialog.show();
-                        }
-                    });
-                    Button btn24 = staff_of_echo_view.findViewById(R.id.button24);
-                    btn24.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View view) {
-                            if (echo_history[23] == 0) {
-                                echo_builder.setMessage(R.string.no_echo);
-                                staff_echo_dialog.dismiss();
-                            } else {
-                                echo_builder.setMessage(R.string.saint_48f);
-                                staff_echo_dialog.dismiss();
+                        });
+                        Button btn24 = staff_of_echo_view.findViewById(R.id.button24);
+                        btn24.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                if (echo_history[23] == 0) {
+                                    echo_builder.setMessage(R.string.no_echo);
+                                    staff_echo_dialog.dismiss();
+                                } else {
+                                    echo_builder.setMessage(R.string.saint_48f);
+                                    staff_echo_dialog.dismiss();
+                                }
+                                AlertDialog echo_dialog = echo_builder.create();
+                                echo_dialog.setCanceledOnTouchOutside(true);
+                                echo_dialog.show();
                             }
-                            AlertDialog echo_dialog = echo_builder.create();
-                            echo_dialog.setCanceledOnTouchOutside(true);
-                            echo_dialog.show();
-                        }
-                    });
-                    staff_echo_dialog.setView(staff_of_echo_view);
-                    staff_echo_dialog.show();
+                        });
+                        Button btn_cancel = staff_of_echo_view.findViewById(R.id.echo_cancel);
+                        btn_cancel.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                staff_echo_dialog.cancel();
+                            }
+                        });
+                        staff_echo_dialog.setView(staff_of_echo_view);
+                        staff_echo_dialog.show();
+                    }
                 } else if (x > sq_size * 10 && y > sq_size * 17 + offset*3 && x < sq_size * 12 + origin && y < sq_size * 18 + offset*3) {
                     pt7.setColor(Color.rgb(255, 255, 255));
                     temp_y = hero_y; temp_x = hero_x;
@@ -831,7 +835,7 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
                 } else if (x > origin + sq_size*6 && y > sq_size * 18 + offset*3 && x < sq_size*7 + origin && y < sq_size * 19 + offset*3) {
                     temp_y = hero_y; temp_x = hero_x;
                     which_button = ITEM12;
-                } else if (x > sq_size*4 + margin*4 && y > sq_size*13 + origin + offset && x < sq_size*6 - margin && y < sq_size * 14 + origin - margin + offset) {
+                } else if (x > sq_size*5 - margin*4 && y > sq_size*13 + margin + offset && x < sq_size*6 + margin*7 && y < sq_size * 14 - margin + offset) {
                     temp_y = hero_y; temp_x = hero_x;
                     which_button = SAVE;
                 } else {
@@ -863,6 +867,36 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
                 }
                 return true;
         }
+    }
+
+    @Override
+    public void onBackPressed() {
+        AlertDialog.Builder back_builder = new AlertDialog.Builder(this);
+        back_builder.setCancelable(false);
+        back_builder.setMessage(R.string.back_btn_alert);
+        back_builder.setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                //if user pressed "yes", then he is allowed to exit from application
+                finish();
+            }
+        });
+        back_builder.setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                //if user select "No", just cancel this dialog and continue with app
+                dialog.cancel();
+            }
+        });
+        AlertDialog back_alert = back_builder.create();
+        back_alert.show();
+    }
+
+    private void set_all_true() {
+        stf_wsdm = stf_echo = stf_space = cross = elixir = true;
+        m_mattock = wing_cent = e_mattock = bomb = wing_up = true;
+        key_enhac = wing_down = lucky_gold = dragonsbane = snow_cryst = true;
+        count_wing = 3;
     }
 
     // function allows the thread to sleep
@@ -1060,10 +1094,6 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
             merchant_history[i] = game_data_to_load[offset] - '0';
             offset++;
         }
-        /*
-        for (int deb = 0; deb < 19; deb++)
-            Log.v(TAG, "bools " + (game_data_to_load[offset+deb] - '0') + " " + String.valueOf(deb));
-            */
         for (int j = 0; j < 19; j++) {
             saint_history[j] = game_data_to_load[offset] - '0';
             offset++;
@@ -1643,10 +1673,10 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
                 break;
             case 26:        // altar
                 final int price = 10 * price_idx * price_idx + 10 * price_idx + 20;
-                String item_atk = "Attack \t+ " + String.valueOf(2 + 2 * (floor_num / 10));
-                String item_def = "Defence \t+ " + String.valueOf(4 + 4 * (floor_num / 10));
+                String item_atk = "Attack + " + String.valueOf(2 + 2 * (floor_num / 10));
+                String item_def = "Defence + " + String.valueOf(4 + 4 * (floor_num / 10));
                 String offer = "Would you like to offer " + String.valueOf(price) + " gold for one of the following items";
-                String[] item_list = {"Health \t+ 1000", item_atk, item_def, "Not this time"};
+                String[] item_list = {"Health + 1000", item_atk, item_def, "Not this time"};
                 final AlertDialog.Builder altar_builder = new AlertDialog.Builder(v.getContext());
                 final AlertDialog.Builder fail_offer_builder = new AlertDialog.Builder(v.getContext());
                 altar_builder.setTitle(offer);
@@ -1806,7 +1836,7 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
             int xx = hero_x * sq_size - sq_size / 2;
             int yy = hero_y * sq_size - sq_size / 2;
             hero_sprite = new Sprite(GameView.this, hero, xx, yy, (byte) 30);
-            red_star_sprite = new Sprite(GameView.this, t___logo, xx, yy, (byte) 10);
+            red_star_sprite = new Sprite(GameView.this, t_r_star, xx, yy, (byte) 10);
             octopus_sprite = new Sprite(GameView.this, m__octopus, 5 * sq_size - sq_size/2, 4 * sq_size - sq_size/2, (byte) 62);
             dragon_sprite = new Sprite(GameView.this, m___dragon, 5 * sq_size - sq_size/2, 5 * sq_size - sq_size/2, (byte) 64);
 
@@ -1827,7 +1857,6 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
                         }
                         if (isEvent && !isBattle && !cantMove)
                             event();
-
                     }
                     if (refresh_ctr) {
                         current_floor = current_game.get_one_floor(floor_num);
@@ -1871,6 +1900,7 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
             t_door_m = createScaledBitmap(t_door_m, sq_size, sq_size, false);
             t_prison = createScaledBitmap(t_prison, sq_size, sq_size, false);
             t___logo = createScaledBitmap(t___logo, sq_size, sq_size, false);
+            t_r_star = createScaledBitmap(t_r_star, sq_size, sq_size, false);
             w___ironw = createScaledBitmap(w___ironw, sq_size, sq_size, false);
             w___ironh = createScaledBitmap(w___ironh, sq_size, sq_size, false);
             w_silverw = createScaledBitmap(w_silverw, sq_size, sq_size, false);
@@ -5126,20 +5156,20 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
             Paint num_box = new Paint();
             num_box.setStrokeWidth(10);
             num_box.setColor(Color.rgb(130, 130, 130));
-            canvas.drawRect(sq_size * 2 - margin * 4, sq_size * 13 + origin + margin + offset, sq_size * 4 + margin, sq_size * 14 + origin - margin + offset, num_box);
-            canvas.drawRect(sq_size * 2 - margin * 4, sq_size * 14 + origin + margin + offset, sq_size * 4 - margin, sq_size * 15 + origin - margin + offset, num_box);
-            canvas.drawRect(sq_size * 2 - margin * 4, sq_size * 15 + origin + margin + offset, sq_size * 4 - margin, sq_size * 16 + origin - margin + offset, num_box);
-            canvas.drawRect(sq_size * 2 - margin * 4, sq_size * 16 + origin + margin + offset, sq_size * 4 - margin, sq_size * 17 + origin - margin + offset, num_box);
-            canvas.drawRect(sq_size * 5 + margin, sq_size * 14 + origin + margin + offset, sq_size * 7 - margin * 3, sq_size * 15 + origin - margin + offset, num_box);
-            canvas.drawRect(sq_size * 5 + margin, sq_size * 15 + origin + margin + offset, sq_size * 7 - margin * 3, sq_size * 16 + origin - margin + offset, num_box);
-            canvas.drawRect(sq_size * 5 + margin, sq_size * 16 + origin + margin + offset, sq_size * 7 - margin * 3, sq_size * 17 + origin - margin + offset, num_box);
-            canvas.drawBitmap(menu_health, sq_size + origin, 13 * sq_size + origin + offset, null);
-            canvas.drawBitmap(w___ironw, sq_size + origin, 14 * sq_size + origin + offset, null);
-            canvas.drawBitmap(w___ironh, sq_size + origin, 15 * sq_size + origin + offset, null);
-            canvas.drawBitmap(menu_gold, sq_size + origin, 16 * sq_size + origin + offset, null);
-            canvas.drawBitmap(i____key_y, sq_size * 4, 14 * sq_size + origin + offset, null);
-            canvas.drawBitmap(i____key_b, sq_size * 4, 15 * sq_size + origin + offset, null);
-            canvas.drawBitmap(i____key_r, sq_size * 4, 16 * sq_size + origin + offset, null);
+            canvas.drawRect(sq_size * 2 - margin * 4, sq_size * 13 + margin + offset, sq_size * 4 + margin, sq_size * 14 - margin + offset, num_box);
+            canvas.drawRect(sq_size * 2 - margin * 4, sq_size * 14 + margin + offset, sq_size * 4 - margin, sq_size * 15 - margin + offset, num_box);
+            canvas.drawRect(sq_size * 2 - margin * 4, sq_size * 15 + margin + offset, sq_size * 4 - margin, sq_size * 16 - margin + offset, num_box);
+            canvas.drawRect(sq_size * 2 - margin * 4, sq_size * 16 + margin + offset, sq_size * 4 - margin, sq_size * 17 - margin + offset, num_box);
+            canvas.drawRect(sq_size * 5 + margin, sq_size * 14 + margin + offset, sq_size * 7 - margin * 3, sq_size * 15 - margin + offset, num_box);
+            canvas.drawRect(sq_size * 5 + margin, sq_size * 15 + margin + offset, sq_size * 7 - margin * 3, sq_size * 16 - margin + offset, num_box);
+            canvas.drawRect(sq_size * 5 + margin, sq_size * 16 + margin + offset, sq_size * 7 - margin * 3, sq_size * 17 - margin + offset, num_box);
+            canvas.drawBitmap(menu_health, sq_size + origin, 13 * sq_size + offset, null);
+            canvas.drawBitmap(w___ironw, sq_size + origin, 14 * sq_size + offset, null);
+            canvas.drawBitmap(w___ironh, sq_size + origin, 15 * sq_size + offset, null);
+            canvas.drawBitmap(menu_gold, sq_size + origin, 16 * sq_size + offset, null);
+            canvas.drawBitmap(i____key_y, sq_size * 4, 14 * sq_size + offset, null);
+            canvas.drawBitmap(i____key_b, sq_size * 4, 15 * sq_size + offset, null);
+            canvas.drawBitmap(i____key_r, sq_size * 4, 16 * sq_size + offset, null);
             // ------------------- Draw Arrow Buttons -----------------------
             canvas.drawRect(sq_size * 9 + origin, sq_size * 13 + origin + offset, sq_size * 10, sq_size * 14 + offset, pt1);
             canvas.drawRect(sq_size * 9 + origin, sq_size * 16 + origin + offset, sq_size * 10, sq_size * 17 + offset, pt2);
@@ -5238,28 +5268,28 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
             textpaint.setColor(Color.BLACK);
             textpaint.setTextSize(sq_size * 3 / 4);
             String my_text = String.valueOf(count_y);
-            canvas.drawText(my_text, sq_size * 5 + margin * 3, sq_size * 14 + margin * 3 + offset, textpaint);
+            canvas.drawText(my_text, sq_size * 5 + margin * 3, sq_size * 14 + margin * 8 + offset, textpaint);
             my_text = String.valueOf(count_b);
-            canvas.drawText(my_text, sq_size * 5 + margin * 3, sq_size * 15 + margin * 3 + offset, textpaint);
+            canvas.drawText(my_text, sq_size * 5 + margin * 3, sq_size * 15 + margin * 8 + offset, textpaint);
             my_text = String.valueOf(count_r);
-            canvas.drawText(my_text, sq_size * 5 + margin * 3, sq_size * 16 + margin * 3 + offset, textpaint);
+            canvas.drawText(my_text, sq_size * 5 + margin * 3, sq_size * 16 + margin * 8 + offset, textpaint);
             my_text = String.valueOf(hp);
-            canvas.drawText(my_text, sq_size * 2 - margin * 2, sq_size * 13 + margin * 3 + offset, textpaint);
+            canvas.drawText(my_text, sq_size * 2 - margin * 2, sq_size * 13 + margin * 8 + offset, textpaint);
             my_text = String.valueOf(atk);
-            canvas.drawText(my_text, sq_size * 2 - margin * 2, sq_size * 14 + margin * 3 + offset, textpaint);
+            canvas.drawText(my_text, sq_size * 2 - margin * 2, sq_size * 14 + margin * 8 + offset, textpaint);
             my_text = String.valueOf(def);
-            canvas.drawText(my_text, sq_size * 2 - margin * 2, sq_size * 15 + margin * 3 + offset, textpaint);
+            canvas.drawText(my_text, sq_size * 2 - margin * 2, sq_size * 15 + margin * 8 + offset, textpaint);
             my_text = String.valueOf(gold);
-            canvas.drawText(my_text, sq_size * 2 - margin * 2, sq_size * 16 + margin * 3 + offset, textpaint);
+            canvas.drawText(my_text, sq_size * 2 - margin * 2, sq_size * 16 + margin * 8 + offset, textpaint);
             textpaint.setTextSize(sq_size);
             my_text = String.valueOf(floor_num) + " F";
-            canvas.drawText(my_text, 6 * sq_size + margin*3, 13 * sq_size + margin * 2 + offset, textpaint);
+            canvas.drawText(my_text, sq_size * 3 + margin*3, sq_size * 13 - margin + offset, textpaint);
             stash_paint.setColor(Color.rgb(210, 210, 210));
-            canvas.drawRect(sq_size*4 + margin*4, sq_size*13 + origin + offset, sq_size*6 - margin, sq_size * 14 + origin - margin + offset, stash_paint);
-            textpaint.setTextSize(sq_size*2/3);
-            textpaint.setColor(Color.rgb(80, 50, 50));
+            canvas.drawRect(sq_size*5 - margin*4, sq_size * 13 + margin + offset, sq_size*6 + margin*7, sq_size * 14 - margin + offset, stash_paint);
+            textpaint.setTextSize(sq_size*9/12);
+            textpaint.setColor(Color.rgb(40, 50, 50));
             my_text = "Save";
-            canvas.drawText(my_text, sq_size * 4 + margin*4, 13 * sq_size + margin * 2 + offset, textpaint);
+            canvas.drawText(my_text, sq_size*5 - margin*2, sq_size * 13 + margin * 8 + offset, textpaint);
             // ------------------- Debug purpose -----------------------
 
             sleep(50);
@@ -6287,8 +6317,7 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
 
         private void draw_staff_of_wisdom_results(Canvas canvas) {
             final int origin = 0 - sq_size / 2;
-            final int margin = sq_size / 10;
-            final int offset = extra_height / 8;
+            final int offset = extra_height / 9;
             canvas.drawARGB(255, 200, 200, 200);
             int extra_wall = extra_height / sq_size;
             // ------------------- Draw Wall -----------------------
@@ -6316,33 +6345,34 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
                     textpaint.setColor(Color.DKGRAY);
                     textpaint.setTextSize(sq_size*7/8);
                     instruction = "Click to continue";
-                    canvas.drawText(instruction, sq_size * 6/2, sq_size * 18, textpaint);
+                    canvas.drawText(instruction, sq_size * 6/2, sq_size * 18 + offset*8, textpaint);
                     draw_monster_stats(canvas, 0, 6);
 
                 } else {
                     textpaint.setColor(Color.DKGRAY);
                     textpaint.setTextSize(sq_size*7/8);
                     instruction = "Click to exit";
-                    canvas.drawText(instruction, sq_size * 7/2, sq_size * 18, textpaint);
+                    canvas.drawText(instruction, sq_size * 7/2, sq_size * 18 + offset*8, textpaint);
                     draw_monster_stats(canvas, 6, monsters_to_draw.size()-6);
                 }
             }
         }
 
         private void draw_monster_stats(Canvas canvas, int i, int size){
-            int margin = sq_size / 8;
+            final int margin = sq_size / 10;
+            final int offset = extra_height / 8;
             Paint textpaint = new Paint();
             String my_text;
             for (int a = 0; a < size; a++){
-                monsters_picture.get(i+a).set_location(sq_size, sq_size * a*2 + sq_size * 9/4 + margin*4*a);
+                monsters_picture.get(i+a).set_location(sq_size, sq_size * a*2 + sq_size * 9/4 + margin*5*a + offset*(a+2));
                 monsters_picture.get(i+a).update(canvas);
 
                 textpaint.setARGB(255,0, 66, 173);
                 textpaint.setTextSize(sq_size*14/32);
                 my_text = monsters_name1.get(a+i);
-                canvas.drawText(my_text, sq_size-margin*2, sq_size * a*2 + margin * 30 + margin*4*a, textpaint);
+                canvas.drawText(my_text, sq_size-margin, sq_size * a*2 + margin * 37 + margin*5*a + offset*(a+2), textpaint);
                 my_text = monsters_name2.get(a+i);
-                canvas.drawText(my_text, sq_size-margin*2, sq_size * a*2 + margin * 33 + margin*4*a, textpaint);
+                canvas.drawText(my_text, sq_size+margin, sq_size * a*2 + margin * 42 + margin*5*a + offset*(a+2), textpaint);
 
                 int stats_table_idx;
                 if (monsters_to_draw.get(a+i) < 63)
@@ -6354,30 +6384,30 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
                 textpaint.setARGB(255,0, 0, 0);
                 textpaint.setTextSize(sq_size*22/32);
 
-                canvas.drawBitmap(menu_health, sq_size * 3 - margin*2, sq_size * a*2 + sq_size * 9/4 + margin*4*a, null);
+                canvas.drawBitmap(menu_health, sq_size * 3 - margin*3, sq_size * a*2 + sq_size * 9/4 + margin*5*a + offset*(a+2), null);
                 my_text = String.valueOf(m_table[stats_table_idx][0]);
-                canvas.drawText(my_text, sq_size * 4 - margin, sq_size * a*2 + margin * 24 + margin*4*a, textpaint);
+                canvas.drawText(my_text, sq_size * 4 - margin, sq_size * a*2 + margin * 30 + margin*5*a + offset*(a+2), textpaint);
 
-                canvas.drawBitmap(w___ironw, sq_size * 6, sq_size * a*2 + sq_size * 9/4 + margin*4*a, null);
+                canvas.drawBitmap(w___ironw, sq_size * 6, sq_size * a*2 + sq_size * 9/4 + margin*5*a + offset*(a+2), null);
                 my_text = String.valueOf(m_table[stats_table_idx][1]);
-                canvas.drawText(my_text, sq_size * 7 + margin, sq_size * a*2 + margin * 24 + margin*4*a, textpaint);
+                canvas.drawText(my_text, sq_size * 7 + margin, sq_size * a*2 + margin * 30 + margin*5*a + offset*(a+2), textpaint);
 
-                canvas.drawBitmap(w___ironh, sq_size * 9 - margin*2, sq_size * a*2 + sq_size * 9/4 + margin*4*a, null);
+                canvas.drawBitmap(w___ironh, sq_size * 9 - margin*2, sq_size * a*2 + sq_size * 9/4 + margin*5*a + offset*(a+2), null);
                 my_text = String.valueOf(m_table[stats_table_idx][2]);
-                canvas.drawText(my_text, sq_size * 10 - margin, sq_size * a*2 + margin * 24 + margin*4*a, textpaint);
+                canvas.drawText(my_text, sq_size * 10 - margin, sq_size * a*2 + margin * 30 + margin*5*a + offset*(a+2), textpaint);
 
-                canvas.drawBitmap(menu_gold, sq_size * 3 + margin*2, sq_size * a*2 + sq_size * 13/4 + margin*4*a, null);
+                canvas.drawBitmap(menu_gold, sq_size * 3 + margin*5, sq_size * a*2 + sq_size * 13/4 + margin*5*a + offset*(a+2), null);
                 my_text = String.valueOf(m_table[stats_table_idx][3]);
                 textpaint.setARGB(255,153, 77, 0);
-                canvas.drawText(my_text, sq_size * 4 + margin*3, sq_size * a*2 + margin * 32 + margin*4*a, textpaint);
+                canvas.drawText(my_text, sq_size * 4 + margin*5, sq_size * a*2 + margin * 40 + margin*5*a + offset*(a+2), textpaint);
 
-                canvas.drawBitmap(t___logo, sq_size * 6 + margin*2, sq_size * a*2 + sq_size * 13/4 + margin*4*a, null);
+                canvas.drawBitmap(t___logo, sq_size * 6 + margin*2, sq_size * a*2 + sq_size * 13/4 + margin*5*a + offset*(a+2), null);
                 if (damage_calculation(stats_table_idx) == 987654321)
                     my_text = "Can't Attack";
                 else
                     my_text = String.valueOf(damage_calculation(stats_table_idx));
                 textpaint.setARGB(255,204, 41, 0);
-                canvas.drawText(my_text, sq_size * 7 + margin*3, sq_size * a*2 + margin * 32 + margin*4*a, textpaint);
+                canvas.drawText(my_text, sq_size * 7 + margin*3, sq_size * a*2 + margin * 40 + margin*5*a + offset*(a+2), textpaint);
             }
             sleep(100);
         }
