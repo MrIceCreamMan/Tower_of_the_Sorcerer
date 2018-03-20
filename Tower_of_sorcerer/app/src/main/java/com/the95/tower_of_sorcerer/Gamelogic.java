@@ -333,11 +333,7 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
     @Override
     public boolean onTouch(View v, MotionEvent me) {
 
-        try {
-            Thread.sleep(25);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+        sleep(25);
         //*/
         switch (me.getAction()) {
             case MotionEvent.ACTION_DOWN:
@@ -389,8 +385,8 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
                     temp_y = hero_y;
                 } else if (x > sq_size * 7 && y > sq_size * 17 + offset*3 && x < sq_size * 9 + origin && y < sq_size * 19 + offset*3) {
                     pt5.setColor(Color.rgb(255, 255, 255));
-                    temp_y = hero_y; temp_x = hero_x;
                     which_button = STAFF1;
+                    temp_y = hero_y; temp_x = hero_x;
                     load_ctr = true;
                     which_surface_view = false;
                 } else if (x > sq_size * 9 + origin && y > sq_size * 17 + offset*3 && x < sq_size * 10 && y < sq_size * 19 + offset*3) {
@@ -402,6 +398,7 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
                     View staff_of_echo_view = staff_echo_inflater.inflate(R.layout.staff_of_echo_menu, null);
                     AlertDialog.Builder staff_echo_builder = new AlertDialog.Builder(Gamelogic.this);
                     final AlertDialog staff_echo_dialog = staff_echo_builder.create();
+                    staff_echo_dialog.setCanceledOnTouchOutside(true);
                     final AlertDialog.Builder echo_builder = new AlertDialog.Builder(Gamelogic.this);
 
                     Button btn1 = staff_of_echo_view.findViewById(R.id.button1);
@@ -416,6 +413,7 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
                                 staff_echo_dialog.dismiss();
                             }
                             AlertDialog echo_dialog = echo_builder.create();
+                            echo_dialog.setCanceledOnTouchOutside(true);
                             echo_dialog.show();
                         }
                     });
@@ -431,6 +429,7 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
                                 staff_echo_dialog.dismiss();
                             }
                             AlertDialog echo_dialog = echo_builder.create();
+                            echo_dialog.setCanceledOnTouchOutside(true);
                             echo_dialog.show();
                         }
                     });
@@ -446,6 +445,7 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
                                 staff_echo_dialog.dismiss();
                             }
                             AlertDialog echo_dialog = echo_builder.create();
+                            echo_dialog.setCanceledOnTouchOutside(true);
                             echo_dialog.show();
                         }
                     });
@@ -461,6 +461,7 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
                                 staff_echo_dialog.dismiss();
                             }
                             AlertDialog echo_dialog = echo_builder.create();
+                            echo_dialog.setCanceledOnTouchOutside(true);
                             echo_dialog.show();
                         }
                     });
@@ -476,6 +477,7 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
                                 staff_echo_dialog.dismiss();
                             }
                             AlertDialog echo_dialog = echo_builder.create();
+                            echo_dialog.setCanceledOnTouchOutside(true);
                             echo_dialog.show();
                         }
                     });
@@ -491,6 +493,7 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
                                 staff_echo_dialog.dismiss();
                             }
                             AlertDialog echo_dialog = echo_builder.create();
+                            echo_dialog.setCanceledOnTouchOutside(true);
                             echo_dialog.show();
                         }
                     });
@@ -506,6 +509,7 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
                                 staff_echo_dialog.dismiss();
                             }
                             AlertDialog echo_dialog = echo_builder.create();
+                            echo_dialog.setCanceledOnTouchOutside(true);
                             echo_dialog.show();
                         }
                     });
@@ -521,6 +525,7 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
                                 staff_echo_dialog.dismiss();
                             }
                             AlertDialog echo_dialog = echo_builder.create();
+                            echo_dialog.setCanceledOnTouchOutside(true);
                             echo_dialog.show();
                         }
                     });
@@ -536,6 +541,7 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
                                 staff_echo_dialog.dismiss();
                             }
                             AlertDialog echo_dialog = echo_builder.create();
+                            echo_dialog.setCanceledOnTouchOutside(true);
                             echo_dialog.show();
                         }
                     });
@@ -551,6 +557,7 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
                                 staff_echo_dialog.dismiss();
                             }
                             AlertDialog echo_dialog = echo_builder.create();
+                            echo_dialog.setCanceledOnTouchOutside(true);
                             echo_dialog.show();
                         }
                     });
@@ -566,6 +573,7 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
                                 staff_echo_dialog.dismiss();
                             }
                             AlertDialog echo_dialog = echo_builder.create();
+                            echo_dialog.setCanceledOnTouchOutside(true);
                             echo_dialog.show();
                         }
                     });
@@ -581,6 +589,7 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
                                 staff_echo_dialog.dismiss();
                             }
                             AlertDialog echo_dialog = echo_builder.create();
+                            echo_dialog.setCanceledOnTouchOutside(true);
                             echo_dialog.show();
                         }
                     });
@@ -596,6 +605,7 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
                                 staff_echo_dialog.dismiss();
                             }
                             AlertDialog echo_dialog = echo_builder.create();
+                            echo_dialog.setCanceledOnTouchOutside(true);
                             echo_dialog.show();
                         }
                     });
@@ -611,6 +621,7 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
                                 staff_echo_dialog.dismiss();
                             }
                             AlertDialog echo_dialog = echo_builder.create();
+                            echo_dialog.setCanceledOnTouchOutside(true);
                             echo_dialog.show();
                         }
                     });
@@ -626,6 +637,7 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
                                 staff_echo_dialog.dismiss();
                             }
                             AlertDialog echo_dialog = echo_builder.create();
+                            echo_dialog.setCanceledOnTouchOutside(true);
                             echo_dialog.show();
                         }
                     });
@@ -641,6 +653,7 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
                                 staff_echo_dialog.dismiss();
                             }
                             AlertDialog echo_dialog = echo_builder.create();
+                            echo_dialog.setCanceledOnTouchOutside(true);
                             echo_dialog.show();
                         }
                     });
@@ -656,6 +669,7 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
                                 staff_echo_dialog.dismiss();
                             }
                             AlertDialog echo_dialog = echo_builder.create();
+                            echo_dialog.setCanceledOnTouchOutside(true);
                             echo_dialog.show();
                         }
                     });
@@ -671,6 +685,7 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
                                 staff_echo_dialog.dismiss();
                             }
                             AlertDialog echo_dialog = echo_builder.create();
+                            echo_dialog.setCanceledOnTouchOutside(true);
                             echo_dialog.show();
                         }
                     });
@@ -686,6 +701,7 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
                                 staff_echo_dialog.dismiss();
                             }
                             AlertDialog echo_dialog = echo_builder.create();
+                            echo_dialog.setCanceledOnTouchOutside(true);
                             echo_dialog.show();
                         }
                     });
@@ -701,6 +717,7 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
                                 staff_echo_dialog.dismiss();
                             }
                             AlertDialog echo_dialog = echo_builder.create();
+                            echo_dialog.setCanceledOnTouchOutside(true);
                             echo_dialog.show();
                         }
                     });
@@ -716,6 +733,7 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
                                 staff_echo_dialog.dismiss();
                             }
                             AlertDialog echo_dialog = echo_builder.create();
+                            echo_dialog.setCanceledOnTouchOutside(true);
                             echo_dialog.show();
                         }
                     });
@@ -731,6 +749,7 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
                                 staff_echo_dialog.dismiss();
                             }
                             AlertDialog echo_dialog = echo_builder.create();
+                            echo_dialog.setCanceledOnTouchOutside(true);
                             echo_dialog.show();
                         }
                     });
@@ -746,6 +765,7 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
                                 staff_echo_dialog.dismiss();
                             }
                             AlertDialog echo_dialog = echo_builder.create();
+                            echo_dialog.setCanceledOnTouchOutside(true);
                             echo_dialog.show();
                         }
                     });
@@ -761,6 +781,7 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
                                 staff_echo_dialog.dismiss();
                             }
                             AlertDialog echo_dialog = echo_builder.create();
+                            echo_dialog.setCanceledOnTouchOutside(true);
                             echo_dialog.show();
                         }
                     });
@@ -841,6 +862,15 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
                     return true;
                 }
                 return true;
+        }
+    }
+
+    // function allows the thread to sleep
+    private void sleep(int sleep_time) {
+        try {
+            Thread.sleep(sleep_time);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
         }
     }
 
@@ -1680,6 +1710,7 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
         }
     }
 
+    // calculate the damage inflict to hero during battle
     public int damage_calculation(int idx){
         int initial_hp = hp;
         int a_damage_b;
@@ -1734,14 +1765,6 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
             } else {
                 page++;
                 return true;
-            }
-        }
-
-        private void sleep(int sleep_time) {
-            try {
-                Thread.sleep(sleep_time);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
             }
         }
 
@@ -6263,14 +6286,17 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
         }
 
         private void draw_staff_of_wisdom_results(Canvas canvas) {
-            int origin = 0 - sq_size / 2;
+            final int origin = 0 - sq_size / 2;
+            final int margin = sq_size / 10;
+            final int offset = extra_height / 8;
             canvas.drawARGB(255, 200, 200, 200);
+            int extra_wall = extra_height / sq_size;
             // ------------------- Draw Wall -----------------------
             for (int i = 0; i < 13; i++) {
                 canvas.drawBitmap(t___wall, origin + i * sq_size, origin, null);
-                canvas.drawBitmap(t___wall, origin + i * sq_size, origin + 19 * sq_size, null);
+                canvas.drawBitmap(t___wall, origin + i * sq_size, origin + (19+extra_wall) * sq_size, null);
             }
-            for (int j = 0; j < 19; j++) {
+            for (int j = 0; j < 19 + extra_wall; j++) {
                 canvas.drawBitmap(t___wall, origin, origin + j * sq_size, null);
                 canvas.drawBitmap(t___wall, origin + 12 * sq_size, origin + j * sq_size, null);
             }
@@ -6278,12 +6304,12 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
             textpaint.setColor(Color.BLACK);
             textpaint.setTextSize(sq_size*7/8);
             String my_text = "Monster Statistics";
-            canvas.drawText(my_text, sq_size * 5/2, sq_size * 3/2, textpaint);
+            canvas.drawText(my_text, sq_size * 5/2, sq_size * 3/2 + offset, textpaint);
             if (monsters_to_draw.size() < 7){
                 textpaint.setColor(Color.DKGRAY);
                 textpaint.setTextSize(sq_size*7/8);
                 instruction = "Click to exit";
-                canvas.drawText(instruction, sq_size * 7/2, sq_size * 18, textpaint);
+                canvas.drawText(instruction, sq_size * 7/2, sq_size * 18 + offset*8, textpaint);
                 draw_monster_stats(canvas, 0, monsters_to_draw.size());
             } else {
                 if (page == 0){
