@@ -157,7 +157,12 @@ default:
 Saint:		Good luck young man.
 Merchant:	Keep it secret, and don't tell others. 
 
-It is said that there is a hidden message in this floor. 
+saint  2f: 
+saint  3f: Alas, my age is catching up to me. I can fight no more. Brave young man,
+you should take this Staff of Wisdom since I have no use for it. It will reveal
+the strength of monsters so you could better prepare your fight against them. Take 
+care and good luck.
+saint 23f: It is said that there is a hidden message in this floor. 
 
 ----------------------------------------------------------------------------------
 -----------------------------    Original text    --------------------------------
@@ -243,7 +248,11 @@ default:
 Saint:	  I have done what I can. Good luck!
 Merchant: Be careful. I have nothing more to say.
 
-I have nothing to say. A certain message may be hidden in this room.
+saint  2f: 
+saint  3f: I will grant you the orb of the hero. You will now be able to save your
+game, and to forecast the results of fighting monsters on the current floor. Use 
+it often. saint 23f: I have nothing to say. A certain message may be hidden in 
+this room.
 ----------------------------------------------------------------------------------
 ----------------------------------------------------------------------------------
 ----------------------------------------------------------------------------------

@@ -18,6 +18,7 @@ public class SaveActivity extends AppCompatActivity {
     final String    FILENAME3 = "save3.txt";
     final String    FILENAME4 = "save4.txt";
     private byte[]  game_data;
+    private boolean[] music_settings;
     private static final String TAG = "debuuuuuuuuuuuuuuuuuug";
 
     @Override
@@ -28,6 +29,7 @@ public class SaveActivity extends AppCompatActivity {
         Bundle extras = getIntent().getExtras();
         if (extras != null) {
             game_data = extras.getByteArray("Game_Data");
+            music_settings = extras.getBooleanArray("Music_Settings");
         }
 
         findViewById(R.id.save_1).setOnClickListener(Save_Game);
@@ -117,12 +119,13 @@ public class SaveActivity extends AppCompatActivity {
     public View.OnClickListener Save_Game = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
-
             FileOutputStream fos;
-            MediaPlayer SelectMusic = MediaPlayer.create(getApplicationContext(), R.raw.choose);
+            MediaPlayer SelectMusic = MediaPlayer.create(getApplicationContext(), R.raw.sfx_choose);
+            MediaPlayer CancelMusic = MediaPlayer.create(getApplicationContext(), R.raw.sfx_cancel);
             switch (view.getId()) {
                 case R.id.save_1:
-                    SelectMusic.start();
+                    if (music_settings[1])
+                        SelectMusic.start();
                     /*
                     File f = new File(FILENAME);
                     try {
@@ -146,7 +149,8 @@ public class SaveActivity extends AppCompatActivity {
                     break;
 
                 case R.id.save_2:
-                    SelectMusic.start();
+                    if (music_settings[1])
+                        SelectMusic.start();
                     try {
                         fos = openFileOutput(FILENAME2, Context.MODE_PRIVATE);
                         fos.write(game_data);
@@ -160,7 +164,8 @@ public class SaveActivity extends AppCompatActivity {
                     break;
 
                 case R.id.save_3:
-                    SelectMusic.start();
+                    if (music_settings[1])
+                        SelectMusic.start();
                     try {
                         fos = openFileOutput(FILENAME3, Context.MODE_PRIVATE);
                         fos.write(game_data);
@@ -174,7 +179,8 @@ public class SaveActivity extends AppCompatActivity {
                     break;
 
                 case R.id.save_4:
-                    SelectMusic.start();
+                    if (music_settings[1])
+                        SelectMusic.start();
                     try {
                         fos = openFileOutput(FILENAME4, Context.MODE_PRIVATE);
                         fos.write(game_data);
@@ -188,7 +194,8 @@ public class SaveActivity extends AppCompatActivity {
                     break;
 
                 case R.id.cancel:
-                    SelectMusic.start();
+                    if (music_settings[1])
+                        CancelMusic.start();
                     finish();
                     break;
             }

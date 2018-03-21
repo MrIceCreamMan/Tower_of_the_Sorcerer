@@ -24,7 +24,8 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         music_settings = new boolean[]{true, true};
-        OpeningThemeMusic = MediaPlayer.create(getApplicationContext(), R.raw.opening);
+        OpeningThemeMusic = MediaPlayer.create(getApplicationContext(), R.raw.bgm_opening);
+        OpeningThemeMusic.setLooping(true);
         OpeningThemeMusic.start();
 
         findViewById(R.id.new_game).setOnClickListener(myListener);
@@ -36,7 +37,7 @@ public class MainActivity extends AppCompatActivity {
     public View.OnClickListener myListener = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
-            MediaPlayer SelectMusic = MediaPlayer.create(getApplicationContext(), R.raw.choose);
+            MediaPlayer SelectMusic = MediaPlayer.create(getApplicationContext(), R.raw.sfx_choose);
             switch (view.getId()) {
                 case R.id.new_game:
                     if (OpeningThemeMusic != null)
@@ -44,6 +45,7 @@ public class MainActivity extends AppCompatActivity {
                     if (music_settings[1])
                         SelectMusic.start();
                     Intent game = new Intent(MainActivity.this, Gamelogic.class);
+                    game.putExtra("Music_Settings", music_settings);
                     startActivity(game);
                     break;
 
@@ -53,6 +55,7 @@ public class MainActivity extends AppCompatActivity {
                     if (music_settings[1])
                         SelectMusic.start();
                     Intent load_screen = new Intent(MainActivity.this, LoadActivity.class);
+                    load_screen.putExtra("Music_Settings", music_settings);
                     startActivity(load_screen);
                     break;
 
@@ -61,9 +64,6 @@ public class MainActivity extends AppCompatActivity {
                         OpeningThemeMusic.release();
                     if (music_settings[1])
                         SelectMusic.start();
-                    //Intent settings_screen = new Intent(MainActivity.this, SettingsActivity.class);
-                    //startActivity(settings_screen);
-
                     Log.v(TAG, "x = " + String.valueOf(music_settings[0]) + " y = " + String.valueOf(music_settings[1]));
                     final String[] items = {"Enable background music", " Enable sound effects"};
                     final boolean[] temp_settings = music_settings;

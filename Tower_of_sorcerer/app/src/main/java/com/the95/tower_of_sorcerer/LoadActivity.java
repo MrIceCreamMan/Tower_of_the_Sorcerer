@@ -14,12 +14,18 @@ import java.io.IOException;
 
 public class LoadActivity extends AppCompatActivity {
     private byte[] game_data;
+    private boolean[] music_settings;
     private static final String TAG = "debuuuuuuuuuuuuuuuuuug";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_load);
+
+        Bundle extras = getIntent().getExtras();
+        if (extras != null) {
+            music_settings = extras.getBooleanArray("Music_Settings");
+        }
 
         findViewById(R.id.load_1).setOnClickListener(Load_Game);
         findViewById(R.id.load_2).setOnClickListener(Load_Game);
@@ -130,46 +136,56 @@ public class LoadActivity extends AppCompatActivity {
     public View.OnClickListener Load_Game = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
-            MediaPlayer SelectMusic = MediaPlayer.create(getApplicationContext(), R.raw.choose);
+            MediaPlayer SelectMusic = MediaPlayer.create(getApplicationContext(), R.raw.sfx_choose);
+            MediaPlayer CancelMusic = MediaPlayer.create(getApplicationContext(), R.raw.sfx_cancel);
             switch (view.getId()) {
                 case R.id.load_1:
-                    SelectMusic.start();
+                    if (music_settings[1])
+                        SelectMusic.start();
                     Intent game_1 = new Intent(LoadActivity.this, Gamelogic.class);
                     load_all_data_from_save_file("save1.txt");
                     game_1.putExtra("Game_File_1", game_data);
+                    game_1.putExtra("Music_Settings", music_settings);
                     startActivity(game_1);
                     finish();
                     break;
 
                 case R.id.load_2:
-                    SelectMusic.start();
+                    if (music_settings[1])
+                        SelectMusic.start();
                     Intent game_2 = new Intent(LoadActivity.this, Gamelogic.class);
                     load_all_data_from_save_file("save2.txt");
                     game_2.putExtra("Game_File_2", game_data);
+                    game_2.putExtra("Music_Settings", music_settings);
                     startActivity(game_2);
                     finish();
                     break;
 
                 case R.id.load_3:
-                    SelectMusic.start();
+                    if (music_settings[1])
+                        SelectMusic.start();
                     Intent game_3 = new Intent(LoadActivity.this, Gamelogic.class);
                     load_all_data_from_save_file("save3.txt");
                     game_3.putExtra("Game_File_3", game_data);
+                    game_3.putExtra("Music_Settings", music_settings);
                     startActivity(game_3);
                     finish();
                     break;
 
                 case R.id.load_4:
-                    SelectMusic.start();
+                    if (music_settings[1])
+                        SelectMusic.start();
                     Intent game_4 = new Intent(LoadActivity.this, Gamelogic.class);
                     load_all_data_from_save_file("save4.txt");
                     game_4.putExtra("Game_File_4", game_data);
+                    game_4.putExtra("Music_Settings", music_settings);
                     startActivity(game_4);
                     finish();
                     break;
 
                 case R.id.cancel:
-                    SelectMusic.start();
+                    if (music_settings[1])
+                        CancelMusic.start();
                     finish();
                     break;
             }

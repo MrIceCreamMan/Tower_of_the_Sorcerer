@@ -77,6 +77,7 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
     private static Gamelogic    parent;
     private byte[]              game_data_to_save;
     private String              instruction;
+    private boolean[]           music_settings;
     private int                 walk_result,    walk_count,     which_button,       sq_size;
     private int                 m_hp,           m_atk,          m_def,              m_gold;
     private float               x,              y,              page,               total_page;
@@ -149,7 +150,7 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
         // initialize current game data
         current_game = new Floors();
         current_floor = current_game.get_one_floor(1);
-        hp = 1000;              atk = 100;              def = 100;              gold = 0;
+        hp = 1000;              atk = 200;              def = 100;              gold = 0;
         floor_num = 1;          act = 0;                thief_event_count = 0;  highest_floor = 1;
         count_y = 10;           count_b = 10;           count_r = 10;           count_wing = 0;
         hero_x = 6;             hero_y = 11;            temp_x = 6;             temp_y = 11;
@@ -162,21 +163,21 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
         saint_history    = new int[]{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
         echo_history     = new int[]{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
         // check if needs to load game
-        byte[] game_data_to_load;
         Bundle extras = getIntent().getExtras();
         if (extras != null) {
-            game_data_to_load = extras.getByteArray("Game_File_1");
-            if (game_data_to_load == null)
-                game_data_to_load = extras.getByteArray("Game_File_2");
-            if (game_data_to_load == null)
-                game_data_to_load = extras.getByteArray("Game_File_3");
-            if (game_data_to_load == null)
-                game_data_to_load = extras.getByteArray("Game_File_4");
-            if (game_data_to_load == null) {
-                Log.v(TAG, "Load file null problem at onCreate in Gamelogic");
-                finish();
-            } else
-                load_game(game_data_to_load);
+            music_settings = extras.getBooleanArray("Music_Settings");
+            byte[] game_data_to_load_1 = extras.getByteArray("Game_File_1");
+            byte[] game_data_to_load_2 = extras.getByteArray("Game_File_2");
+            byte[] game_data_to_load_3 = extras.getByteArray("Game_File_3");
+            byte[] game_data_to_load_4 = extras.getByteArray("Game_File_4");
+            if (game_data_to_load_1 != null)
+                load_game(game_data_to_load_1);
+            else if (game_data_to_load_2 != null)
+                load_game(game_data_to_load_2);
+            else if (game_data_to_load_3 != null)
+                load_game(game_data_to_load_3);
+            else if (game_data_to_load_4 != null)
+                load_game(game_data_to_load_4);
         }
         set_all_true();
 
@@ -326,9 +327,8 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
 
     @Override
     public boolean onTouch(View v, MotionEvent me) {
-
         sleep(25);
-        //*/
+
         switch (me.getAction()) {
             case MotionEvent.ACTION_DOWN:
                 if (!which_surface_view) {
@@ -1185,7 +1185,23 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
                 AlertDialog.Builder saint_builder = new AlertDialog.Builder(v.getContext());
                 switch (floor_num) {
                     case 2:
-                        saint_builder.setMessage(R.string.saint_2f);
+                        if (saint_history[0] == 0) {
+                            saint_builder.setMessage(R.string.saint_2f);
+                            saint_builder.setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialogInterface, int i) {
+                                    atk = atk * 103 / 100;
+                                    def = def * 103 / 100;
+                                    saint_history[0]++;
+                                }
+                            });
+                            saint_builder.setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialogInterface, int i) {
+                                }
+                            });
+                        } else
+                            saint_builder.setMessage(R.string.saint_default);
                         break;
                     case 3:
                         if (saint_history[1] == 0) {
@@ -1335,6 +1351,7 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
                         break;
                 }
                 AlertDialog saint_dialog = saint_builder.create();
+                saint_dialog.setCanceledOnTouchOutside(true);
                 saint_dialog.show();
                 break;
             case 23:        // merchant
@@ -1719,7 +1736,7 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
                 AlertDialog altar_list = altar_builder.create();
                 altar_list.show();
                 break;
-            case 28:
+            case 28:        // princess
                 AlertDialog.Builder princess_builder = new AlertDialog.Builder(v.getContext());
                 final AlertDialog.Builder zeno_builder = new AlertDialog.Builder(v.getContext());
                 princess_builder.setMessage(R.string.princess_dialog1);
@@ -1731,6 +1748,7 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
                         current_game.change_24f();
                         zeno_builder.setMessage(R.string.princess_dialog2);
                         AlertDialog zeno_dialog = zeno_builder.create();
+                        zeno_dialog.setCanceledOnTouchOutside(true);
                         zeno_dialog.show();
                     }
                 });
@@ -1845,6 +1863,8 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
                 if (!holder.getSurface().isValid()) {
                     continue;
                 }
+                if (music_settings[0])
+                    play_bgm();
                 if (which_surface_view) {
                     if (!isWalk) {
                         if (button_click && !isBattle && !isEvent && !cantMove)
@@ -1877,6 +1897,9 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
                     holder.unlockCanvasAndPost(c);
                 }
             }
+        }
+
+        private void play_bgm() {
         }
 
         private void resize_bitmaps() {
@@ -3126,7 +3149,6 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
                         act++;
                         hero_x = 6;
                         hero_y = 7;
-                        not_show_hero = true;
                         current_floor[2][6] = 52;
                         current_floor[8][6] = 8;
                         refresh_ctr = true;
@@ -3173,7 +3195,8 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
                     } else if (act == 5) {
                         sleep(300);
                         act++;
-                        not_show_hero = false;
+                        current_floor[8][6] = 8;
+                        refresh_ctr = true;
                         parent.runOnUiThread(new Runnable() {
                             public void run() {
                                 AlertDialog.Builder f40_builder1 = new AlertDialog.Builder(parent);
@@ -5299,6 +5322,25 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
         }
 
         private void check_complete() {
+            if (hp <= 0){
+                parent.runOnUiThread(new Runnable() {
+                    public void run() {
+                        AlertDialog.Builder game_over_builder = new AlertDialog.Builder(parent);
+                        game_over_builder.setTitle(R.string.game_over_title);
+                        game_over_builder.setMessage(R.string.game_over_message);
+                        game_over_builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                finish();
+                            }
+                        });
+                        AlertDialog game_over_dialog = game_over_builder.create();
+                        game_over_dialog.setCanceledOnTouchOutside(false);
+                        game_over_dialog.show();
+                    }
+                });
+                return;
+            }
             switch (floor_num) {
                 case 2:
                     if (current_floor[2][6] == 1 && current_floor[2][8] == 1) {
@@ -6001,53 +6043,143 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
                 case 9:         // prison
                     return 0;
                 case 11:        // iron sword
+                    parent.runOnUiThread(new Runnable() {
+                        public void run() {
+                            AlertDialog.Builder pick_up_builder = new AlertDialog.Builder(parent);
+                            pick_up_builder.setMessage(R.string.pick_up_iron_sword);
+                            AlertDialog pick_up_dialog = pick_up_builder.create();
+                            pick_up_dialog.setCanceledOnTouchOutside(true);
+                            pick_up_dialog.show();
+                        }
+                    });
                     current_floor[i][j] = 1;
                     atk += 10;
                     refresh_ctr = true;
                     return 1;
                 case 12:        // iron shield
+                    parent.runOnUiThread(new Runnable() {
+                        public void run() {
+                            AlertDialog.Builder pick_up_builder = new AlertDialog.Builder(parent);
+                            pick_up_builder.setMessage(R.string.pick_up_iron_shield);
+                            AlertDialog pick_up_dialog = pick_up_builder.create();
+                            pick_up_dialog.setCanceledOnTouchOutside(true);
+                            pick_up_dialog.show();
+                        }
+                    });
                     current_floor[i][j] = 1;
                     def += 10;
                     refresh_ctr = true;
                     return 1;
                 case 13:        // silver sword
+                    parent.runOnUiThread(new Runnable() {
+                        public void run() {
+                            AlertDialog.Builder pick_up_builder = new AlertDialog.Builder(parent);
+                            pick_up_builder.setMessage(R.string.pick_up_silver_sword);
+                            AlertDialog pick_up_dialog = pick_up_builder.create();
+                            pick_up_dialog.setCanceledOnTouchOutside(true);
+                            pick_up_dialog.show();
+                        }
+                    });
                     current_floor[i][j] = 1;
                     atk += 20;
                     refresh_ctr = true;
                     return 1;
                 case 14:        // silver shield
+                    parent.runOnUiThread(new Runnable() {
+                        public void run() {
+                            AlertDialog.Builder pick_up_builder = new AlertDialog.Builder(parent);
+                            pick_up_builder.setMessage(R.string.pick_up_silver_shield);
+                            AlertDialog pick_up_dialog = pick_up_builder.create();
+                            pick_up_dialog.setCanceledOnTouchOutside(true);
+                            pick_up_dialog.show();
+                        }
+                    });
                     current_floor[i][j] = 1;
                     def += 20;
                     refresh_ctr = true;
                     return 1;
                 case 15:        // knight sword
+                    parent.runOnUiThread(new Runnable() {
+                        public void run() {
+                            AlertDialog.Builder pick_up_builder = new AlertDialog.Builder(parent);
+                            pick_up_builder.setMessage(R.string.pick_up_knight_sword);
+                            AlertDialog pick_up_dialog = pick_up_builder.create();
+                            pick_up_dialog.setCanceledOnTouchOutside(true);
+                            pick_up_dialog.show();
+                        }
+                    });
                     current_floor[i][j] = 1;
                     current_floor[10][8] = 0;
                     atk += 40;
                     refresh_ctr = true;
                     return 1;
                 case 16:        // knight shield
+                    parent.runOnUiThread(new Runnable() {
+                        public void run() {
+                            AlertDialog.Builder pick_up_builder = new AlertDialog.Builder(parent);
+                            pick_up_builder.setMessage(R.string.pick_up_knight_shield);
+                            AlertDialog pick_up_dialog = pick_up_builder.create();
+                            pick_up_dialog.setCanceledOnTouchOutside(true);
+                            pick_up_dialog.show();
+                        }
+                    });
                     current_floor[i][j] = 1;
                     current_floor[5][2] = 0;
                     def += 40;
                     refresh_ctr = true;
                     return 1;
                 case 17:        // divine sword
+                    parent.runOnUiThread(new Runnable() {
+                        public void run() {
+                            AlertDialog.Builder pick_up_builder = new AlertDialog.Builder(parent);
+                            pick_up_builder.setMessage(R.string.pick_up_divine_sword);
+                            AlertDialog pick_up_dialog = pick_up_builder.create();
+                            pick_up_dialog.setCanceledOnTouchOutside(true);
+                            pick_up_dialog.show();
+                        }
+                    });
                     current_floor[i][j] = 1;
                     atk += 50;
                     refresh_ctr = true;
                     return 1;
                 case 18:        // divine shield
+                    parent.runOnUiThread(new Runnable() {
+                        public void run() {
+                            AlertDialog.Builder pick_up_builder = new AlertDialog.Builder(parent);
+                            pick_up_builder.setMessage(R.string.pick_up_divine_shield);
+                            AlertDialog pick_up_dialog = pick_up_builder.create();
+                            pick_up_dialog.setCanceledOnTouchOutside(true);
+                            pick_up_dialog.show();
+                        }
+                    });
                     current_floor[i][j] = 1;
                     def += 50;
                     refresh_ctr = true;
                     return 1;
                 case 19:        // sacred sword
+                    parent.runOnUiThread(new Runnable() {
+                        public void run() {
+                            AlertDialog.Builder pick_up_builder = new AlertDialog.Builder(parent);
+                            pick_up_builder.setMessage(R.string.pick_up_sacred_sword);
+                            AlertDialog pick_up_dialog = pick_up_builder.create();
+                            pick_up_dialog.setCanceledOnTouchOutside(true);
+                            pick_up_dialog.show();
+                        }
+                    });
                     current_floor[i][j] = 1;
                     atk += 100;
                     refresh_ctr = true;
                     return 1;
                 case 20:        // sacred shield
+                    parent.runOnUiThread(new Runnable() {
+                        public void run() {
+                            AlertDialog.Builder pick_up_builder = new AlertDialog.Builder(parent);
+                            pick_up_builder.setMessage(R.string.pick_up_sacred_shield);
+                            AlertDialog pick_up_dialog = pick_up_builder.create();
+                            pick_up_dialog.setCanceledOnTouchOutside(true);
+                            pick_up_dialog.show();
+                        }
+                    });
                     current_floor[i][j] = 1;
                     sacred_shield = true;
                     def += 100;
@@ -6159,11 +6291,33 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
                     refresh_ctr = true;
                     return 1;
                 case 74:        // red potion
+                    parent.runOnUiThread(new Runnable() {
+                        public void run() {
+                            AlertDialog.Builder pick_up_builder = new AlertDialog.Builder(parent);
+                            String full_message = getString(R.string.pick_up_red_potion);
+                            full_message += String.valueOf(50*(1+floor_num/10)) + ".";
+                            pick_up_builder.setMessage(full_message);
+                            AlertDialog pick_up_dialog = pick_up_builder.create();
+                            pick_up_dialog.setCanceledOnTouchOutside(true);
+                            pick_up_dialog.show();
+                        }
+                    });
                     current_floor[i][j] = 1;
                     hp += 50 * (floor_num / 10 + 1);
                     refresh_ctr = true;
                     return 1;
                 case 75:        // blue potion
+                    parent.runOnUiThread(new Runnable() {
+                        public void run() {
+                            AlertDialog.Builder pick_up_builder = new AlertDialog.Builder(parent);
+                            String full_message = getString(R.string.pick_up_blue_potion);
+                            full_message += String.valueOf(200*(1+floor_num/10)) + ".";
+                            pick_up_builder.setMessage(full_message);
+                            AlertDialog pick_up_dialog = pick_up_builder.create();
+                            pick_up_dialog.setCanceledOnTouchOutside(true);
+                            pick_up_dialog.show();
+                        }
+                    });
                     current_floor[i][j] = 1;
                     hp += 200 * (floor_num / 10 + 1);
                     refresh_ctr = true;
@@ -6171,11 +6325,33 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
                         current_floor[1][2] = -7;
                     return 1;
                 case 76:        // red crystal
+                    parent.runOnUiThread(new Runnable() {
+                        public void run() {
+                            AlertDialog.Builder pick_up_builder = new AlertDialog.Builder(parent);
+                            String full_message = getString(R.string.pick_up_red_crystal);
+                            full_message += String.valueOf(1+floor_num/10) + ".";
+                            pick_up_builder.setMessage(full_message);
+                            AlertDialog pick_up_dialog = pick_up_builder.create();
+                            pick_up_dialog.setCanceledOnTouchOutside(true);
+                            pick_up_dialog.show();
+                        }
+                    });
                     current_floor[i][j] = 1;
                     atk += (floor_num / 10 + 1);
                     refresh_ctr = true;
                     return 1;
                 case 77:        // blue crystal
+                    parent.runOnUiThread(new Runnable() {
+                        public void run() {
+                            AlertDialog.Builder pick_up_builder = new AlertDialog.Builder(parent);
+                            String full_message = getString(R.string.pick_up_blue_crystal);
+                            full_message += String.valueOf(1+floor_num/10) + ".";
+                            pick_up_builder.setMessage(full_message);
+                            AlertDialog pick_up_dialog = pick_up_builder.create();
+                            pick_up_dialog.setCanceledOnTouchOutside(true);
+                            pick_up_dialog.show();
+                        }
+                    });
                     current_floor[i][j] = 1;
                     def += (floor_num / 10 + 1);
                     refresh_ctr = true;
@@ -6186,16 +6362,43 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
                     refresh_ctr = true;
                     return 1;
                 case 79:        // staff of echo
+                    parent.runOnUiThread(new Runnable() {
+                        public void run() {
+                            AlertDialog.Builder pick_up_builder = new AlertDialog.Builder(parent);
+                            pick_up_builder.setMessage(R.string.pick_up_stf_echo);
+                            AlertDialog pick_up_dialog = pick_up_builder.create();
+                            pick_up_dialog.setCanceledOnTouchOutside(true);
+                            pick_up_dialog.show();
+                        }
+                    });
                     current_floor[i][j] = 1;
                     stf_echo = true;
                     refresh_ctr = true;
                     return 1;
                 case 80:        // staff of space
+                    parent.runOnUiThread(new Runnable() {
+                        public void run() {
+                            AlertDialog.Builder pick_up_builder = new AlertDialog.Builder(parent);
+                            pick_up_builder.setMessage(R.string.pick_up_stf_space);
+                            AlertDialog pick_up_dialog = pick_up_builder.create();
+                            pick_up_dialog.setCanceledOnTouchOutside(true);
+                            pick_up_dialog.show();
+                        }
+                    });
                     current_floor[i][j] = 1;
                     stf_space = true;
                     refresh_ctr = true;
                     return 1;
                 case 81:        // cross
+                    parent.runOnUiThread(new Runnable() {
+                        public void run() {
+                            AlertDialog.Builder pick_up_builder = new AlertDialog.Builder(parent);
+                            pick_up_builder.setMessage(R.string.pick_up_cross);
+                            AlertDialog pick_up_dialog = pick_up_builder.create();
+                            pick_up_dialog.setCanceledOnTouchOutside(true);
+                            pick_up_dialog.show();
+                        }
+                    });
                     current_floor[i][j] = 1;
                     cross = true;
                     refresh_ctr = true;
@@ -6206,11 +6409,29 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
                     refresh_ctr = true;
                     return 1;
                 case 83:        // magic mattock
+                    parent.runOnUiThread(new Runnable() {
+                        public void run() {
+                            AlertDialog.Builder pick_up_builder = new AlertDialog.Builder(parent);
+                            pick_up_builder.setMessage(R.string.pick_up_mattock);
+                            AlertDialog pick_up_dialog = pick_up_builder.create();
+                            pick_up_dialog.setCanceledOnTouchOutside(true);
+                            pick_up_dialog.show();
+                        }
+                    });
                     current_floor[i][j] = 1;
                     m_mattock = true;
                     refresh_ctr = true;
                     return 1;
                 case 84:        // magic wing cent
+                    parent.runOnUiThread(new Runnable() {
+                        public void run() {
+                            AlertDialog.Builder pick_up_builder = new AlertDialog.Builder(parent);
+                            pick_up_builder.setMessage(R.string.pick_up_wing_cent);
+                            AlertDialog pick_up_dialog = pick_up_builder.create();
+                            pick_up_dialog.setCanceledOnTouchOutside(true);
+                            pick_up_dialog.show();
+                        }
+                    });
                     current_floor[i][j] = 1;
                     wing_cent = true;
                     refresh_ctr = true;
@@ -6221,36 +6442,99 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
                     refresh_ctr = true;
                     return 1;
                 case 86:        // bomb
+                    parent.runOnUiThread(new Runnable() {
+                        public void run() {
+                            AlertDialog.Builder pick_up_builder = new AlertDialog.Builder(parent);
+                            pick_up_builder.setMessage(R.string.pick_up_bomb);
+                            AlertDialog pick_up_dialog = pick_up_builder.create();
+                            pick_up_dialog.setCanceledOnTouchOutside(true);
+                            pick_up_dialog.show();
+                        }
+                    });
                     current_floor[i][j] = 1;
                     bomb = true;
                     refresh_ctr = true;
                     return 1;
                 case 87:        // magic wing up
+                    parent.runOnUiThread(new Runnable() {
+                        public void run() {
+                            AlertDialog.Builder pick_up_builder = new AlertDialog.Builder(parent);
+                            pick_up_builder.setMessage(R.string.pick_up_wing_up);
+                            AlertDialog pick_up_dialog = pick_up_builder.create();
+                            pick_up_dialog.setCanceledOnTouchOutside(true);
+                            pick_up_dialog.show();
+                        }
+                    });
                     current_floor[i][j] = 1;
                     wing_up = true;
                     refresh_ctr = true;
                     return 1;
                 case 88:        // enhanced key
+                    parent.runOnUiThread(new Runnable() {
+                        public void run() {
+                            AlertDialog.Builder pick_up_builder = new AlertDialog.Builder(parent);
+                            pick_up_builder.setMessage(R.string.pick_up_enhanced_key);
+                            AlertDialog pick_up_dialog = pick_up_builder.create();
+                            pick_up_dialog.setCanceledOnTouchOutside(true);
+                            pick_up_dialog.show();
+                        }
+                    });
                     current_floor[i][j] = 1;
                     key_enhac = true;
                     refresh_ctr = true;
                     return 1;
                 case 89:        // magic wing down
+                    parent.runOnUiThread(new Runnable() {
+                        public void run() {
+                            AlertDialog.Builder pick_up_builder = new AlertDialog.Builder(parent);
+                            pick_up_builder.setMessage(R.string.pick_up_wing_down);
+                            AlertDialog pick_up_dialog = pick_up_builder.create();
+                            pick_up_dialog.setCanceledOnTouchOutside(true);
+                            pick_up_dialog.show();
+                        }
+                    });
                     current_floor[i][j] = 1;
                     wing_down = true;
                     refresh_ctr = true;
                     return 1;
                 case 90:        // lucky gold
+                    parent.runOnUiThread(new Runnable() {
+                        public void run() {
+                            AlertDialog.Builder pick_up_builder = new AlertDialog.Builder(parent);
+                            pick_up_builder.setMessage(R.string.pick_up_lucky_gold);
+                            AlertDialog pick_up_dialog = pick_up_builder.create();
+                            pick_up_dialog.setCanceledOnTouchOutside(true);
+                            pick_up_dialog.show();
+                        }
+                    });
                     current_floor[i][j] = 1;
                     lucky_gold = true;
                     refresh_ctr = true;
                     return 1;
                 case 91:        // dragonsbane
+                    parent.runOnUiThread(new Runnable() {
+                        public void run() {
+                            AlertDialog.Builder pick_up_builder = new AlertDialog.Builder(parent);
+                            pick_up_builder.setMessage(R.string.pick_up_dragonsbane);
+                            AlertDialog pick_up_dialog = pick_up_builder.create();
+                            pick_up_dialog.setCanceledOnTouchOutside(true);
+                            pick_up_dialog.show();
+                        }
+                    });
                     current_floor[i][j] = 1;
                     dragonsbane = true;
                     refresh_ctr = true;
                     return 1;
                 case 92:        // snow crystal
+                    parent.runOnUiThread(new Runnable() {
+                        public void run() {
+                            AlertDialog.Builder pick_up_builder = new AlertDialog.Builder(parent);
+                            pick_up_builder.setMessage(R.string.pick_up_snow_crystal);
+                            AlertDialog pick_up_dialog = pick_up_builder.create();
+                            pick_up_dialog.setCanceledOnTouchOutside(true);
+                            pick_up_dialog.show();
+                        }
+                    });
                     current_floor[i][j] = 1;
                     snow_cryst = true;
                     refresh_ctr = true;
@@ -6693,7 +6977,6 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
         }
 
     }
-
 }
 
 

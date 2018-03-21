@@ -13,7 +13,9 @@
     <string name="yes">Yes</string>
     <string name="no">No</string>
     <string name="back_btn_alert">Do you want to exit the game?</string>
-    <string name="saint_2f">Back</string>
+    <string name="game_over_title">Game Over</string>
+    <string name="game_over_message">Good luck on your next try.</string>
+    <string name="saint_2f">Thank you so much for saving me. I can increase your attack and defense power by 3 percent. Do you want me to do it now?</string>
     <string name="saint_3f">Alas, my age is catching up to me. I can fight no more. Brave young man,
 you should take this Staff of Wisdom since I have no use for it. It will reveal
 the strength of monsters so you could better prepare your fight against them. Take
@@ -153,7 +155,7 @@ the Dragon.</string>
     <string name="item_description_cross">Passive item. It doubles your attack when you are fighting against zombies and vampires.</string>
     <string name="item_description_elixir">It can be used only once. It increases your health points by 10 x Attack + 5 x Defence. Would you like to use it now?</string>
     <string name="item_description_mattock">It can be used only once. It destroys the walls next to you. Would you like to use it now?</string>
-    <string name="item_description_wing_center">It can be used 3 times. It teleports you to an unoccupied block which is symerical to the center of the current floor. Would you like to use it now?</string>
+    <string name="item_description_wing_center">It can be used 3 times. It teleports you to an unoccupied space which is symerical to the center of the current floor. Would you like to use it now?</string>
     <string name="item_description_enhanced_mattock">It can be used only once. It destroys all the walls at the current floor. Would you like to use it now?</string>
     <string name="item_description_bomb">It can be used only once. It destroys all the monsters standing next to you, but it does not work against bosses. Would you like to use it now?</string>
     <string name="item_description_wing_up">It can be used only once. It teleports you to one floor above the current floor when you are next to the stairs. Would you like to use it now?</string>
@@ -182,7 +184,7 @@ the Dragon.</string>
     <string name="knight_captain_32f_2">see you later</string>
     <string name="knight_captain_40f_0">You think I am that easily defeated? You must be kidding me! What you just killed were merelly illusions. Now, it\'s
     my turn to kill you!</string>
-    <string name="knight_captain_40f_1">Skeleton Elites, charge!</string>
+    <string name="knight_captain_40f_1">You can never defeat me! Skeleton Elites, charge!</string>
     <string name="knight_captain_40f_2">Charge! Knight squad! Go kill him!</string>
     <string name="knight_captain_40f_3">charge 3</string>
     <string name="knight_captain_40f_4">He is weak now! Knight Elites, charge!!!</string>
@@ -194,4 +196,30 @@ the Dragon.</string>
     <string name="zeno_42f_2">Zeno blablabla</string>
     <string name="zeno_49f_1">You can\'t defeat me cause i am zeno</string>
     <string name="zeno_49f_2">What? You created the symbol sealing away my magic power? You still won\'t defeat me though I only get 1/10 of my power.</string>
+    <string name="pick_up_red_crystal">Picked up Red Crystal. Attack + </string>
+    <string name="pick_up_blue_crystal">Picked up Blue Crystal. Defense + </string>
+    <string name="pick_up_red_potion">Picked up Red Potion. Health + </string>
+    <string name="pick_up_blue_potion">Picked up Blue Potion. Health + </string>
+    <string name="pick_up_iron_sword">Picked up Iron Sword. Attack + 10</string>
+    <string name="pick_up_iron_shield">Picked up Iron Shield. Defense + 10</string>
+    <string name="pick_up_silver_sword">Picked up Silver Sword. Attack + 20</string>
+    <string name="pick_up_silver_shield">Picked up Silver Shield. Defense + 20</string>
+    <string name="pick_up_knight_sword">Picked up Knight Sword. Attack + 40</string>
+    <string name="pick_up_knight_shield">Picked up Knight Shield. Defense + 40</string>
+    <string name="pick_up_divine_sword">Picked up Divine Sword. Attack + 50</string>
+    <string name="pick_up_divine_shield">Picked up Divine Shield. Defense + 50</string>
+    <string name="pick_up_sacred_sword">Picked up Sacred Sword. Attack + 100</string>
+    <string name="pick_up_sacred_shield">Picked up Sacred Shield. Defense + 100. Immune to magic attacks.</string>
+    <string name="pick_up_stf_echo">Picked up Staff of Echo. It allows you to listen to information given by Merchants and Saints again.</string>
+    <string name="pick_up_stf_space">Picked up Staff of Space. It teleports you to floors you have already visited when you are next to the stairs.</string>
+    <string name="pick_up_cross">Picked up Cross. It doubles your attack when you are fighting against zombies and vampires.</string>
+    <string name="pick_up_mattock">Picked up Mattock. It destroys the walls next to you.</string>
+    <string name="pick_up_wing_cent">Picked up Magic Wing - Center. It teleports you to an unoccupied space which is symerical to the center of the current floor.</string>
+    <string name="pick_up_bomb">Picked up Bomb. It destroys all the monsters standing next to you, but it does not work against bosses.</string>
+    <string name="pick_up_wing_up">Picked up Magic Wing - Up. It teleports you to one floor above the current floor when you are next to the stairs.</string>
+    <string name="pick_up_enhanced_key">Picked up Enhanced Yellow Key. It opens all the yellow doors at the current floor.</string>
+    <string name="pick_up_wing_down">Picked up Magic Wing - Down. It teleports you to one floor below the current floor when you are next to the stairs.</string>
+    <string name="pick_up_lucky_gold">Picked up Lucky Golde. It doubles the money you get from battle.</string>
+    <string name="pick_up_dragonsbane">Picked up Dragonsbane. It doubles your attack when you are fighting against the Dragon.</string>
+    <string name="pick_up_snow_crystal">Picked up Snow Crystal. It freezes lava into solid ground.</string>
 </resources>
