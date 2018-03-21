@@ -337,7 +337,7 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
                 }
                 if (blackout) {
                     AlertDialog.Builder wakeup_builder = new AlertDialog.Builder(v.getContext());
-                    wakeup_builder.setMessage("... ... \t\twake up!");
+                    wakeup_builder.setMessage(R.string.wake_up);
                     AlertDialog wakeup_dialog = wakeup_builder.create();
                     wakeup_dialog.setCanceledOnTouchOutside(true);
                     wakeup_dialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
@@ -892,6 +892,7 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
         back_alert.show();
     }
 
+    // helper function to set all items to be true
     private void set_all_true() {
         stf_wsdm = stf_echo = stf_space = cross = elixir = true;
         m_mattock = wing_cent = e_mattock = bomb = wing_up = true;
@@ -1122,52 +1123,52 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
                 AlertDialog.Builder thief_builder = new AlertDialog.Builder(v.getContext());
                 if (thief_event_count == 0) {
                     thief_event_count++;
-                    thief_builder.setMessage("Follow me and you will be free");
+                    thief_builder.setMessage(R.string.thief0);
                 } else if (thief_event_count == 1) {
                     thief_event_count++;
-                    thief_builder.setMessage("I dug many tunnels, find them");
+                    thief_builder.setMessage(R.string.thief1);
                 } else if (thief_event_count == 2) {
                     thief_event_count++;
-                    thief_builder.setMessage("silver swords is on 17. I got to go");
+                    thief_builder.setMessage(R.string.thief2);
                 } else if (thief_event_count == 3) {
                     thief_event_count++;
-                    thief_builder.setMessage("octopus");
+                    thief_builder.setMessage(R.string.thief3);
                 } else if (thief_event_count == 4) {
                     thief_event_count++;
-                    thief_builder.setMessage("29f I just finished and you are here");
+                    thief_builder.setMessage(R.string.thief4);
                 } else if (thief_event_count == 5) {
                     if (floor_num == 29)
-                        thief_builder.setMessage("29f I just finished and you are here");
+                        thief_builder.setMessage(R.string.thief4);
                     else {
                         thief_event_count = 6;
-                        thief_builder.setMessage("dragon 35f, i am now at 2f");
+                        thief_builder.setMessage(R.string.thief5);
                         current_game.change_35f();
                     }
                 } else if (thief_event_count == 6) {
                     if (floor_num == 2)
-                        thief_builder.setMessage("take a rest, i am now at 2f");
+                        thief_builder.setMessage(R.string.thief6_1);
                     else {
                         thief_event_count++;
-                        thief_builder.setMessage("dragon 35f, i am now at 35f");
+                        thief_builder.setMessage(R.string.thief6_2);
                     }
                 } else if (thief_event_count == 7) {
                     thief_event_count++;
-                    thief_builder.setMessage("i am devil zeno1");
+                    thief_builder.setMessage(R.string.thief7);
                 } else if (thief_event_count == 8) {
                     thief_event_count++;
-                    thief_builder.setMessage("i am devil zeno2");
+                    thief_builder.setMessage(R.string.thief8);
                 } else if (thief_event_count == 9) {
                     thief_event_count++;
-                    thief_builder.setMessage("i am devil zeno3");
+                    thief_builder.setMessage(R.string.thief9);
                 } else if (thief_event_count == 10) {
                     thief_event_count++;
-                    thief_builder.setMessage("i am devil zeno4");
+                    thief_builder.setMessage(R.string.thief10);
                 } else if (thief_event_count == 11) {
                     thief_event_count++;
-                    thief_builder.setMessage("i am devil zeno5");
+                    thief_builder.setMessage(R.string.thief11);
                 } else {
                     thief_event_count = 0;
-                    thief_builder.setMessage("i am devil zeno6");
+                    thief_builder.setMessage(R.string.thief12);
                 }
                 AlertDialog thief_dialog = thief_builder.create();
                 thief_dialog.setCanceledOnTouchOutside(true);
@@ -1183,7 +1184,7 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
             case 22:        // saint
                 AlertDialog.Builder saint_builder = new AlertDialog.Builder(v.getContext());
                 switch (floor_num) {
-                    case 2:     // ********************************************
+                    case 2:
                         saint_builder.setMessage(R.string.saint_2f);
                         break;
                     case 3:
@@ -1220,7 +1221,7 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
                                 saint_builder.setMessage(R.string.saint_default);
                         else {
                             if (saint_history[5] == 0) {
-                                saint_history[5]++; // 8*******************************************
+                                saint_history[5]++;
                                 saint_builder.setMessage(R.string.saint_16fh);
                                 elixir = true;
                             } else
@@ -1352,7 +1353,7 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
                     case 6:
                         if (merchant_history[1] == 0) {
                             merchant_builder.setMessage(R.string.merchant_6f0);
-                            merchant_builder.setPositiveButton("yes", new DialogInterface.OnClickListener() {
+                            merchant_builder.setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialogInterface, int i) {
                                     if (gold >= 50) {
@@ -1366,7 +1367,7 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
                                     }
                                 }
                             });
-                            merchant_builder.setNegativeButton("no", new DialogInterface.OnClickListener() {
+                            merchant_builder.setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialogInterface, int i) {
                                 }
@@ -1382,7 +1383,7 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
                     case 7:
                         if (merchant_history[2] == 0) {
                             merchant_builder.setMessage(R.string.merchant_7f0);
-                            merchant_builder.setPositiveButton("yes", new DialogInterface.OnClickListener() {
+                            merchant_builder.setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialogInterface, int i) {
                                     if (gold >= 50) {
@@ -1396,7 +1397,7 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
                                     }
                                 }
                             });
-                            merchant_builder.setNegativeButton("no", new DialogInterface.OnClickListener() {
+                            merchant_builder.setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialogInterface, int i) {
                                 }
@@ -1413,7 +1414,7 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
                         if (hero_x < 6) {
                             if (merchant_history[3] == 0) {
                                 merchant_builder.setMessage(R.string.merchant_12f0);
-                                merchant_builder.setPositiveButton("yes", new DialogInterface.OnClickListener() {
+                                merchant_builder.setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
                                     @Override
                                     public void onClick(DialogInterface dialogInterface, int i) {
                                         if (gold >= 800) {
@@ -1427,7 +1428,7 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
                                         }
                                     }
                                 });
-                                merchant_builder.setNegativeButton("no", new DialogInterface.OnClickListener() {
+                                merchant_builder.setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {
                                     @Override
                                     public void onClick(DialogInterface dialogInterface, int i) {
                                     }
@@ -1441,7 +1442,7 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
                             }
                         } else {
                             merchant_builder.setMessage(R.string.merchant_12fh);
-                            merchant_builder.setPositiveButton("yes", new DialogInterface.OnClickListener() {
+                            merchant_builder.setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialogInterface, int i) {
                                     if (gold >= 1000) {
@@ -1455,7 +1456,7 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
                                     }
                                 }
                             });
-                            merchant_builder.setNegativeButton("no", new DialogInterface.OnClickListener() {
+                            merchant_builder.setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialogInterface, int i) {
                                 }
@@ -1465,7 +1466,7 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
                     case 15:
                         if (merchant_history[5] == 0) {
                             merchant_builder.setMessage(R.string.merchant_15f0);
-                            merchant_builder.setPositiveButton("yes", new DialogInterface.OnClickListener() {
+                            merchant_builder.setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialogInterface, int i) {
                                     if (gold >= 200) {
@@ -1479,7 +1480,7 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
                                     }
                                 }
                             });
-                            merchant_builder.setNegativeButton("no", new DialogInterface.OnClickListener() {
+                            merchant_builder.setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialogInterface, int i) {
                                 }
@@ -1494,7 +1495,7 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
                         break;
                     case 28:
                         merchant_builder.setMessage(R.string.merchant_28f);
-                        merchant_builder.setPositiveButton("yes", new DialogInterface.OnClickListener() {
+                        merchant_builder.setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialogInterface, int i) {
                                 if (count_y > 0) {
@@ -1507,7 +1508,7 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
                                 }
                             }
                         });
-                        merchant_builder.setNegativeButton("no", new DialogInterface.OnClickListener() {
+                        merchant_builder.setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialogInterface, int i) {
                             }
@@ -1516,7 +1517,7 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
                     case 31:
                         if (merchant_history[7] == 0) {
                             merchant_builder.setMessage(R.string.merchant_31f0);
-                            merchant_builder.setPositiveButton("yes", new DialogInterface.OnClickListener() {
+                            merchant_builder.setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialogInterface, int i) {
                                     if (gold >= 1000) {
@@ -1531,7 +1532,7 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
                                     }
                                 }
                             });
-                            merchant_builder.setNegativeButton("no", new DialogInterface.OnClickListener() {
+                            merchant_builder.setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialogInterface, int i) {
                                 }
@@ -1547,7 +1548,7 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
                     case 38:
                         if (merchant_history[8] == 0) {
                             merchant_builder.setMessage(R.string.merchant_38f0);
-                            merchant_builder.setPositiveButton("yes", new DialogInterface.OnClickListener() {
+                            merchant_builder.setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialogInterface, int i) {
                                     if (gold >= 200) {
@@ -1561,7 +1562,7 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
                                     }
                                 }
                             });
-                            merchant_builder.setNegativeButton("no", new DialogInterface.OnClickListener() {
+                            merchant_builder.setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialogInterface, int i) {
                                 }
@@ -1577,7 +1578,7 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
                     case 39:
                         if (merchant_history[9] == 0) {
                             merchant_builder.setMessage(R.string.merchant_39f0);
-                            merchant_builder.setPositiveButton("yes", new DialogInterface.OnClickListener() {
+                            merchant_builder.setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialogInterface, int i) {
                                     if (gold >= 2000) {
@@ -1591,7 +1592,7 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
                                     }
                                 }
                             });
-                            merchant_builder.setNegativeButton("no", new DialogInterface.OnClickListener() {
+                            merchant_builder.setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialogInterface, int i) {
                                 }
@@ -1607,7 +1608,7 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
                     case 45:
                         if (merchant_history[10] == 0) {
                             merchant_builder.setMessage(R.string.merchant_45f0);
-                            merchant_builder.setPositiveButton("yes", new DialogInterface.OnClickListener() {
+                            merchant_builder.setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialogInterface, int i) {
                                     if (gold >= 1000) {
@@ -1621,7 +1622,7 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
                                     }
                                 }
                             });
-                            merchant_builder.setNegativeButton("no", new DialogInterface.OnClickListener() {
+                            merchant_builder.setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialogInterface, int i) {
                                 }
@@ -1637,7 +1638,7 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
                     case 47:
                         if (merchant_history[11] == 0) {
                             merchant_builder.setMessage(R.string.merchant_47f0);
-                            merchant_builder.setPositiveButton("yes", new DialogInterface.OnClickListener() {
+                            merchant_builder.setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialogInterface, int i) {
                                     if (gold >= 4000) {
@@ -1651,7 +1652,7 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
                                     }
                                 }
                             });
-                            merchant_builder.setNegativeButton("no", new DialogInterface.OnClickListener() {
+                            merchant_builder.setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialogInterface, int i) {
                                 }
@@ -1721,14 +1722,14 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
             case 28:
                 AlertDialog.Builder princess_builder = new AlertDialog.Builder(v.getContext());
                 final AlertDialog.Builder zeno_builder = new AlertDialog.Builder(v.getContext());
-                princess_builder.setMessage(R.string.princess_dialog);
+                princess_builder.setMessage(R.string.princess_dialog1);
                 AlertDialog princess_dialog = princess_builder.create();
                 princess_dialog.setCanceledOnTouchOutside(true);
                 princess_dialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
                     @Override
                     public void onCancel(DialogInterface dialogInterface) {
                         current_game.change_24f();
-                        zeno_builder.setMessage("you are played");
+                        zeno_builder.setMessage(R.string.princess_dialog2);
                         AlertDialog zeno_dialog = zeno_builder.create();
                         zeno_dialog.show();
                     }
@@ -2087,7 +2088,7 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
                         parent.runOnUiThread(new Runnable() {
                             public void run() {
                                 AlertDialog.Builder f3_builder1 = new AlertDialog.Builder(parent);
-                                f3_builder1.setMessage("You are trapped. kys haha!");
+                                f3_builder1.setMessage(R.string.zeno_3f);
                                 AlertDialog f3_dialog1 = f3_builder1.create();
                                 f3_dialog1.setCanceledOnTouchOutside(true);
                                 f3_dialog1.setOnCancelListener(new DialogInterface.OnCancelListener() {
@@ -2149,7 +2150,7 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
                         parent.runOnUiThread(new Runnable() {
                             public void run() {
                                 AlertDialog.Builder f10_builder1 = new AlertDialog.Builder(parent);
-                                f10_builder1.setMessage("Soldiers, go take him!!!");
+                                f10_builder1.setMessage(R.string.skeleton_captain_10f_1);
                                 AlertDialog f10_dialog1 = f10_builder1.create();
                                 f10_dialog1.setCanceledOnTouchOutside(true);
                                 f10_dialog1.setOnCancelListener(new DialogInterface.OnCancelListener() {
@@ -2519,7 +2520,7 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
                         parent.runOnUiThread(new Runnable() {
                             public void run() {
                                 AlertDialog.Builder f20_builder1 = new AlertDialog.Builder(parent);
-                                f20_builder1.setMessage("I am vampire!!!");
+                                f20_builder1.setMessage(R.string.vampire_20f_1);
                                 AlertDialog f20_dialog1 = f20_builder1.create();
                                 f20_dialog1.setCanceledOnTouchOutside(true);
                                 f20_dialog1.setOnCancelListener(new DialogInterface.OnCancelListener() {
@@ -2727,7 +2728,7 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
                         parent.runOnUiThread(new Runnable() {
                             public void run() {
                                 AlertDialog.Builder f25_builder1 = new AlertDialog.Builder(parent);
-                                f25_builder1.setMessage("You are trapped. fight me!");
+                                f25_builder1.setMessage(R.string.archmage_25f);
                                 AlertDialog f25_dialog1 = f25_builder1.create();
                                 f25_dialog1.setCanceledOnTouchOutside(true);
                                 f25_dialog1.setOnCancelListener(new DialogInterface.OnCancelListener() {
@@ -2874,7 +2875,7 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
                         parent.runOnUiThread(new Runnable() {
                             public void run() {
                                 AlertDialog.Builder f32_builder1 = new AlertDialog.Builder(parent);
-                                f32_builder1.setMessage("You are trapped. fight me!");
+                                f32_builder1.setMessage(R.string.knight_captain_32f_1);
                                 AlertDialog f32_dialog1 = f32_builder1.create();
                                 f32_dialog1.setCanceledOnTouchOutside(true);
                                 f32_dialog1.setOnCancelListener(new DialogInterface.OnCancelListener() {
@@ -2926,7 +2927,7 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
                         parent.runOnUiThread(new Runnable() {
                             public void run() {
                                 AlertDialog.Builder f32_builder2 = new AlertDialog.Builder(parent);
-                                f32_builder2.setMessage("see you later");
+                                f32_builder2.setMessage(R.string.knight_captain_32f_2);
                                 AlertDialog f32_dialog2 = f32_builder2.create();
                                 f32_dialog2.setCanceledOnTouchOutside(true);
                                 f32_dialog2.setOnCancelListener(new DialogInterface.OnCancelListener() {
@@ -3132,7 +3133,7 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
                         parent.runOnUiThread(new Runnable() {
                             public void run() {
                                 AlertDialog.Builder f32_builder2 = new AlertDialog.Builder(parent);
-                                f32_builder2.setMessage("just illusion kid");
+                                f32_builder2.setMessage(R.string.knight_captain_40f_0);
                                 AlertDialog f32_dialog2 = f32_builder2.create();
                                 f32_dialog2.setCanceledOnTouchOutside(true);
                                 f32_dialog2.setOnCancelListener(new DialogInterface.OnCancelListener() {
@@ -3176,7 +3177,7 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
                         parent.runOnUiThread(new Runnable() {
                             public void run() {
                                 AlertDialog.Builder f40_builder1 = new AlertDialog.Builder(parent);
-                                f40_builder1.setMessage("charge 1");
+                                f40_builder1.setMessage(R.string.knight_captain_40f_1);
                                 AlertDialog f40_dialog1 = f40_builder1.create();
                                 f40_dialog1.setCanceledOnTouchOutside(true);
                                 f40_dialog1.setOnCancelListener(new DialogInterface.OnCancelListener() {
@@ -3282,7 +3283,7 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
                         parent.runOnUiThread(new Runnable() {
                             public void run() {
                                 AlertDialog.Builder f40_builder2 = new AlertDialog.Builder(parent);
-                                f40_builder2.setMessage("charge 2");
+                                f40_builder2.setMessage(R.string.knight_captain_40f_2);
                                 AlertDialog f40_dialog2 = f40_builder2.create();
                                 f40_dialog2.setCanceledOnTouchOutside(true);
                                 f40_dialog2.setOnCancelListener(new DialogInterface.OnCancelListener() {
@@ -3388,7 +3389,7 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
                         parent.runOnUiThread(new Runnable() {
                             public void run() {
                                 AlertDialog.Builder f40_builder3 = new AlertDialog.Builder(parent);
-                                f40_builder3.setMessage("charge 3");
+                                f40_builder3.setMessage(R.string.knight_captain_40f_3);
                                 AlertDialog f40_dialog3 = f40_builder3.create();
                                 f40_dialog3.setCanceledOnTouchOutside(true);
                                 f40_dialog3.setOnCancelListener(new DialogInterface.OnCancelListener() {
@@ -3524,7 +3525,7 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
                         parent.runOnUiThread(new Runnable() {
                             public void run() {
                                 AlertDialog.Builder f40_builder4 = new AlertDialog.Builder(parent);
-                                f40_builder4.setMessage("charge 4");
+                                f40_builder4.setMessage(R.string.knight_captain_40f_4);
                                 AlertDialog f40_dialog4 = f40_builder4.create();
                                 f40_dialog4.setCanceledOnTouchOutside(true);
                                 f40_dialog4.setOnCancelListener(new DialogInterface.OnCancelListener() {
@@ -3660,7 +3661,7 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
                         parent.runOnUiThread(new Runnable() {
                             public void run() {
                                 AlertDialog.Builder f40_builder5 = new AlertDialog.Builder(parent);
-                                f40_builder5.setMessage("final charge");
+                                f40_builder5.setMessage(R.string.knight_captain_40f_5);
                                 AlertDialog f40_dialog5 = f40_builder5.create();
                                 f40_dialog5.setCanceledOnTouchOutside(true);
                                 f40_dialog5.setOnCancelListener(new DialogInterface.OnCancelListener() {
@@ -3725,7 +3726,7 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
                         parent.runOnUiThread(new Runnable() {
                             public void run() {
                                 AlertDialog.Builder f40_builder6 = new AlertDialog.Builder(parent);
-                                f40_builder6.setMessage("I wont kill you this time");
+                                f40_builder6.setMessage(R.string.knight_captain_40f_6);
                                 AlertDialog f40_dialog6 = f40_builder6.create();
                                 f40_dialog6.setCanceledOnTouchOutside(true);
                                 f40_dialog6.setOnCancelListener(new DialogInterface.OnCancelListener() {
@@ -3845,7 +3846,7 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
                         parent.runOnUiThread(new Runnable() {
                             public void run() {
                                 AlertDialog.Builder f42_builder1 = new AlertDialog.Builder(parent);
-                                f42_builder1.setMessage("Knight Captain: Oh! Sir Zeno. I was not able to catch the brave man. Please forgive me.");
+                                f42_builder1.setMessage(R.string.knight_captain_42f_1);
                                 AlertDialog f42_dialog1 = f42_builder1.create();
                                 f42_dialog1.setCanceledOnTouchOutside(true);
                                 f42_dialog1.setOnCancelListener(new DialogInterface.OnCancelListener() {
@@ -3866,7 +3867,7 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
                         parent.runOnUiThread(new Runnable() {
                             public void run() {
                                 AlertDialog.Builder f42_builder2 = new AlertDialog.Builder(parent);
-                                f42_builder2.setMessage("Zeno reply and kill knight captain");
+                                f42_builder2.setMessage(R.string.zeno_42f_1);
                                 AlertDialog f42_dialog2 = f42_builder2.create();
                                 f42_dialog2.setCanceledOnTouchOutside(true);
                                 f42_dialog2.setOnCancelListener(new DialogInterface.OnCancelListener() {
@@ -3895,7 +3896,7 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
                         parent.runOnUiThread(new Runnable() {
                             public void run() {
                                 AlertDialog.Builder f42_builder3 = new AlertDialog.Builder(parent);
-                                f42_builder3.setMessage("Oh bitch plz");
+                                f42_builder3.setMessage(R.string.knight_captain_42f_2);
                                 AlertDialog f42_dialog3 = f42_builder3.create();
                                 f42_dialog3.setCanceledOnTouchOutside(true);
                                 f42_dialog3.setOnCancelListener(new DialogInterface.OnCancelListener() {
@@ -3934,7 +3935,7 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
                         parent.runOnUiThread(new Runnable() {
                             public void run() {
                                 AlertDialog.Builder f42_builder4 = new AlertDialog.Builder(parent);
-                                f42_builder4.setMessage("balabalabal");
+                                f42_builder4.setMessage(R.string.zeno_42f_2);
                                 AlertDialog f42_dialog4 = f42_builder4.create();
                                 f42_dialog4.setCanceledOnTouchOutside(true);
                                 f42_dialog4.setOnCancelListener(new DialogInterface.OnCancelListener() {
@@ -4005,7 +4006,7 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
                         parent.runOnUiThread(new Runnable() {
                             public void run() {
                                 AlertDialog.Builder f49_builder1 = new AlertDialog.Builder(parent);
-                                f49_builder1.setMessage("balabalabal");
+                                f49_builder1.setMessage(R.string.zeno_49f_1);
                                 AlertDialog f49_dialog1 = f49_builder1.create();
                                 f49_dialog1.setCanceledOnTouchOutside(true);
                                 f49_dialog1.setOnCancelListener(new DialogInterface.OnCancelListener() {
@@ -4069,7 +4070,7 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
                         parent.runOnUiThread(new Runnable() {
                             public void run() {
                                 AlertDialog.Builder f49_builder2 = new AlertDialog.Builder(parent);
-                                f49_builder2.setMessage("1 / 10");
+                                f49_builder2.setMessage(R.string.zeno_49f_2);
                                 AlertDialog f49_dialog2 = f49_builder2.create();
                                 f49_dialog2.setCanceledOnTouchOutside(true);
                                 f49_dialog2.setOnCancelListener(new DialogInterface.OnCancelListener() {
