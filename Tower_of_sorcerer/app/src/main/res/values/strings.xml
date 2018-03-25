@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Tower_of_sorcerer</string>
+    <string name="app_name">Tower of the Sorcerer</string>
     <string name="game_title1">Tower of the</string>
     <string name="game_title2">Sorcerer</string>
     <string name="new_game">New Game</string>
@@ -15,46 +15,48 @@
     <string name="back_btn_alert">Do you want to exit the game?</string>
     <string name="game_over_title">Game Over</string>
     <string name="game_over_message">Good luck on your next try.</string>
-    <string name="saint_2f">Thank you so much for saving me. I can increase your attack and defense power by 3 percent. Do you want me to do it now?</string>
+    <string name="game_finish_title">Congratulations</string>
+    <string name="game_finish_message">You successfully beat the game!</string>
+    <string name="saint_2f">Thank you so much for saving me. I can increase your attack and defense power
+        by 3 percent. Do you want me to do it now?</string>
     <string name="saint_3f">Alas, my age is catching up to me. I can fight no more. Brave young man,
-you should take this Staff of Wisdom since I have no use for it. It will reveal
-the strength of monsters so you could better prepare your fight against them. Take
-care and good luck.</string>
+        you should take this Staff of Wisdom since I have no use for it. It will reveal the strength of
+        monsters so you could better prepare your fight against them. Take care and good luck.</string>
     <string name="saint_4f">There are doors which cannot be opened with a key. To open them, you will have
- to defeat the monsters which guard them.</string>
+        to defeat the monsters which guard them.</string>
     <string name="saint_6f">After you make a purchase from a merchant, go talk to him again because he
-will tell you some important information.</string>
+        will tell you some important information.</string>
     <string name="saint_16f">I heard that there are two hidden red keys hidden in this area.</string>
-    <string name="saint_16fh">Back</string>
+    <string name="saint_16fh">Thank god, you saved me! I was stuck in the tunnel because the slime-man
+        blocked the exit. Take this bottle of Elixir as a symbol of my gratitude. It recovers your health
+        based on your attack and defense power. The stronger you are, the more health you will recover.</string>
     <string name="saint_18f">Many knights had failed to pass this area because of those Rock Monsters.
-Their defenses are just too high. Maybe you should increase your offense at the
-altar a few time in this area.</string>
+        Their defenses are just too high. Maybe you should increase your offense at the
+        altar a few time in this area.</string>
     <string name="saint_21f">Do you know the Archmage in this area is the owner of this tower? He is way
-too strong for you now. Fighting him is suicide. You should go to higher floors
-and get stronger first.</string>
+        too strong for you now. Fighting him is suicide. You should go to higher floors
+        and get stronger first.</string>
     <string name="saint_23f0">It is said that there is a hidden message in this floor.</string>
     <string name="saint_23f1">Go 0F!</string>
     <string name="saint_27f">At this current stage, if you have 1500 health, 80 attack, 98 defense, 5
-yellow keys and 1 blue key, you are almost ideal.</string>
+        yellow keys and 1 blue key, you are almost ideal.</string>
     <string name="saint_31f">The attack power of the swordsmen is too high. You should only fight them when
-you can one shot them, or you will lose a lot of health.</string>
+        you can one shot them, or you will lose a lot of health.</string>
     <string name="saint_33f">More haste, less speed.</string>
     <string name="saint_36f">If you find the four secret tunnels in this floor, you will be able to go
-upstairs without fighting strong enemies.</string>
+        upstairs without fighting strong enemies.</string>
     <string name="saint_37f">This floor is an item warehouse, but to get the treasure, you will have to use
-the mattock.</string>
+        the mattock.</string>
     <string name="saint_39f">At three o\'clock, the secret treasure which allows you to teleport three time
-will appear.</string>
-    <string name="saint_42f">The magic powers of Mages allows them to attack from a distance, so don\'t get
-near them. The magic power of Demon Sergeant cannot work alone, but when they
-appear in pairs, they can form an invisible demon gate which cut your health in
-half when you pass by.</string>
+        will appear.</string>
+    <string name="saint_42f">Mages can attack from a distance with their magic. A pair of Demon Sergeants
+        can form an invisible demon gate which cut your health in half when you pass by.</string>
     <string name="saint_45f">The 44th floor is in a different dimension, and you can\'t get there with
-stairs. But you may try to teleport.</string>
+        stairs. But you may try to teleport.</string>
     <string name="saint_46f">There is a secret about the 41st floor - it is perfectly symmetrical even
-though it doesn't seem to be.</string>
+        though it doesn't seem to be.</string>
     <string name="saint_48f">The shape of five on a dice is actually an ancient symbol for sealing magic.
-Remember the symbol because it will help you in the future.</string>
+        Remember the symbol because it will help you in the future.</string>
     <string name="saint_default">Good luck young man!</string>
     <string name="merchant_2f0">Thank you so much for freeing me. Please take this 1000 gold as a gift.</string>
     <string name="merchant_6f0">I have a blue key for 50 gold. Would you like to buy it?</string>
@@ -62,40 +64,39 @@ Remember the symbol because it will help you in the future.</string>
     <string name="merchant_12f0">I have a red key for 800 gold. Would you like to buy it?</string>
     <string name="merchant_12fh">I have lots of yellow keys, 1000 gold each. Would you like to buy one?</string>
     <string name="merchant_15f0">I have a blue key for 200 gold. Would you like to buy it?</string>
-    <string name="merchant_28f">Would you like to sell your yellow keys to me for 100 gold each. I need lots of them.</string>
-    <string name="merchant_31f0">I have 1 blue key and 4 yellow keys for 1000 gold. Would you like to buy them?</string>
+    <string name="merchant_28f">Would you like to sell your yellow keys to me for 100 gold each.
+        I need lots of them.</string>
+    <string name="merchant_31f0">I have 1 blue key and 4 yellow keys for 1000 gold. Would you like
+        to buy them?</string>
     <string name="merchant_38f0">I have 3 yellow keys for 200 gold. Would you like to buy them?</string>
     <string name="merchant_39f0">I have 3 blue keys for 2000 gold. Would you like to buy them?</string>
     <string name="merchant_45f0">I can recover you 2000 health for 1000 gold. Would you let me do it?</string>
     <string name="merchant_47f0">I have a enhanced mattock for 4000 gold. Would you like to buy it?</string>
     <string name="merchant_2f1">Thank you. Good luck on your journey</string>
     <string name="merchant_6f1">This tower consists of 50 floors. Every 10 floors form one area, and each area
- has one boss guarding the entrance to the next area. To proceed, you must defeat
- these bosses.</string>
+        has one boss guarding the entrance to the next area. To proceed, you must defeat
+        these bosses.</string>
     <string name="merchant_7f1">When you offer gold in exchange for strength at an alter, you should put your
-priority on defense. However, you cannot completely ignore offense either.</string>
+        priority on defense. However, you cannot completely ignore offense either.</string>
     <string name="merchant_12f1">Have you found the secret tunnels on the 9th, 16th, and 18th floor? I heard
-that there are more of them on higher floors.</string>
+        that there are more of them on higher floors.</string>
     <string name="merchant_15f1">When you carry a cross, your attacks will be twice as effective against
-zombies and the Vampire, and I don\'t think you can defeat the Vampire without it.
-There is a cross hidden on a floor higher than this one.</string>
+        zombies and the Vampire, and I don\'t think you can defeat the Vampire without it. There is a cross
+        hidden on a floor higher than this one.</string>
     <string name="merchant_31f1">Even though the tower is said to have 50 floors, I have never heard anyone
-reaching to the 50th floor.</string>
+        reaching to the 50th floor.</string>
     <string name="merchant_38f1">There is never a gate without Gate-Keepers, and there is always a gate when
-you see Gate-Keepers.</string>
+        you see Gate-Keepers.</string>
     <string name="merchant_39f1">There is a Lucky Gold hidden in this tower. If you carry it with you, you will
-get twice as much money from battles.</string>
+        get twice as much money from battles.</string>
     <string name="merchant_45f1">I heard that the Sacred Shield can protect you against all kinds of magic
-powers. But I also heard that this shield is hidden on a floor which doesn't
-exist.</string>
+        powers. But I also heard that this shield is hidden on a floor which doesn't
+        exist.</string>
     <string name="merchant_47f1">I heard that to kill the Dragon, you must have a holy sword, a holy
-shield, and most importantly the Dragonsbane, which doubles your attack against
-the Dragon.</string>
+        shield, and most importantly the Dragonsbane, which doubles your attack against the Dragon.</string>
     <string name="merchant_default">Keep it secret, and don\'t tell others</string>
     <string name="purchase_fail">You don\'t have enough gold.</string>
     <string name="purchase_fail_28f">You don\'t have any yellow key.</string>
-    <string name="princess_dialog1">I am fake. See you on 50th floor.</string>
-    <string name="princess_dialog2">I am fake. See you on 50th floor.</string>
     <string name="echo_btn1"> 4F Saint</string>
     <string name="echo_btn2"> 6F Saint</string>
     <string name="echo_btn3"> 6F Merchant</string>
@@ -124,45 +125,76 @@ the Dragon.</string>
     <string name="staff_of_echo_menu_select">Choose an echo to listen</string>
     <string name="background_picture">Backgroud Picture</string>
     <string name="wake_up">. . . \t\t. . . \t\tup. . . \t\twake up. . .</string>
-    <string name="thief0">Who am I? I am a thief, and I\'m looking for a treasure in this tower. Even though I was caught, it\'s not a big deal you know?
-        \'cause I just need to spend a few nights digging tunnels and I will be out of here. And you are such a lucky dog, bro. \'cause I have just
-        finished the tunnel planning to get out, and you were thrown in my cell. Follow me and let\'s get out!</string>
-    <string name="thief1">Forgot to tell you, but you should have figured out by now that your weapons were taken away. It\'s not wise to fight monsters
-        without any weapons. I know there is one old iron sword on the 5th floor, and one old iron shield on the 9th floor. I ain\t gonna call them good
-        weapons but still, better than nothing, right? By the way, I have dug many tunnels in this tower. I covered them to look just like regular walls,
-        but if you are able to find them, they will help you a lot. Good luck bro. See ya.</string>
-    <string name="thief2">Oh wow! You are much stronger than I thought, bro. You killed the Skeleton Captain and his soldiers all by yourself? Damn,
-        that\'s amazing. You know thers is a silver sword on 17th floor, right? Good luck finding it. I got to go. See ya.</string>
-    <string name="thief3">Wow, look at who is here! The Skeleton Captain Slayer! Did the giant octopus block your way? It\'s such a pain in the ass!
-        I counld\'t get around it so I had to dig this tunnel. You came just in time. Enjoy this free tunnel. See you later!</string>
-    <string name="thief4">Yo, bro. Nice to see ya. Sigh, I am out of luck. Can\'t find my treasure anywhere. I\'m taking some rest.</string>
-    <string name="thief5">Thank you so much for saving me bro! Thought I was doomed. I got caught again, but this time they saw my mattock and took
-        it away, so I can\'t dig tunnels to get out. But you came and saved me. I can\'t thank you enough. Is the Dragon on the 35th floor blocking your
-        way? Don\'t you worry bro. I got your back. I have hidden my other mattocks in the tower. Let me find one frist and I will dig a tunnel for you
-        so you can get around the Dragon.</string>
-    <string name="thief6_1">Give me some time to find my hidden mattocks, bro. I will catch you up on the 35th floor.</string>
-    <string name="thief6_2">Just follow the tunnel I have dug for you, and you will be on your way upstairs. After this incident, I realized that it\'s
-        not worth risking my life looking for some treasures which may not even exist. I\'m outta here. Good luck saving the princess. Goodbye.</string>
-    <string name="thief7">i am devil zeno1</string>
-    <string name="thief8">i am devil zeno2</string>
-    <string name="thief9">i am devil zeno3</string>
-    <string name="thief10">i am devil zeno4</string>
-    <string name="thief11">i am devil zeno5</string>
-    <string name="thief12">i am devil zeno6</string>
+    <string name="thief0">Who am I? I am a thief, and I\'m looking for a treasure in this tower. Even though I
+        was caught, it\'s not a big deal you know? \'cause I just need to spend a few nights digging tunnels
+        and I will be out of here. And you are such a lucky dog, bro. \'cause I have just finished the tunnel
+        planning to get out, and you were thrown in my cell. Follow me and let\'s get out!</string>
+    <string name="thief1">Forgot to tell you, but you should have figured out by now that your weapons were
+        taken away. It\'s not wise to fight monsters without any weapons. I know there is one old iron sword
+        on the 5th floor, and one old iron shield on the 9th floor. I ain\'t gonna call them good weapons but
+        still, better than nothing, right? By the way, I have dug many tunnels in this tower. I covered them
+        to look just like regular walls, but if you are able to find them, they will help you a lot. Good
+        luck bro. See ya.</string>
+    <string name="thief2">Oh wow! You are much stronger than I thought, bro. You killed the Skeleton Captain
+        and his soldiers all by yourself? Damn, that\'s amazing. You know thers is a silver sword on 17th
+        floor, right? Good luck finding it. I got to go. See ya.</string>
+    <string name="thief3">Wow, look at who is here! The Skeleton Captain Slayer! Did the giant octopus block
+        your way? It\'s such a pain in the ass! I counld\'t get around it so I had to dig this tunnel. You
+        came just in time. Enjoy this free tunnel. See you later!</string>
+    <string name="thief4">Yo, bro. Nice to see ya. Sigh, I am out of luck. Can\'t find my treasure anywhere.
+        I\'m taking some rest.</string>
+    <string name="thief5">Thank you so much for saving me bro! Thought I was doomed. I got caught again, but
+        this time they saw my mattock and took it away, so I can\'t dig tunnels to get out. But you came and
+        saved me. I can\'t thank you enough. Is the Dragon on the 35th floor blocking your way? Don\'t you
+        worry bro. I got your back. I have hidden my other mattocks in the tower. Let me find one frist and
+        I will dig a tunnel for you so you can get around the Dragon.</string>
+    <string name="thief6_1">Give me some time to find my hidden mattocks, bro. I will catch you up on the
+        35th floor.</string>
+    <string name="thief6_2">Just follow the tunnel I have dug for you, and you will be on your way upstairs.
+        After this incident, I realized that it\'s not worth risking my life looking for some treasures which
+        may not even exist. I\'m outta here. Good luck saving the princess. Goodbye.</string>
+    <string name="thief7">What? Thief!? Why are you here? Didn\'t you leave?</string>
+    <string name="thief8">Haha! Pretty surprised seeing me huh? The only reason I am here is that I am Zeno!</string>
+    <string name="thief9">But why? Why would you help when you could easily kill me?</string>
+    <string name="thief10">Because of power. I want more power!!! The Archmage is only slightly stronger than
+        me, but he became the owner of this tower while I was assigned to be the region boss on the 50th floor.
+        When I found him became obsessed with his spell book, I knew my chance was coming. Before he locked himself
+        up in his chamber trying to create the strongest spell, I managed to replace the last page of his book so he
+        would never succeed. Later, I started to kill his minions and he did know because he has not gone out of his
+        chamber yet. Now he is dead and I will rule this tower!</string>
+    <string name="thief11">If I can kill him, what makes you think I won\'t kill you?</string>
+    <string name="thief12">Because of the sacred weapons you are wielding now. According to the last page of the
+        spell book. Both the Sacred Sword and the Sacred Shield were born in the lava. They were purified by the
+        holy fire so they resist magic. I first tried to get these weapons myself but I almost died to the lava
+        protecting the Sacred Shield. I realized I should better let others to do the job, and that\'s why the
+        legend goes that there is a princess in this tower. The foolish Archmage must have used magic against you,
+        but when he realized it was not working, it was too late, since you already killed him. Knowing this, I
+        trained myself battling without using magic. Once I kill you and take your weapons, I would be invincible!
+        Now is the time. Let the fight begin!</string>
     <string name="Load_img_description">Load Activity Image</string>
     <string name="Load_default">----</string>
     <string name="Load_floor_number">-- F</string>
-    <string name="item_description_cross">Passive item. It doubles your attack when you are fighting against zombies and vampires.</string>
-    <string name="item_description_elixir">It can be used only once. It increases your health points by 10 x Attack + 5 x Defence. Would you like to use it now?</string>
-    <string name="item_description_mattock">It can be used only once. It destroys the walls next to you. Would you like to use it now?</string>
-    <string name="item_description_wing_center">It can be used 3 times. It teleports you to an unoccupied space which is symerical to the center of the current floor. Would you like to use it now?</string>
-    <string name="item_description_enhanced_mattock">It can be used only once. It destroys all the walls at the current floor. Would you like to use it now?</string>
-    <string name="item_description_bomb">It can be used only once. It destroys all the monsters standing next to you, but it does not work against bosses. Would you like to use it now?</string>
-    <string name="item_description_wing_up">It can be used only once. It teleports you to one floor above the current floor when you are next to the stairs. Would you like to use it now?</string>
-    <string name="item_description_enhanced_key">It can be used only once. It opens all the yellow doors at the current floor. Would you like to use it now?</string>
-    <string name="item_description_wing_down">It can be used only once. It teleports you to one floor below the current floor when you are next to the stairs. Would you like to use it now?</string>
+    <string name="item_description_cross">Passive item. It doubles your attack when you are fighting against
+        zombies and vampires.</string>
+    <string name="item_description_elixir">It can be used only once. It increases your health points by
+        10 x Attack + 5 x Defence. Would you like to use it now?</string>
+    <string name="item_description_mattock">It can be used only once. It destroys the walls next to you.
+        Would you like to use it now?</string>
+    <string name="item_description_wing_center">It can be used 3 times. It teleports you to an unoccupied
+        space which is symerical to the center of the current floor. Would you like to use it now?</string>
+    <string name="item_description_enhanced_mattock">It can be used only once. It destroys all the walls
+        at the current floor. Would you like to use it now?</string>
+    <string name="item_description_bomb">It can be used only once. It destroys all the monsters standing
+        next to you, but it does not work against bosses. Would you like to use it now?</string>
+    <string name="item_description_wing_up">It can be used only once. It teleports you to one floor above
+        the current floor when you are next to the stairs. Would you like to use it now?</string>
+    <string name="item_description_enhanced_key">It can be used only once. It opens all the yellow doors at
+        the current floor. Would you like to use it now?</string>
+    <string name="item_description_wing_down">It can be used only once. It teleports you to one floor below
+        the current floor when you are next to the stairs. Would you like to use it now?</string>
     <string name="item_description_lucky_gold">Passive item. It doubles the money you get from battle.</string>
-    <string name="item_description_dragonsbane">Passive item. It doubles your attack when you are fighting against the Dragon.</string>
+    <string name="item_description_dragonsbane">Passive item. It doubles your attack when you are fighting
+        against the Dragon.</string>
     <string name="item_description_snow_crystal">Passive item. It freezes lava into solid ground.</string>
     <string name="item_title_cross">Cross</string>
     <string name="item_title_elixir">Elixir</string>
@@ -178,24 +210,40 @@ the Dragon.</string>
     <string name="item_title_snow_crystal">Snow Crystal</string>
     <string name="zeno_3f">Another interloper coming for the princess! Sergeants, throw him in jail!</string>
     <string name="skeleton_captain_10f_1">You are trapped!!! Soldiers, go kill him!!!</string>
-    <string name="vampire_20f_1">I am vampire!!!</string>
-    <string name="archmage_25f">Archmage says fight me!</string>
-    <string name="knight_captain_32f_1">Knight captain says fight me!</string>
-    <string name="knight_captain_32f_2">see you later</string>
-    <string name="knight_captain_40f_0">You think I am that easily defeated? You must be kidding me! What you just killed were merelly illusions. Now, it\'s
-    my turn to kill you!</string>
+    <string name="vampire_20f_1">Oh nice, fresh blood! You never thought those Giant Bats were just my disguise,
+        did you? This is how I hunt: lure the prey in, and drain their blood. mmmwwwahahahaha. . .</string>
+    <string name="princess_dialog1">Haha, young man, you did a great job coming this far. If you are not afraid
+        of death, you should go through the portal on th 24th floor I just opened. I will be waiting for you on
+        the other side.</string>
+    <string name="princess_dialog2">What? This is Zeno\'s voice. How is he not dead? And the princess is only
+        a doll?!</string>
+    <string name="archmage_25f">. . . tear of slime, fang of bat. . . What! An intruder!!! Did you just kill
+        all my minions?!!! I WILL SHOW YOU WHO IS THE BOSS HERE!!!</string>
+    <string name="knight_captain_32f_1">What? An interloper! It\'s been a long time since the last man make it
+        through the Vampire. It doesn\'t matter anymore because I will kill you right here right now!</string>
+    <string name="knight_captain_32f_2">You think you are pretty strong, huh? That\'s because I didn\'t use my
+        full strength. If you can make it to the 40th floor, I shall then fight you with my full power.</string>
+    <string name="knight_captain_40f_0">You think I am that easily defeated? You must be kidding me! What
+        you just killed were merelly illusions. Now, it\'s my turn to kill you!</string>
     <string name="knight_captain_40f_1">You can never defeat me! Skeleton Elites, charge!</string>
     <string name="knight_captain_40f_2">Charge! Knight squad! Go kill him!</string>
-    <string name="knight_captain_40f_3">charge 3</string>
+    <string name="knight_captain_40f_3">You will not stand a chance against my Swordsman Squad. CHARGE FORWARD!!!</string>
     <string name="knight_captain_40f_4">He is weak now! Knight Elites, charge!!!</string>
-    <string name="knight_captain_40f_5">You angered me so much! You should really turn away and run because I am going to kill you myself!</string>
-    <string name="knight_captain_40f_6">Don\'t you dare following me! I\'m going to call some backups, and you doomed</string>
-    <string name="knight_captain_42f_1">Oh! Lord Zeno! I. . . I am. . . I am not able to defeat this man. P. . . Ple. . . Please forgive me.</string>
+    <string name="knight_captain_40f_5">You angered me so much! You should really turn away and run because
+        I am going to kill you myself!</string>
+    <string name="knight_captain_40f_6">Don\'t you dare following me! I\'m going to call some backups, and
+        you are doomed</string>
+    <string name="knight_captain_42f_1">Oh! Lord Zeno! I. . . I am. . . I am not able to defeat this man.
+        P. . . Ple. . . Please forgive me.</string>
     <string name="zeno_42f_1">You are far too weak. You are no longer of any use. Sergeants, kill him!</string>
     <string name="knight_captain_42f_2">No. Please, Lord Zeno. Please. Aaahh!!!</string>
-    <string name="zeno_42f_2">Zeno blablabla</string>
-    <string name="zeno_49f_1">You can\'t defeat me cause i am zeno</string>
-    <string name="zeno_49f_2">What? You created the symbol sealing away my magic power? You still won\'t defeat me though I only get 1/10 of my power.</string>
+    <string name="zeno_42f_2">You are quite strong, young man. You can make a very good subordinate of mine.
+        I can let you be the boss on the 40th to replace the fool I just killed. I will give you some time to
+        think it through. You will give me your answer when we meet on the 49th floor.</string>
+    <string name="zeno_49f_1">You are not here to surrender yourself to me? And you want to kill me? You just
+        made a terrible decision, and I will make sure you pay for it. Sergeants, on guard!</string>
+    <string name="zeno_49f_2">What? You created the symbol sealing away my magic power? You still won\'t
+        defeat me though I only get 1/10 of my power.</string>
     <string name="pick_up_red_crystal">Picked up Red Crystal. Attack + </string>
     <string name="pick_up_blue_crystal">Picked up Blue Crystal. Defense + </string>
     <string name="pick_up_red_potion">Picked up Red Potion. Health + </string>
@@ -210,16 +258,25 @@ the Dragon.</string>
     <string name="pick_up_divine_shield">Picked up Divine Shield. Defense + 50</string>
     <string name="pick_up_sacred_sword">Picked up Sacred Sword. Attack + 100</string>
     <string name="pick_up_sacred_shield">Picked up Sacred Shield. Defense + 100. Immune to magic attacks.</string>
-    <string name="pick_up_stf_echo">Picked up Staff of Echo. It allows you to listen to information given by Merchants and Saints again.</string>
-    <string name="pick_up_stf_space">Picked up Staff of Space. It teleports you to floors you have already visited when you are next to the stairs.</string>
-    <string name="pick_up_cross">Picked up Cross. It doubles your attack when you are fighting against zombies and vampires.</string>
+    <string name="pick_up_stf_echo">Picked up Staff of Echo. It allows you to listen to information given
+        by Merchants and Saints again.</string>
+    <string name="pick_up_stf_space">Picked up Staff of Space. It teleports you to floors you have already
+        visited when you are next to the stairs.</string>
+    <string name="pick_up_cross">Picked up Cross. It doubles your attack when you are fighting against
+        zombies and vampires.</string>
     <string name="pick_up_mattock">Picked up Mattock. It destroys the walls next to you.</string>
-    <string name="pick_up_wing_cent">Picked up Magic Wing - Center. It teleports you to an unoccupied space which is symerical to the center of the current floor.</string>
-    <string name="pick_up_bomb">Picked up Bomb. It destroys all the monsters standing next to you, but it does not work against bosses.</string>
-    <string name="pick_up_wing_up">Picked up Magic Wing - Up. It teleports you to one floor above the current floor when you are next to the stairs.</string>
-    <string name="pick_up_enhanced_key">Picked up Enhanced Yellow Key. It opens all the yellow doors at the current floor.</string>
-    <string name="pick_up_wing_down">Picked up Magic Wing - Down. It teleports you to one floor below the current floor when you are next to the stairs.</string>
+    <string name="pick_up_wing_cent">Picked up Magic Wing - Center. It teleports you to an unoccupied space
+        which is symerical to the center of the current floor.</string>
+    <string name="pick_up_bomb">Picked up Bomb. It destroys all the monsters standing next to you, but it
+        does not work against bosses.</string>
+    <string name="pick_up_wing_up">Picked up Magic Wing - Up. It teleports you to one floor above the current
+        floor when you are next to the stairs.</string>
+    <string name="pick_up_enhanced_key">Picked up Enhanced Yellow Key. It opens all the yellow doors at the
+        current floor.</string>
+    <string name="pick_up_wing_down">Picked up Magic Wing - Down. It teleports you to one floor below the
+        current floor when you are next to the stairs.</string>
     <string name="pick_up_lucky_gold">Picked up Lucky Golde. It doubles the money you get from battle.</string>
-    <string name="pick_up_dragonsbane">Picked up Dragonsbane. It doubles your attack when you are fighting against the Dragon.</string>
+    <string name="pick_up_dragonsbane">Picked up Dragonsbane. It doubles your attack when you are fighting
+        against the Dragon.</string>
     <string name="pick_up_snow_crystal">Picked up Snow Crystal. It freezes lava into solid ground.</string>
 </resources>

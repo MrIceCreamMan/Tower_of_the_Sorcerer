@@ -49,15 +49,15 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
             { 100,   65,   15,   30},   // 7    skeleton captain
             { 130,   60,    3,    8},   // 8    black slime
             {  60,  100,    8,   12},   // 9    giant bat
-            { 100,   95,   30,   18},   //10    priest elite
-            { 260,   85,    5,   22},   //11    zombie
+            { 100,   95,   30,   22},   //10    priest elite
+            { 260,   85,    5,   18},   //11    zombie
             {  20,  100,   68,   28},   //12    rock monster
             { 320,  120,   15,   30},   //13    zombie warrior
             { 444,  199,   66,  144},   //14    vampire
             { 320,  140,   20,   30},   //15    slime-man
             { 220,  180,   30,   35},   //16    skeleton elite
             { 210,  200,   65,   45},   //17    knight
-            { 100,  180,  110,   50},   //18    advanced gate-keeper
+            { 100,  180,  110,  100},   //18    advanced gate-keeper
             { 100,  680,   50,   55},   //19    swordsman
             { 160,  230,  105,   65},   //20    knight elite
             { 120,  150,   50,  100},   //21    knight captain
@@ -94,6 +94,7 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
     private boolean             isWalk,         isBattle,       isEvent,            cantMove;
     private boolean             hero_attack,    show_hero,      not_show_hero,      show_fight;
     private boolean             blackout,       proceed,        no_dialog,          which_surface_view;
+    private boolean             sound_block,    sound_teleport, debug_fly,          bgm_on;
     //  current game data
     private Floors      current_game;
     private byte[][]    current_floor;
@@ -148,20 +149,21 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
         monsters_to_draw = new ArrayList<>();           monsters_picture = new ArrayList<>();
         monsters_name1 = new ArrayList<>();             monsters_name2 = new ArrayList<>();
         walk_result = 0;        walk_count = 0;         which_button = 6;       sq_size = 32;
-        m_hp =      0;          m_atk = 0;              m_def = 0;              m_gold = 0;
+        m_hp = 0;               m_atk = 0;              m_def = 0;              m_gold = 0;
         x = 0;                  y = 0;                  page = 0;               total_page = 1;
         extra_height = 0;
         refresh_ctr = true;     load_ctr = true;        battle_coming = false;  button_click = false;
         isWalk = false;         isBattle = false;       isEvent = false;        cantMove = false;
         hero_attack = true;     show_hero = true;       not_show_hero = false;  show_fight = false;
         blackout = false;       proceed = false;        no_dialog = true;       which_surface_view = true;
+        sound_block = true;     sound_teleport = false; debug_fly = false;      bgm_on = false;
 
         // initialize current game data
         current_game = new Floors();
         current_floor = current_game.get_one_floor(1);
-        hp = 1000;              atk = 200;              def = 100;              gold = 0;
+        hp = 1000;              atk = 100;              def = 100;              gold = 0;
         floor_num = 1;          act = 0;                thief_event_count = 0;  highest_floor = 1;
-        count_y = 10;           count_b = 10;           count_r = 10;           count_wing = 0;
+        count_y = 0;            count_b = 0;            count_r = 0;            count_wing = 0;
         hero_x = 6;             hero_y = 11;            temp_x = 6;             temp_y = 11;
         price_idx = 0;
         stf_wsdm = false;       stf_echo = false;       stf_space = false;      cross = false;
@@ -210,20 +212,27 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
             which_music = bgm_list[floor_num/10];
         background_music = MediaPlayer.create(getApplicationContext(), which_music);
         background_music.setLooping(true);
-        if (music_settings[0])
+        if (music_settings[0]) {
+            bgm_on = true;
             background_music.start();
+        }
 
         // debug/testing purpose
-        set_all_true();
+        //set_all_true();
 
         // initialize pictures
         ball = BitmapFactory.decodeResource(getResources(), R.drawable.newearth);
-        pic_debug = BitmapFactory.decodeResource(getResources(), R.drawable.z1_debug);
-        pic_d1 = BitmapFactory.decodeResource(getResources(), R.drawable.z3);
-        pic_d2 = BitmapFactory.decodeResource(getResources(), R.drawable.z4);
-        pic_d3 = BitmapFactory.decodeResource(getResources(), R.drawable.z5);
-        pic_dh = BitmapFactory.decodeResource(getResources(), R.drawable.z2);
         hero = BitmapFactory.decodeResource(getResources(), R.drawable.hero);
+        //pic_debug = BitmapFactory.decodeResource(getResources(), R.drawable.z1_debug);
+        //pic_d1 = BitmapFactory.decodeResource(getResources(), R.drawable.z3);
+        //pic_d2 = BitmapFactory.decodeResource(getResources(), R.drawable.z4);
+        //pic_d3 = BitmapFactory.decodeResource(getResources(), R.drawable.z5);
+        //pic_dh = BitmapFactory.decodeResource(getResources(), R.drawable.z2);
+        pic_debug = BitmapFactory.decodeResource(getResources(), R.drawable.z1_debug);
+        pic_d1 = BitmapFactory.decodeResource(getResources(), R.drawable.tile1_floor);
+        pic_d2 = BitmapFactory.decodeResource(getResources(), R.drawable.tile1_floor);
+        pic_d3 = BitmapFactory.decodeResource(getResources(), R.drawable.tile1_floor);
+        pic_dh = BitmapFactory.decodeResource(getResources(), R.drawable.tile1_floor);
 
         menu_health = BitmapFactory.decodeResource(getResources(), R.drawable.menu_health);
         menu_gold = BitmapFactory.decodeResource(getResources(), R.drawable.menu_gold);
@@ -344,7 +353,6 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
         pt8 = new Paint();
         pt8.setColor(Color.rgb(220, 220, 220));
         pt8.setStrokeWidth(10);
-        //Log.v(TAG, "width = " + sq_wall.getWidth() + " y = " + sq_wall.getHeight());
         setContentView(gameview);
     }
 
@@ -431,11 +439,15 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
                         final AlertDialog staff_echo_dialog = staff_echo_builder.create();
                         staff_echo_dialog.setCanceledOnTouchOutside(true);
                         final AlertDialog.Builder echo_builder = new AlertDialog.Builder(Gamelogic.this);
+                        final MediaPlayer CancelMusic = MediaPlayer.create(getApplicationContext(), R.raw.sfx_cancel);
+                        final MediaPlayer SelectMusic = MediaPlayer.create(getApplicationContext(), R.raw.sfx_choose);
 
                         Button btn1 = staff_of_echo_view.findViewById(R.id.button1);
                         btn1.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View view) {
+                                if (music_settings[1])
+                                    SelectMusic.start();
                                 if (echo_history[0] == 0) {
                                     echo_builder.setMessage(R.string.no_echo);
                                     staff_echo_dialog.dismiss();
@@ -448,10 +460,17 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
                                 echo_dialog.show();
                             }
                         });
+                        if (echo_history[0] != 0)
+                            btn1.setBackgroundColor(Color.argb(255, 250, 150, 30));
+                        else
+                            btn1.setBackgroundColor(Color.argb(255, 160, 160, 160));
+
                         Button btn2 = staff_of_echo_view.findViewById(R.id.button2);
                         btn2.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View view) {
+                                if (music_settings[1])
+                                    SelectMusic.start();
                                 if (echo_history[1] == 0) {
                                     echo_builder.setMessage(R.string.no_echo);
                                     staff_echo_dialog.dismiss();
@@ -464,10 +483,17 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
                                 echo_dialog.show();
                             }
                         });
+                        if (echo_history[1] != 0)
+                            btn2.setBackgroundColor(Color.argb(255, 250, 150, 30));
+                        else
+                            btn2.setBackgroundColor(Color.argb(255, 160, 160, 160));
+
                         Button btn3 = staff_of_echo_view.findViewById(R.id.button3);
                         btn3.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View view) {
+                                if (music_settings[1])
+                                    SelectMusic.start();
                                 if (echo_history[2] == 0) {
                                     echo_builder.setMessage(R.string.no_echo);
                                     staff_echo_dialog.dismiss();
@@ -480,10 +506,17 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
                                 echo_dialog.show();
                             }
                         });
+                        if (echo_history[2] != 0)
+                            btn3.setBackgroundColor(Color.argb(255, 250, 150, 30));
+                        else
+                            btn3.setBackgroundColor(Color.argb(255, 160, 160, 160));
+
                         Button btn4 = staff_of_echo_view.findViewById(R.id.button4);
                         btn4.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View view) {
+                                if (music_settings[1])
+                                    SelectMusic.start();
                                 if (echo_history[3] == 0) {
                                     echo_builder.setMessage(R.string.no_echo);
                                     staff_echo_dialog.dismiss();
@@ -496,10 +529,17 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
                                 echo_dialog.show();
                             }
                         });
+                        if (echo_history[3] != 0)
+                            btn4.setBackgroundColor(Color.argb(255, 250, 150, 30));
+                        else
+                            btn4.setBackgroundColor(Color.argb(255, 160, 160, 160));
+
                         Button btn5 = staff_of_echo_view.findViewById(R.id.button5);
                         btn5.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View view) {
+                                if (music_settings[1])
+                                    SelectMusic.start();
                                 if (echo_history[4] == 0) {
                                     echo_builder.setMessage(R.string.no_echo);
                                     staff_echo_dialog.dismiss();
@@ -512,10 +552,17 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
                                 echo_dialog.show();
                             }
                         });
+                        if (echo_history[4] != 0)
+                            btn5.setBackgroundColor(Color.argb(255, 250, 150, 30));
+                        else
+                            btn5.setBackgroundColor(Color.argb(255, 160, 160, 160));
+
                         Button btn6 = staff_of_echo_view.findViewById(R.id.button6);
                         btn6.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View view) {
+                                if (music_settings[1])
+                                    SelectMusic.start();
                                 if (echo_history[5] == 0) {
                                     echo_builder.setMessage(R.string.no_echo);
                                     staff_echo_dialog.dismiss();
@@ -528,10 +575,17 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
                                 echo_dialog.show();
                             }
                         });
+                        if (echo_history[5] != 0)
+                            btn6.setBackgroundColor(Color.argb(255, 250, 150, 30));
+                        else
+                            btn6.setBackgroundColor(Color.argb(255, 160, 160, 160));
+
                         Button btn7 = staff_of_echo_view.findViewById(R.id.button7);
                         btn7.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View view) {
+                                if (music_settings[1])
+                                    SelectMusic.start();
                                 if (echo_history[6] == 0) {
                                     echo_builder.setMessage(R.string.no_echo);
                                     staff_echo_dialog.dismiss();
@@ -544,10 +598,17 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
                                 echo_dialog.show();
                             }
                         });
+                        if (echo_history[6] != 0)
+                            btn7.setBackgroundColor(Color.argb(255, 250, 150, 30));
+                        else
+                            btn7.setBackgroundColor(Color.argb(255, 160, 160, 160));
+
                         Button btn8 = staff_of_echo_view.findViewById(R.id.button8);
                         btn8.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View view) {
+                                if (music_settings[1])
+                                    SelectMusic.start();
                                 if (echo_history[7] == 0) {
                                     echo_builder.setMessage(R.string.no_echo);
                                     staff_echo_dialog.dismiss();
@@ -560,10 +621,17 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
                                 echo_dialog.show();
                             }
                         });
+                        if (echo_history[7] != 0)
+                            btn8.setBackgroundColor(Color.argb(255, 250, 150, 30));
+                        else
+                            btn8.setBackgroundColor(Color.argb(255, 160, 160, 160));
+
                         Button btn9 = staff_of_echo_view.findViewById(R.id.button9);
                         btn9.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View view) {
+                                if (music_settings[1])
+                                    SelectMusic.start();
                                 if (echo_history[8] == 0) {
                                     echo_builder.setMessage(R.string.no_echo);
                                     staff_echo_dialog.dismiss();
@@ -576,10 +644,17 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
                                 echo_dialog.show();
                             }
                         });
+                        if (echo_history[8] != 0)
+                            btn9.setBackgroundColor(Color.argb(255, 250, 150, 30));
+                        else
+                            btn9.setBackgroundColor(Color.argb(255, 160, 160, 160));
+
                         Button btn10 = staff_of_echo_view.findViewById(R.id.button10);
                         btn10.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View view) {
+                                if (music_settings[1])
+                                    SelectMusic.start();
                                 if (echo_history[9] == 0) {
                                     echo_builder.setMessage(R.string.no_echo);
                                     staff_echo_dialog.dismiss();
@@ -592,10 +667,17 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
                                 echo_dialog.show();
                             }
                         });
+                        if (echo_history[9] != 0)
+                            btn10.setBackgroundColor(Color.argb(255, 250, 150, 30));
+                        else
+                            btn10.setBackgroundColor(Color.argb(255, 160, 160, 160));
+
                         Button btn11 = staff_of_echo_view.findViewById(R.id.button11);
                         btn11.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View view) {
+                                if (music_settings[1])
+                                    SelectMusic.start();
                                 if (echo_history[10] == 0) {
                                     echo_builder.setMessage(R.string.no_echo);
                                     staff_echo_dialog.dismiss();
@@ -608,10 +690,17 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
                                 echo_dialog.show();
                             }
                         });
+                        if (echo_history[10] != 0)
+                            btn11.setBackgroundColor(Color.argb(255, 250, 150, 30));
+                        else
+                            btn11.setBackgroundColor(Color.argb(255, 160, 160, 160));
+
                         Button btn12 = staff_of_echo_view.findViewById(R.id.button12);
                         btn12.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View view) {
+                                if (music_settings[1])
+                                    SelectMusic.start();
                                 if (echo_history[11] == 0) {
                                     echo_builder.setMessage(R.string.no_echo);
                                     staff_echo_dialog.dismiss();
@@ -624,10 +713,17 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
                                 echo_dialog.show();
                             }
                         });
+                        if (echo_history[11] != 0)
+                            btn12.setBackgroundColor(Color.argb(255, 250, 150, 30));
+                        else
+                            btn12.setBackgroundColor(Color.argb(255, 160, 160, 160));
+
                         Button btn13 = staff_of_echo_view.findViewById(R.id.button13);
                         btn13.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View view) {
+                                if (music_settings[1])
+                                    SelectMusic.start();
                                 if (echo_history[12] == 0) {
                                     echo_builder.setMessage(R.string.no_echo);
                                     staff_echo_dialog.dismiss();
@@ -640,10 +736,17 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
                                 echo_dialog.show();
                             }
                         });
+                        if (echo_history[12] != 0)
+                            btn13.setBackgroundColor(Color.argb(255, 250, 150, 30));
+                        else
+                            btn13.setBackgroundColor(Color.argb(255, 160, 160, 160));
+
                         Button btn14 = staff_of_echo_view.findViewById(R.id.button14);
                         btn14.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View view) {
+                                if (music_settings[1])
+                                    SelectMusic.start();
                                 if (echo_history[13] == 0) {
                                     echo_builder.setMessage(R.string.no_echo);
                                     staff_echo_dialog.dismiss();
@@ -656,10 +759,17 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
                                 echo_dialog.show();
                             }
                         });
+                        if (echo_history[13] != 0)
+                            btn14.setBackgroundColor(Color.argb(255, 250, 150, 30));
+                        else
+                            btn14.setBackgroundColor(Color.argb(255, 160, 160, 160));
+
                         Button btn15 = staff_of_echo_view.findViewById(R.id.button15);
                         btn15.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View view) {
+                                if (music_settings[1])
+                                    SelectMusic.start();
                                 if (echo_history[14] == 0) {
                                     echo_builder.setMessage(R.string.no_echo);
                                     staff_echo_dialog.dismiss();
@@ -672,10 +782,17 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
                                 echo_dialog.show();
                             }
                         });
+                        if (echo_history[14] != 0)
+                            btn15.setBackgroundColor(Color.argb(255, 250, 150, 30));
+                        else
+                            btn15.setBackgroundColor(Color.argb(255, 160, 160, 160));
+
                         Button btn16 = staff_of_echo_view.findViewById(R.id.button16);
                         btn16.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View view) {
+                                if (music_settings[1])
+                                    SelectMusic.start();
                                 if (echo_history[15] == 0) {
                                     echo_builder.setMessage(R.string.no_echo);
                                     staff_echo_dialog.dismiss();
@@ -688,10 +805,17 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
                                 echo_dialog.show();
                             }
                         });
+                        if (echo_history[15] != 0)
+                            btn16.setBackgroundColor(Color.argb(255, 250, 150, 30));
+                        else
+                            btn16.setBackgroundColor(Color.argb(255, 160, 160, 160));
+
                         Button btn17 = staff_of_echo_view.findViewById(R.id.button17);
                         btn17.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View view) {
+                                if (music_settings[1])
+                                    SelectMusic.start();
                                 if (echo_history[16] == 0) {
                                     echo_builder.setMessage(R.string.no_echo);
                                     staff_echo_dialog.dismiss();
@@ -704,15 +828,22 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
                                 echo_dialog.show();
                             }
                         });
+                        if (echo_history[16] != 0)
+                            btn17.setBackgroundColor(Color.argb(255, 250, 150, 30));
+                        else
+                            btn17.setBackgroundColor(Color.argb(255, 160, 160, 160));
+
                         Button btn18 = staff_of_echo_view.findViewById(R.id.button18);
                         btn18.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View view) {
+                                if (music_settings[1])
+                                    SelectMusic.start();
                                 if (echo_history[17] == 0) {
                                     echo_builder.setMessage(R.string.no_echo);
                                     staff_echo_dialog.dismiss();
                                 } else {
-                                    echo_builder.setMessage(R.string.saint_45f);
+                                    echo_builder.setMessage(R.string.merchant_39f1);
                                     staff_echo_dialog.dismiss();
                                 }
                                 AlertDialog echo_dialog = echo_builder.create();
@@ -720,10 +851,17 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
                                 echo_dialog.show();
                             }
                         });
+                        if (echo_history[17] != 0)
+                            btn18.setBackgroundColor(Color.argb(255, 250, 150, 30));
+                        else
+                            btn18.setBackgroundColor(Color.argb(255, 160, 160, 160));
+
                         Button btn19 = staff_of_echo_view.findViewById(R.id.button19);
                         btn19.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View view) {
+                                if (music_settings[1])
+                                    SelectMusic.start();
                                 if (echo_history[18] == 0) {
                                     echo_builder.setMessage(R.string.no_echo);
                                     staff_echo_dialog.dismiss();
@@ -736,10 +874,17 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
                                 echo_dialog.show();
                             }
                         });
+                        if (echo_history[18] != 0)
+                            btn19.setBackgroundColor(Color.argb(255, 250, 150, 30));
+                        else
+                            btn19.setBackgroundColor(Color.argb(255, 160, 160, 160));
+
                         Button btn20 = staff_of_echo_view.findViewById(R.id.button20);
                         btn20.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View view) {
+                                if (music_settings[1])
+                                    SelectMusic.start();
                                 if (echo_history[19] == 0) {
                                     echo_builder.setMessage(R.string.no_echo);
                                     staff_echo_dialog.dismiss();
@@ -752,10 +897,17 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
                                 echo_dialog.show();
                             }
                         });
+                        if (echo_history[19] != 0)
+                            btn20.setBackgroundColor(Color.argb(255, 250, 150, 30));
+                        else
+                            btn20.setBackgroundColor(Color.argb(255, 160, 160, 160));
+
                         Button btn21 = staff_of_echo_view.findViewById(R.id.button21);
                         btn21.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View view) {
+                                if (music_settings[1])
+                                    SelectMusic.start();
                                 if (echo_history[20] == 0) {
                                     echo_builder.setMessage(R.string.no_echo);
                                     staff_echo_dialog.dismiss();
@@ -768,10 +920,17 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
                                 echo_dialog.show();
                             }
                         });
+                        if (echo_history[20] != 0)
+                            btn21.setBackgroundColor(Color.argb(255, 250, 150, 30));
+                        else
+                            btn21.setBackgroundColor(Color.argb(255, 160, 160, 160));
+
                         Button btn22 = staff_of_echo_view.findViewById(R.id.button22);
                         btn22.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View view) {
+                                if (music_settings[1])
+                                    SelectMusic.start();
                                 if (echo_history[21] == 0) {
                                     echo_builder.setMessage(R.string.no_echo);
                                     staff_echo_dialog.dismiss();
@@ -784,10 +943,17 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
                                 echo_dialog.show();
                             }
                         });
+                        if (echo_history[21] != 0)
+                            btn22.setBackgroundColor(Color.argb(255, 250, 150, 30));
+                        else
+                            btn22.setBackgroundColor(Color.argb(255, 160, 160, 160));
+
                         Button btn23 = staff_of_echo_view.findViewById(R.id.button23);
                         btn23.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View view) {
+                                if (music_settings[1])
+                                    SelectMusic.start();
                                 if (echo_history[22] == 0) {
                                     echo_builder.setMessage(R.string.no_echo);
                                     staff_echo_dialog.dismiss();
@@ -800,10 +966,17 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
                                 echo_dialog.show();
                             }
                         });
+                        if (echo_history[22] != 0)
+                            btn23.setBackgroundColor(Color.argb(255, 250, 150, 30));
+                        else
+                            btn23.setBackgroundColor(Color.argb(255, 160, 160, 160));
+
                         Button btn24 = staff_of_echo_view.findViewById(R.id.button24);
                         btn24.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View view) {
+                                if (music_settings[1])
+                                    SelectMusic.start();
                                 if (echo_history[23] == 0) {
                                     echo_builder.setMessage(R.string.no_echo);
                                     staff_echo_dialog.dismiss();
@@ -816,10 +989,17 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
                                 echo_dialog.show();
                             }
                         });
+                        if (echo_history[23] != 0)
+                            btn24.setBackgroundColor(Color.argb(255, 250, 150, 30));
+                        else
+                            btn24.setBackgroundColor(Color.argb(255, 160, 160, 160));
+
                         Button btn_cancel = staff_of_echo_view.findViewById(R.id.echo_cancel);
                         btn_cancel.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View view) {
+                                if (music_settings[1])
+                                    CancelMusic.start();
                                 staff_echo_dialog.cancel();
                             }
                         });
@@ -894,6 +1074,12 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
                 pt6.setColor(Color.rgb(180, 150, 180));
                 pt7.setColor(Color.rgb(150, 150, 150));
                 pt8.setColor(Color.rgb(220, 220, 220));
+                if (!sound_block)
+                    sound_block = true;
+                if (sound_teleport) {
+                    sound_teleport = false;
+                    sfx_play(R.raw.sfx_teleport);
+                }
                 checkNextPosition(v, temp_x, temp_y);
                 return true;
             default:
@@ -929,12 +1115,26 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
         back_alert.show();
     }
 
+    // play sfx sound function
+    private void sfx_play(int which_sfx) {
+        sfx_music = MediaPlayer.create(getApplicationContext(), which_sfx);
+        if (music_settings[1])
+            sfx_music.start();
+        sfx_music.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+            @Override
+            public void onCompletion(MediaPlayer mediaPlayer) {
+                mediaPlayer.release();
+            }
+        });
+    }
+
     // helper function to set all items to be true
     private void set_all_true() {
         stf_wsdm = stf_echo = stf_space = cross = elixir = true;
         m_mattock = wing_cent = e_mattock = bomb = wing_up = true;
         key_enhac = wing_down = lucky_gold = dragonsbane = snow_cryst = true;
         count_wing = 3;
+        debug_fly = true;
     }
 
     // function allows the thread to sleep
@@ -1188,38 +1388,29 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
                         thief_event_count++;
                         thief_builder.setMessage(R.string.thief6_2);
                     }
-                } else if (thief_event_count == 7) {
-                    thief_event_count++;
-                    thief_builder.setMessage(R.string.thief7);
-                } else if (thief_event_count == 8) {
-                    thief_event_count++;
-                    thief_builder.setMessage(R.string.thief8);
-                } else if (thief_event_count == 9) {
-                    thief_event_count++;
-                    thief_builder.setMessage(R.string.thief9);
-                } else if (thief_event_count == 10) {
-                    thief_event_count++;
-                    thief_builder.setMessage(R.string.thief10);
-                } else if (thief_event_count == 11) {
-                    thief_event_count++;
-                    thief_builder.setMessage(R.string.thief11);
                 } else {
                     thief_event_count = 0;
-                    thief_builder.setMessage(R.string.thief12);
+                    thief_builder.setMessage(R.string.thief7);
                 }
-                AlertDialog thief_dialog = thief_builder.create();
-                thief_dialog.setCanceledOnTouchOutside(true);
-                thief_dialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
+                thief_builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
                     @Override
-                    public void onCancel(DialogInterface dialogInterface) {
+                    public void onClick(DialogInterface dialogInterface, int i) {
                         proceed = true;
                     }
                 });
+                AlertDialog thief_dialog = thief_builder.create();
+                thief_dialog.setCanceledOnTouchOutside(false);
                 isEvent = true;
                 thief_dialog.show();
                 break;
             case 22:        // saint
                 AlertDialog.Builder saint_builder = new AlertDialog.Builder(v.getContext());
+                saint_builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        sfx_play(R.raw.sfx_choose);
+                    }
+                });
                 switch (floor_num) {
                     case 2:
                         if (saint_history[0] == 0) {
@@ -1227,6 +1418,7 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
                             saint_builder.setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialogInterface, int i) {
+                                    sfx_play(R.raw.sfx_choose);
                                     atk = atk * 103 / 100;
                                     def = def * 103 / 100;
                                     saint_history[0]++;
@@ -1235,6 +1427,7 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
                             saint_builder.setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialogInterface, int i) {
+                                    sfx_play(R.raw.sfx_cancel);
                                 }
                             });
                         } else
@@ -1244,6 +1437,7 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
                         if (saint_history[1] == 0) {
                             saint_history[1]++;
                             saint_builder.setMessage(R.string.saint_3f);
+                            sfx_play(R.raw.sfx_items);
                             stf_wsdm = true;
                         } else
                             saint_builder.setMessage(R.string.saint_default);
@@ -1276,6 +1470,7 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
                             if (saint_history[5] == 0) {
                                 saint_history[5]++;
                                 saint_builder.setMessage(R.string.saint_16fh);
+                                sfx_play(R.raw.sfx_items);
                                 elixir = true;
                             } else
                                 saint_builder.setMessage(R.string.saint_default);
@@ -1388,11 +1583,17 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
                         break;
                 }
                 AlertDialog saint_dialog = saint_builder.create();
-                saint_dialog.setCanceledOnTouchOutside(true);
+                saint_dialog.setCanceledOnTouchOutside(false);
                 saint_dialog.show();
                 break;
             case 23:        // merchant
                 final AlertDialog.Builder merchant_builder = new AlertDialog.Builder(v.getContext());
+                merchant_builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        sfx_play(R.raw.sfx_choose);
+                    }
+                });
                 final AlertDialog.Builder no_gold_builder = new AlertDialog.Builder(v.getContext());
                 switch (floor_num) {
                     case 2:
@@ -1411,12 +1612,15 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
                                 @Override
                                 public void onClick(DialogInterface dialogInterface, int i) {
                                     if (gold >= 50) {
+                                        sfx_play(R.raw.sfx_choose);
                                         merchant_history[1]++;
                                         gold -= 50;
                                         count_b++;
                                     } else {
+                                        sfx_play(R.raw.sfx_cancel);
                                         no_gold_builder.setMessage(R.string.purchase_fail);
                                         AlertDialog no_gold_dialog = no_gold_builder.create();
+                                        no_gold_dialog.setCanceledOnTouchOutside(true);
                                         no_gold_dialog.show();
                                     }
                                 }
@@ -1424,6 +1628,7 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
                             merchant_builder.setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialogInterface, int i) {
+                                    sfx_play(R.raw.sfx_cancel);
                                 }
                             });
                         } else if (merchant_history[1] == 1) {
@@ -1441,12 +1646,15 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
                                 @Override
                                 public void onClick(DialogInterface dialogInterface, int i) {
                                     if (gold >= 50) {
+                                        sfx_play(R.raw.sfx_choose);
                                         merchant_history[2]++;
                                         gold -= 50;
                                         count_y += 5;
                                     } else {
+                                        sfx_play(R.raw.sfx_cancel);
                                         no_gold_builder.setMessage(R.string.purchase_fail);
                                         AlertDialog no_gold_dialog = no_gold_builder.create();
+                                        no_gold_dialog.setCanceledOnTouchOutside(true);
                                         no_gold_dialog.show();
                                     }
                                 }
@@ -1454,6 +1662,7 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
                             merchant_builder.setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialogInterface, int i) {
+                                    sfx_play(R.raw.sfx_cancel);
                                 }
                             });
                         } else if (merchant_history[2] == 1) {
@@ -1472,12 +1681,15 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
                                     @Override
                                     public void onClick(DialogInterface dialogInterface, int i) {
                                         if (gold >= 800) {
+                                            sfx_play(R.raw.sfx_choose);
                                             merchant_history[3]++;
                                             gold -= 800;
                                             count_r++;
                                         } else {
+                                            sfx_play(R.raw.sfx_cancel);
                                             no_gold_builder.setMessage(R.string.purchase_fail);
                                             AlertDialog no_gold_dialog = no_gold_builder.create();
+                                            no_gold_dialog.setCanceledOnTouchOutside(true);
                                             no_gold_dialog.show();
                                         }
                                     }
@@ -1485,6 +1697,7 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
                                 merchant_builder.setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {
                                     @Override
                                     public void onClick(DialogInterface dialogInterface, int i) {
+                                        sfx_play(R.raw.sfx_cancel);
                                     }
                                 });
                             } else if (merchant_history[3] == 1) {
@@ -1500,12 +1713,15 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
                                 @Override
                                 public void onClick(DialogInterface dialogInterface, int i) {
                                     if (gold >= 1000) {
+                                        sfx_play(R.raw.sfx_choose);
                                         merchant_history[4]++;
                                         gold -= 1000;
                                         count_y++;
                                     } else {
+                                        sfx_play(R.raw.sfx_cancel);
                                         no_gold_builder.setMessage(R.string.purchase_fail);
                                         AlertDialog no_gold_dialog = no_gold_builder.create();
+                                        no_gold_dialog.setCanceledOnTouchOutside(true);
                                         no_gold_dialog.show();
                                     }
                                 }
@@ -1513,6 +1729,7 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
                             merchant_builder.setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialogInterface, int i) {
+                                    sfx_play(R.raw.sfx_cancel);
                                 }
                             });
                         }
@@ -1524,12 +1741,15 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
                                 @Override
                                 public void onClick(DialogInterface dialogInterface, int i) {
                                     if (gold >= 200) {
+                                        sfx_play(R.raw.sfx_choose);
                                         merchant_history[5]++;
                                         gold -= 200;
                                         count_b++;
                                     } else {
+                                        sfx_play(R.raw.sfx_cancel);
                                         no_gold_builder.setMessage(R.string.purchase_fail);
                                         AlertDialog no_gold_dialog = no_gold_builder.create();
+                                        no_gold_dialog.setCanceledOnTouchOutside(true);
                                         no_gold_dialog.show();
                                     }
                                 }
@@ -1537,6 +1757,7 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
                             merchant_builder.setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialogInterface, int i) {
+                                    sfx_play(R.raw.sfx_cancel);
                                 }
                             });
                         } else if (merchant_history[5] == 1) {
@@ -1553,11 +1774,14 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
                             @Override
                             public void onClick(DialogInterface dialogInterface, int i) {
                                 if (count_y > 0) {
+                                    sfx_play(R.raw.sfx_choose);
                                     gold += 100;
                                     count_y--;
                                 } else {
+                                    sfx_play(R.raw.sfx_cancel);
                                     no_gold_builder.setMessage(R.string.purchase_fail_28f);
                                     AlertDialog no_gold_dialog = no_gold_builder.create();
+                                    no_gold_dialog.setCanceledOnTouchOutside(true);
                                     no_gold_dialog.show();
                                 }
                             }
@@ -1565,6 +1789,7 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
                         merchant_builder.setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialogInterface, int i) {
+                                sfx_play(R.raw.sfx_cancel);
                             }
                         });
                         break;
@@ -1575,13 +1800,16 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
                                 @Override
                                 public void onClick(DialogInterface dialogInterface, int i) {
                                     if (gold >= 1000) {
+                                        sfx_play(R.raw.sfx_choose);
                                         merchant_history[7]++;
                                         gold -= 1000;
                                         count_y += 4;
                                         count_b++;
                                     } else {
+                                        sfx_play(R.raw.sfx_cancel);
                                         no_gold_builder.setMessage(R.string.purchase_fail);
                                         AlertDialog no_gold_dialog = no_gold_builder.create();
+                                        no_gold_dialog.setCanceledOnTouchOutside(true);
                                         no_gold_dialog.show();
                                     }
                                 }
@@ -1589,6 +1817,7 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
                             merchant_builder.setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialogInterface, int i) {
+                                    sfx_play(R.raw.sfx_cancel);
                                 }
                             });
                         } else if (merchant_history[7] == 1) {
@@ -1606,12 +1835,15 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
                                 @Override
                                 public void onClick(DialogInterface dialogInterface, int i) {
                                     if (gold >= 200) {
+                                        sfx_play(R.raw.sfx_choose);
                                         merchant_history[8]++;
                                         gold -= 200;
                                         count_y += 3;
                                     } else {
+                                        sfx_play(R.raw.sfx_cancel);
                                         no_gold_builder.setMessage(R.string.purchase_fail);
                                         AlertDialog no_gold_dialog = no_gold_builder.create();
+                                        no_gold_dialog.setCanceledOnTouchOutside(true);
                                         no_gold_dialog.show();
                                     }
                                 }
@@ -1619,6 +1851,7 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
                             merchant_builder.setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialogInterface, int i) {
+                                    sfx_play(R.raw.sfx_cancel);
                                 }
                             });
                         } else if (merchant_history[8] == 1) {
@@ -1636,12 +1869,15 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
                                 @Override
                                 public void onClick(DialogInterface dialogInterface, int i) {
                                     if (gold >= 2000) {
+                                        sfx_play(R.raw.sfx_choose);
                                         merchant_history[9]++;
                                         gold -= 2000;
                                         count_b += 3;
                                     } else {
+                                        sfx_play(R.raw.sfx_cancel);
                                         no_gold_builder.setMessage(R.string.purchase_fail);
                                         AlertDialog no_gold_dialog = no_gold_builder.create();
+                                        no_gold_dialog.setCanceledOnTouchOutside(true);
                                         no_gold_dialog.show();
                                     }
                                 }
@@ -1649,6 +1885,7 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
                             merchant_builder.setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialogInterface, int i) {
+                                    sfx_play(R.raw.sfx_cancel);
                                 }
                             });
                         } else if (merchant_history[9] == 1) {
@@ -1666,12 +1903,15 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
                                 @Override
                                 public void onClick(DialogInterface dialogInterface, int i) {
                                     if (gold >= 1000) {
+                                        sfx_play(R.raw.sfx_choose);
                                         merchant_history[10]++;
                                         gold -= 1000;
                                         hp += 2000;
                                     } else {
+                                        sfx_play(R.raw.sfx_cancel);
                                         no_gold_builder.setMessage(R.string.purchase_fail);
                                         AlertDialog no_gold_dialog = no_gold_builder.create();
+                                        no_gold_dialog.setCanceledOnTouchOutside(true);
                                         no_gold_dialog.show();
                                     }
                                 }
@@ -1679,6 +1919,7 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
                             merchant_builder.setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialogInterface, int i) {
+                                    sfx_play(R.raw.sfx_cancel);
                                 }
                             });
                         } else if (merchant_history[10] == 1) {
@@ -1696,12 +1937,15 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
                                 @Override
                                 public void onClick(DialogInterface dialogInterface, int i) {
                                     if (gold >= 4000) {
+                                        sfx_play(R.raw.sfx_choose);
                                         merchant_history[11]++;
                                         gold -= 4000;
                                         e_mattock = true;
                                     } else {
+                                        sfx_play(R.raw.sfx_cancel);
                                         no_gold_builder.setMessage(R.string.purchase_fail);
                                         AlertDialog no_gold_dialog = no_gold_builder.create();
+                                        no_gold_dialog.setCanceledOnTouchOutside(true);
                                         no_gold_dialog.show();
                                     }
                                 }
@@ -1709,6 +1953,7 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
                             merchant_builder.setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialogInterface, int i) {
+                                    sfx_play(R.raw.sfx_cancel);
                                 }
                             });
                         } else if (merchant_history[11] == 1) {
@@ -1742,54 +1987,42 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
                                 gold -= price;
                                 price_idx++;
                                 hp += 1000;
-                                sfx_music = MediaPlayer.create(getApplicationContext(), R.raw.sfx_choose);
-                                if (music_settings[1])
-                                    sfx_music.start();
+                                sfx_play(R.raw.sfx_gold_spent);
                             } else {
-                                sfx_music = MediaPlayer.create(getApplicationContext(), R.raw.sfx_cancel);
-                                if (music_settings[1])
-                                    sfx_music.start();
+                                sfx_play(R.raw.sfx_cancel);
                                 fail_offer_builder.setMessage(R.string.purchase_fail);
                                 AlertDialog no_gold_dialog = fail_offer_builder.create();
+                                no_gold_dialog.setCanceledOnTouchOutside(true);
                                 no_gold_dialog.show();
                             }
                         } else if (item == 1) {
                             if (gold > price) {
-                                sfx_music = MediaPlayer.create(getApplicationContext(), R.raw.sfx_choose);
-                                if (music_settings[1])
-                                    sfx_music.start();
+                                sfx_play(R.raw.sfx_gold_spent);
                                 gold -= price;
                                 price_idx++;
                                 atk += (2 + 2 * (floor_num / 10));
                             } else {
-                                sfx_music = MediaPlayer.create(getApplicationContext(), R.raw.sfx_cancel);
-                                if (music_settings[1])
-                                    sfx_music.start();
+                                sfx_play(R.raw.sfx_cancel);
                                 fail_offer_builder.setMessage(R.string.purchase_fail);
                                 AlertDialog no_gold_dialog = fail_offer_builder.create();
+                                no_gold_dialog.setCanceledOnTouchOutside(true);
                                 no_gold_dialog.show();
                             }
                         } else if (item == 2) {
                             if (gold > price) {
-                                sfx_music = MediaPlayer.create(getApplicationContext(), R.raw.sfx_choose);
-                                if (music_settings[1])
-                                    sfx_music.start();
+                                sfx_play(R.raw.sfx_gold_spent);
                                 gold -= price;
                                 price_idx++;
                                 def += (4 + 4 * (floor_num / 10));
                             } else {
-                                sfx_music = MediaPlayer.create(getApplicationContext(), R.raw.sfx_cancel);
-                                if (music_settings[1])
-                                    sfx_music.start();
+                                sfx_play(R.raw.sfx_cancel);
                                 fail_offer_builder.setMessage(R.string.purchase_fail);
                                 AlertDialog no_gold_dialog = fail_offer_builder.create();
+                                no_gold_dialog.setCanceledOnTouchOutside(true);
                                 no_gold_dialog.show();
                             }
-                        } else {
-                            sfx_music = MediaPlayer.create(getApplicationContext(), R.raw.sfx_cancel);
-                            if (music_settings[1])
-                                sfx_music.start();
-                        }
+                        } else
+                            sfx_play(R.raw.sfx_cancel);
                     }
                 });
                 AlertDialog altar_list = altar_builder.create();
@@ -1878,6 +2111,10 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
 
         public void pause() {
             isItOK = false;
+            if (background_music != null) {
+                bgm_on = false;
+                background_music.release();
+            }
             while (true) {
                 try {
                     t.join();
@@ -1893,6 +2130,29 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
             isItOK = true;
             t = new Thread(this);
             t.start();
+            if (!bgm_on) {
+                int which_music;
+                if (floor_num == 0)
+                    which_music = R.raw.level1_background;
+                else if (floor_num == 50)
+                    which_music = R.raw.bgm_ending;
+                else if (floor_num == 49) {
+                    if (act == 0)
+                        which_music = R.raw.level5_background;
+                    else
+                        which_music = R.raw.level5_demon_fight;
+                } else if (floor_num % 10 == 0) {
+                    if (act == 0)
+                        which_music = bgm_list[floor_num / 10 - 1];
+                    else
+                        which_music = boss_music_list[floor_num / 10 - 1];
+                } else
+                    which_music = bgm_list[floor_num / 10];
+                background_music = MediaPlayer.create(getApplicationContext(), which_music);
+                background_music.setLooping(true);
+                if (music_settings[0])
+                    background_music.start();
+            }
         }
 
         public void run() {
@@ -2078,9 +2338,7 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
                 show_hero = false;
                 show_fight = true;
                 m_hp -= a_damage_b;
-                sfx_music = MediaPlayer.create(getApplicationContext(), R.raw.sfx_fight);
-                if (music_settings[1])
-                    sfx_music.start();
+                sfx_play(R.raw.sfx_fight);
             } else {
                 show_hero = true;
                 show_fight = false;
@@ -2111,22 +2369,23 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
                                 return;
                             proceed = false;
                             act++;
+                            sfx_play(R.raw.sfx_open_doors);
                             current_floor[7][2] = 1;
                             refresh_ctr = true;
                         } else if (act == 1) {
-                            sleep(500);
+                            sleep(400);
                             act++;
                             current_floor[7][3] = 1;
                             current_floor[7][2] = 21;
                             refresh_ctr = true;
                         } else if (act == 2) {
-                            sleep(500);
+                            sleep(400);
                             act++;
                             current_floor[7][2] = 1;
                             current_floor[7][1] = 21;
                             refresh_ctr = true;
                         } else {
-                            sleep(500);
+                            sleep(400);
                             act = 0;
                             current_floor[7][1] = 1;
                             current_floor[8][1] = 21;
@@ -2143,14 +2402,15 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
                             current_floor[9][1] = 21;
                             refresh_ctr = true;
                         } else if (act == 1) {
-                            sleep(500);
+                            sleep(300);
                             act++;
                             current_floor[9][1] = 1;
                             current_floor[10][1] = 21;
                             refresh_ctr = true;
                         } else {
-                            sleep(500);
+                            sleep(300);
                             act = 0;
+                            sfx_play(R.raw.sfx_stairs);
                             current_floor[10][1] = 1;
                             refresh_ctr = true;
                             isEvent = false;
@@ -2165,6 +2425,10 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
                 case 3:
                     if (act == 0) {
                         act++;
+                    } else if (act == 1) {
+                        sleep(500);
+                        if (music_settings[1])
+                            sfx_play(R.raw.sfx_teleport);
                         parent.runOnUiThread(new Runnable() {
                             public void run() {
                                 AlertDialog.Builder f3_builder1 = new AlertDialog.Builder(parent);
@@ -2181,16 +2445,17 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
                                 f3_dialog1.show();
                             }
                         });
-                    } else if (act == 1) {
-                        if (!proceed)
-                            return;
-                        proceed = false;
                         act++;
                         current_floor[7][5] = 60;
                         refresh_ctr = true;
                     } else if (act == 2) {
                         sleep(500);
+                        if (!proceed)
+                            return;
+                        proceed = false;
                         act++;
+                        if (music_settings[1])
+                            sfx_play(R.raw.sfx_teleport);
                         current_floor[8][5] = 57;
                         current_floor[10][5] = 57;
                         current_floor[9][4] = 57;
@@ -2199,6 +2464,7 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
                     } else if (act == 3) {
                         sleep(500);
                         act++;
+                        sfx_play(R.raw.sfx_fight);
                         show_fight = true;
                         hp = 0;
                     } else if (act == 4) {
@@ -2262,6 +2528,7 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
                     } else if (act == 2) {
                         sleep(200);
                         act++;
+                        sfx_play(R.raw.sfx_open_doors);
                         current_floor[3][6] = 8;
                         current_floor[7][6] = 8;
                         current_floor[2][6] = 38;
@@ -2269,7 +2536,9 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
                     } else if (act == 3) {
                         sleep(200);
                         act++;
+                        sfx_play(R.raw.sfx_open_doors);
                         current_floor[4][4] = 1;
+                        sfx_play(R.raw.sfx_open_doors);
                         current_floor[4][8] = 1;
                         current_floor[2][6] = 1;
                         current_floor[1][6] = 38;
@@ -2405,12 +2674,15 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
                     } else if (act == 16) {
                         sleep(200);
                         act++;
+                        sfx_play(R.raw.sfx_open_doors);
                         current_floor[4][4] = 8;
                         current_floor[4][8] = 8;
                         refresh_ctr = true;
                         isEvent = false;
                     } else if (act == 17) {
+                        sleep(300);
                         act++;
+                        sfx_play(R.raw.sfx_open_doors);
                         current_floor[3][6] = 1;
                         refresh_ctr = true;
                         isEvent = false;
@@ -2418,54 +2690,58 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
                         act++;
                         if (background_music != null)           // kill the old music first
                             background_music.release();
-                        background_music = MediaPlayer.create(getApplicationContext(), bgm_list[0]);
-                        background_music.setLooping(true);
-                        if (music_settings[0])                  // if bgm option is checked
-                            background_music.start();
                     } else if (act == 19) {
                         sleep(300);
                         act++;
+                        sfx_play(R.raw.sfx_rewards);
                         current_floor[3][1] = 76;
                         current_floor[3][2] = 76;
                         current_floor[3][3] = 76;
                         refresh_ctr = true;
                     } else if (act == 20) {
-                        sleep(200);
+                        sleep(700);
                         act++;
+                        sfx_play(R.raw.sfx_rewards);
                         current_floor[3][9] = 77;
                         current_floor[3][10] = 77;
                         current_floor[3][11] = 77;
                         refresh_ctr = true;
                     } else if (act == 21) {
-                        sleep(200);
+                        sleep(700);
                         act++;
+                        sfx_play(R.raw.sfx_rewards);
                         current_floor[4][1] = 75;
                         current_floor[4][2] = 75;
                         current_floor[4][3] = 75;
                         refresh_ctr = true;
                     } else if (act == 22) {
-                        sleep(200);
+                        sleep(700);
                         act++;
+                        sfx_play(R.raw.sfx_rewards);
                         current_floor[4][9] = 71;
                         current_floor[4][10] = 71;
                         current_floor[4][11] = 71;
                         refresh_ctr = true;
                     } else if (act == 23) {
-                        sleep(200);
+                        sleep(700);
                         act++;
+                        sfx_play(R.raw.sfx_teleport);
                         current_floor[11][6] = 3;
                         current_floor[9][6] = -4;
                         refresh_ctr = true;
                     } else if (act == 24) {
-                        sleep(200);
+                        sleep(700);
                         act++;
+                        sfx_play(R.raw.sfx_open_doors);
                         current_floor[4][4] = 1;
                         current_floor[4][8] = 1;
                         current_floor[7][6] = 1;
                         refresh_ctr = true;
                         isEvent = false;
                     } else if (act == 25) {
+                        sleep(200);
                         act++;
+                        sfx_play(R.raw.sfx_stairs);
                         current_floor[10][1] = 21;
                         refresh_ctr = true;
                     } else if (act == 26) {
@@ -2538,7 +2814,9 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
                     } else {
                         if (!proceed)
                             return;
+                        proceed = false;
                         act = 0;
+                        sfx_play(R.raw.sfx_stairs);
                         current_floor[10][6] = 1;
                         refresh_ctr = true;
                         isEvent = false;
@@ -2550,7 +2828,9 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
                             if (!proceed)
                                 return;
                             proceed = false;
+                            sleep(200);
                             act++;
+                            sfx_play(R.raw.sfx_open_doors);
                             current_floor[1][8] = 1;
                             refresh_ctr = true;
                         } else if (act == 1) {
@@ -2568,6 +2848,7 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
                         } else {
                             sleep(500);
                             act = 0;
+                            sfx_play(R.raw.sfx_stairs);
                             current_floor[1][7] = 1;
                             refresh_ctr = true;
                             isEvent = false;
@@ -2579,6 +2860,7 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
                         } else if (act == 1) {
                             sleep(300);
                             act++;
+                            sfx_play(R.raw.sfx_open_doors);
                             current_floor[9][6] = 8;
                             refresh_ctr = true;
                             isEvent = false;
@@ -2599,6 +2881,7 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
                         } else {
                             sleep(500);
                             act = 0;
+                            sfx_play(R.raw.sfx_open_doors);
                             current_floor[3][6] = 1;
                             current_floor[9][6] = 1;
                             refresh_ctr = true;
@@ -2608,27 +2891,6 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
                     break;
                 case 20:
                     if (act == 0) {
-                        act++;
-                        parent.runOnUiThread(new Runnable() {
-                            public void run() {
-                                AlertDialog.Builder f20_builder1 = new AlertDialog.Builder(parent);
-                                f20_builder1.setMessage(R.string.vampire_20f_1);
-                                AlertDialog f20_dialog1 = f20_builder1.create();
-                                f20_dialog1.setCanceledOnTouchOutside(true);
-                                f20_dialog1.setOnCancelListener(new DialogInterface.OnCancelListener() {
-                                    @Override
-                                    public void onCancel(DialogInterface dialogInterface) {
-                                        proceed = true;
-                                        current_floor[8][6] = 1;
-                                    }
-                                });
-                                f20_dialog1.show();
-                            }
-                        });
-                    } else if (act == 1) {
-                        if (!proceed)
-                            return;
-                        proceed = false;
                         if (background_music != null)           // kill the old music first
                             background_music.release();
                         background_music = MediaPlayer.create(getApplicationContext(), boss_music_list[1]);
@@ -2636,6 +2898,10 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
                         if (music_settings[0])                  // if bgm option is checked
                             background_music.start();
                         act++;
+                    } else if (act == 1) {
+                        sleep(200);
+                        act++;
+                        sfx_play(R.raw.sfx_open_doors);
                         current_floor[9][6] = 8;
                         refresh_ctr = true;
                     } else if (act == 2) {
@@ -2716,17 +2982,37 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
                         current_floor[7][7] = 1;
                         current_floor[6][6] = 45;
                         refresh_ctr = true;
-                        isEvent = false;
                     } else if (act == 10) {
+                        sleep(500);
                         act++;
-                        if (background_music != null)           // kill the old music first
-                            background_music.release();
-                        background_music = MediaPlayer.create(getApplicationContext(), bgm_list[1]);
-                        background_music.setLooping(true);
-                        if (music_settings[0])                  // if bgm option is checked
-                            background_music.start();
+                        parent.runOnUiThread(new Runnable() {
+                            public void run() {
+                                AlertDialog.Builder f20_builder1 = new AlertDialog.Builder(parent);
+                                f20_builder1.setMessage(R.string.vampire_20f_1);
+                                AlertDialog f20_dialog1 = f20_builder1.create();
+                                f20_dialog1.setCanceledOnTouchOutside(true);
+                                f20_dialog1.setOnCancelListener(new DialogInterface.OnCancelListener() {
+                                    @Override
+                                    public void onCancel(DialogInterface dialogInterface) {
+                                        proceed = true;
+                                        current_floor[8][6] = 1;
+                                    }
+                                });
+                                f20_dialog1.show();
+                            }
+                        });
                     } else if (act == 11) {
+                        if (!proceed)
+                            return;
+                        proceed = false;
+                        sleep(500);
                         act++;
+                        isEvent = false;
+                    } else if (act == 12) {
+                        act++;
+                        if (background_music != null)
+                            background_music.release();
+                        sfx_play(R.raw.sfx_rewards);
                         current_floor[5][4] = 76;
                         current_floor[6][4] = 76;
                         current_floor[7][4] = 76;
@@ -2734,9 +3020,10 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
                         current_floor[6][8] = 77;
                         current_floor[7][8] = 77;
                         refresh_ctr = true;
-                    } else if (act == 12) {
-                        sleep(500);
+                    } else if (act == 13) {
+                        sleep(700);
                         act++;
+                        sfx_play(R.raw.sfx_rewards);
                         current_floor[4][5] = 71;
                         current_floor[4][6] = 71;
                         current_floor[4][7] = 71;
@@ -2747,6 +3034,7 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
                     } else {
                         sleep(700);
                         act = 0;
+                        sfx_play(R.raw.sfx_open_doors);
                         current_floor[3][6] = 1;
                         current_floor[9][6] = 1;
                         current_floor[1][6] = 3;
@@ -2757,11 +3045,18 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
                 case 24:
                     if (act == 0) {
                         act++;
+                        not_show_hero = true;
+                        if (background_music != null)           // kill the old music first
+                            background_music.release();
+                        background_music = MediaPlayer.create(getApplicationContext(), R.raw.bgm_ending);
+                        background_music.setLooping(true);
+                        if (music_settings[0])                  // if bgm option is checked
+                            background_music.start();
                     } else if (act == 1) {
                         sleep(500);
                         act++;
-                        not_show_hero = true;
-                        hero_x = 6; hero_y = 7;
+                        hero_x = 6;
+                        hero_y = 7;
                         refresh_ctr = true;
                     } else if (act == 2) {
                         sleep(1000);
@@ -2790,11 +3085,12 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
                                 current_floor[e][r] = 1;
                             }
                         }
+                        not_show_hero = false;
                         refresh_ctr = true;
                     } else if (act == 5) {
                         sleep(1000);
                         act++;
-                        not_show_hero = false;
+                        sfx_play(R.raw.sfx_teleport);
                         refresh_ctr = true;
                     } else if (act == 6) {
                         sleep(1000);
@@ -2816,14 +3112,24 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
                         act = 0;
                         isEvent = false;
                         floor_num = 50;
+                        thief_event_count = 7;
+                        refresh_ctr = true;
                     }
                     break;
                 case 25:
                     if (act == 0) {
+                        if (background_music != null)           // kill the old music first
+                            background_music.release();
+                        background_music = MediaPlayer.create(getApplicationContext(), boss_music_list[3]);
+                        background_music.setLooping(true);
+                        if (music_settings[0])                  // if bgm option is checked
+                            background_music.start();
                         act++;
+                        current_floor[9][6] = 1;
                     } else if (act == 1) {
                         sleep(500);
                         act++;
+                        sfx_play(R.raw.sfx_open_doors);
                         current_floor[10][6] = 8;
                         refresh_ctr = true;
                     } else if (act == 2) {
@@ -2848,48 +3154,44 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
                         if (!proceed)
                             return;
                         proceed = false;
-                        if (background_music != null)           // kill the old music first
-                            background_music.release();
-                        background_music = MediaPlayer.create(getApplicationContext(), boss_music_list[3]);
-                        background_music.setLooping(true);
-                        if (music_settings[0])                  // if bgm option is checked
-                            background_music.start();
                         act++;
                         isEvent = false;
                     } else if (act == 4) {
                         sleep(300);
-                        if (background_music != null)           // kill the old music first
+                        if (background_music != null)
                             background_music.release();
-                        background_music = MediaPlayer.create(getApplicationContext(), bgm_list[3]);
-                        background_music.setLooping(true);
-                        if (music_settings[0])                  // if bgm option is checked
-                            background_music.start();
                         act++;
+                        sfx_play(R.raw.sfx_rewards);
                         current_floor[8][4] = 73;
                         refresh_ctr = true;
                     } else if (act == 5) {
-                        sleep(300);
+                        sleep(700);
                         act++;
+                        sfx_play(R.raw.sfx_rewards);
                         current_floor[8][5] = 73;
                         refresh_ctr = true;
                     } else if (act == 6) {
-                        sleep(300);
+                        sleep(700);
                         act++;
+                        sfx_play(R.raw.sfx_rewards);
                         current_floor[8][6] = 73;
                         refresh_ctr = true;
                     } else if (act == 7) {
-                        sleep(300);
+                        sleep(700);
                         act++;
+                        sfx_play(R.raw.sfx_rewards);
                         current_floor[8][7] = 73;
                         refresh_ctr = true;
                     } else if (act == 8) {
-                        sleep(300);
+                        sleep(700);
                         act++;
+                        sfx_play(R.raw.sfx_rewards);
                         current_floor[8][8] = 73;
                         refresh_ctr = true;
                     } else {
-                        sleep(300);
-                        act++;
+                        sleep(700);
+                        act = 0;
+                        sfx_play(R.raw.sfx_open_doors);
                         current_floor[10][6] = 1;
                         refresh_ctr = true;
                         isEvent = false;
@@ -2907,6 +3209,7 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
                     } else if (act == 1) {
                         sleep(300);
                         act++;
+                        sfx_play(R.raw.sfx_open_doors);
                         current_floor[4][6] = 8;
                         current_floor[7][6] = 8;
                         refresh_ctr = true;
@@ -2914,13 +3217,16 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
                     } else if (act == 2) {
                         act++;
                     } else if (act == 3) {
+                        sleep(300);
                         act++;
+                        sfx_play(R.raw.sfx_open_doors);
                         current_floor[4][6] = 1;
                         current_floor[7][6] = 1;
                         refresh_ctr = true;
                     } else {
                         sleep(300);
                         act = 0;
+                        sfx_play(R.raw.sfx_teleport);
                         current_floor[1][6] = 3;
                         refresh_ctr = true;
                         isEvent = false;
@@ -2932,6 +3238,7 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
                     } else if (act == 1) {
                         sleep(200);
                         act++;
+                        sfx_play(R.raw.sfx_stairs);
                         current_floor[1][10] = 52;
                         refresh_ctr = true;
                     } else if (act == 2) {
@@ -3138,6 +3445,7 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
                     } else if (act == 29) {
                         sleep(50);
                         act = 0;
+                        sfx_play(R.raw.sfx_stairs);
                         current_floor[1][10] = 1;
                         refresh_ctr = true;
                         isEvent = false;
@@ -3150,6 +3458,7 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
                     } else if (act == 1) {
                         sleep(300);
                         act = 0;
+                        sfx_play(R.raw.sfx_open_doors);
                         current_floor[4][10] = 8;
                         current_floor[8][10] = 8;
                         refresh_ctr = true;
@@ -3159,6 +3468,7 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
                 case 35:
                     if (thief_event_count == 5) {
                         current_game.change_2f();
+                        current_game.change_29f_again();
                         isEvent = false;
                     } else if (act == 0) {
                         if (highest_floor == 35) {
@@ -3179,6 +3489,7 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
                         } else {
                             sleep(500);
                             act++;
+                            sfx_play(R.raw.sfx_rewards);
                             current_floor[6][5] = 1;
                             current_floor[6][6] = 92;
                             current_floor[6][7] = 1;
@@ -3190,20 +3501,24 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
                         if (highest_floor == 35) {
                             sleep(300);
                             act = 0;
+                            sfx_play(R.raw.sfx_stairs);
+                            current_game.change_2f_again();
                             current_floor[11][5] = 1;
                             refresh_ctr = true;
                             isEvent = false;
                         } else {
-                            sleep(500);
+                            sleep(700);
                             act++;
+                            sfx_play(R.raw.sfx_rewards);
                             current_floor[5][5] = 75;
                             current_floor[5][6] = 75;
                             current_floor[5][7] = 75;
                             refresh_ctr = true;
                         }
                     } else {
-                        sleep(500);
+                        sleep(700);
                         act = 0;
+                        sfx_play(R.raw.sfx_open_doors);
                         current_floor[3][6] = 1;
                         refresh_ctr = true;
                         isEvent = false;
@@ -3215,11 +3530,13 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
                     } else if (act == 1) {
                         sleep(600);
                         act++;
+                        sfx_play(R.raw.sfx_open_doors);
                         current_floor[9][2] = 8;
                         refresh_ctr = true;
                     } else {
                         sleep(600);
                         act = 0;
+                        sfx_play(R.raw.sfx_open_doors);
                         current_floor[9][2] = 1;
                         refresh_ctr = true;
                         isEvent = false;
@@ -3227,6 +3544,12 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
                     break;
                 case 40:
                     if (act == 0) {
+                        if (background_music != null)           // kill the old music first
+                            background_music.release();
+                        background_music = MediaPlayer.create(getApplicationContext(), boss_music_list[3]);
+                        background_music.setLooping(true);
+                        if (music_settings[0])                  // if bgm option is checked
+                            background_music.start();
                         boolean no_teleport = current_floor[2][2] != 1 && current_floor[2][3] != 1 && current_floor[2][4] != 1;
                         no_teleport &= current_floor[2][8] != 1 && current_floor[2][9] != 1 && current_floor[2][10] != 1;
                         no_teleport &= current_floor[4][3] != 1 && current_floor[4][4] != 1 && current_floor[4][5] != 1;
@@ -3242,7 +3565,10 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
                         act++;
                         hero_x = 6;
                         hero_y = 7;
+                        sfx_play(R.raw.sfx_teleport);
                         current_floor[2][6] = 52;
+                        sleep(500);
+                        sfx_play(R.raw.sfx_open_doors);
                         current_floor[8][6] = 8;
                         refresh_ctr = true;
                         parent.runOnUiThread(new Runnable() {
@@ -3268,6 +3594,7 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
                     } else if (act == 3) {
                         sleep(300);
                         act++;
+                        sfx_play(R.raw.sfx_teleport);
                         current_floor[2][2] = 50;
                         current_floor[2][3] = 50;
                         current_floor[2][4] = 50;
@@ -3278,6 +3605,7 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
                     } else if (act == 4) {
                         sleep(300);
                         act++;
+                        sfx_play(R.raw.sfx_teleport);
                         current_floor[4][3] = 47;
                         current_floor[4][4] = 47;
                         current_floor[4][5] = 47;
@@ -3288,7 +3616,10 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
                     } else if (act == 5) {
                         sleep(300);
                         act++;
-                        current_floor[8][6] = 8;
+                        if (current_floor[8][6] != 8) {
+                            sfx_play(R.raw.sfx_open_doors);
+                            current_floor[8][6] = 8;
+                        }
                         refresh_ctr = true;
                         parent.runOnUiThread(new Runnable() {
                             public void run() {
@@ -3309,12 +3640,6 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
                         if (!proceed)
                             return;
                         proceed = false;
-                        if (background_music != null)           // kill the old music first
-                            background_music.release();
-                        background_music = MediaPlayer.create(getApplicationContext(), boss_music_list[3]);
-                        background_music.setLooping(true);
-                        if (music_settings[0])                  // if bgm option is checked
-                            background_music.start();
                         act++;
                     } else if (act == 7) {
                         sleep(300);
@@ -3864,12 +4189,8 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
                         if (!proceed)
                             return;
                         proceed = false;
-                        if (background_music != null)           // kill the old music first
+                        if (background_music != null)
                             background_music.release();
-                        background_music = MediaPlayer.create(getApplicationContext(), bgm_list[3]);
-                        background_music.setLooping(true);
-                        if (music_settings[0])                  // if bgm option is checked
-                            background_music.start();
                         act++;
                     } else if (act == 61) {
                         sleep(25);
@@ -3898,40 +4219,52 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
                     } else if (act == 65) {
                         sleep(25);
                         act++;
+                        sfx_play(R.raw.sfx_teleport);
                         current_floor[1][6] = 3;
                         refresh_ctr = true;
                     } else if (act == 66) {
-                        sleep(25);
+                        sleep(300);
                         act++;
+                        sfx_play(R.raw.sfx_stairs);
                         current_floor[2][6] = 1;
                         refresh_ctr = true;
                     } else if (act == 67) {
                         sleep(300);
                         act++;
+                        sfx_play(R.raw.sfx_rewards);
                         current_floor[2][2] = 76;
                         current_floor[2][3] = 76;
                         current_floor[2][4] = 76;
                         refresh_ctr = true;
                     } else if (act == 68) {
-                        sleep(300);
+                        sleep(700);
                         act++;
+                        sfx_play(R.raw.sfx_rewards);
                         current_floor[2][8] = 77;
                         current_floor[2][9] = 77;
                         current_floor[2][10] = 77;
                         refresh_ctr = true;
                     } else if (act == 69) {
-                        sleep(300);
+                        sleep(700);
                         act++;
+                        sfx_play(R.raw.sfx_rewards);
                         current_floor[4][3] = 75;
                         current_floor[4][4] = 75;
                         current_floor[4][5] = 75;
                         refresh_ctr = true;
                     } else if (act == 70) {
-                        sleep(300);
-                        act = 0;
+                        sleep(700);
+                        act++;
+                        sfx_play(R.raw.sfx_rewards);
                         current_floor[4][7] = 71;
                         current_floor[4][8] = 71;
                         current_floor[4][9] = 71;
+                        refresh_ctr = true;
+                    } else {
+                        sleep(700);
+                        act = 0;
+                        sfx_play(R.raw.sfx_open_doors);
+                        current_floor[8][6] = 1;
                         refresh_ctr = true;
                         isEvent = false;
                     }
@@ -3966,6 +4299,7 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
                     } else if (act == 1) {
                         sleep(500);
                         act++;
+                        sfx_play(R.raw.sfx_teleport);
                         current_floor[6][6] = 60;
                         refresh_ctr = true;
                     } else if (act == 2) {
@@ -4013,6 +4347,7 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
                         proceed = false;
                         sleep(500);
                         act++;
+                        sfx_play(R.raw.sfx_teleport);
                         current_floor[7][6] = 57;
                         current_floor[9][6] = 57;
                         current_floor[8][5] = 57;
@@ -4041,8 +4376,9 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
                             return;
                         proceed = false;
                         sleep(500);
+                        sfx_play(R.raw.sfx_fight);
+                        current_floor[8][6] = 93;
                         act++;
-                        current_floor[8][6] = 10;
                         refresh_ctr = true;
                     } else if (act == 7) {
                         sleep(500);
@@ -4052,6 +4388,7 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
                     } else if (act == 8) {
                         sleep(500);
                         act++;
+                        sfx_play(R.raw.sfx_teleport);
                         current_floor[7][6] = 1;
                         current_floor[9][6] = 1;
                         current_floor[8][5] = 1;
@@ -4081,6 +4418,7 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
                         proceed = false;
                         sleep(500);
                         act = 0;
+                        sfx_play(R.raw.sfx_teleport);
                         current_floor[6][6] = 1;
                         refresh_ctr = true;
                         isEvent = false;
@@ -4092,23 +4430,27 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
                     } else if (act == 1) {
                         sleep(300);
                         act++;
+                        sfx_play(R.raw.sfx_open_doors);
                         current_floor[1][7] = 0;
                         refresh_ctr = true;
                     } else if (act == 2) {
                         sleep(300);
                         act++;
+                        sfx_play(R.raw.sfx_teleport);
                         current_floor[1][9] = 1;
                         current_floor[1][10] = 57;
                         refresh_ctr = true;
                     } else if (act == 3) {
                         sleep(300);
                         act++;
+                        sfx_play(R.raw.sfx_teleport);
                         current_floor[1][10] = 1;
                         current_floor[1][11] = 57;
                         refresh_ctr = true;
                     } else if (act == 4) {
                         sleep(300);
                         act = 0;
+                        sfx_play(R.raw.sfx_open_doors);
                         current_floor[1][10] = 0;
                         refresh_ctr = true;
                         isEvent = false;
@@ -4117,15 +4459,23 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
                 case 49:
                     if (act == 0) {
                         act++;
+                        if (background_music != null)           // kill the old music first
+                            background_music.release();
+                        background_music = MediaPlayer.create(getApplicationContext(), boss_music_list[4]);
+                        background_music.setLooping(true);
+                        if (music_settings[0])                  // if bgm option is checked
+                            background_music.start();
                         current_floor[6][6] = 1;
                     } else if (act == 1) {
                         sleep(500);
                         act++;
+                        sfx_play(R.raw.sfx_open_doors);
                         current_floor[7][6] = 8;
                         refresh_ctr = true;
                     } else if (act == 2) {
                         sleep(500);
                         act++;
+                        sfx_play(R.raw.sfx_teleport);
                         current_floor[3][6] = 60;
                         refresh_ctr = true;
                     } else if (act == 3) {
@@ -4150,49 +4500,51 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
                         if (!proceed)
                             return;
                         proceed = false;
-                        if (background_music != null)           // kill the old music first
-                            background_music.release();
-                        background_music = MediaPlayer.create(getApplicationContext(), boss_music_list[4]);
-                        background_music.setLooping(true);
-                        if (music_settings[0])                  // if bgm option is checked
-                            background_music.start();
                         sleep(500);
                         act++;
+                        sfx_play(R.raw.sfx_teleport);
                         current_floor[2][5] = 57;
                         refresh_ctr = true;
                     } else if (act == 5) {
                         sleep(500);
                         act++;
+                        sfx_play(R.raw.sfx_teleport);
                         current_floor[2][6] = 57;
                         refresh_ctr = true;
                     } else if (act == 6) {
                         sleep(500);
                         act++;
+                        sfx_play(R.raw.sfx_teleport);
                         current_floor[2][7] = 57;
                         refresh_ctr = true;
                     } else if (act == 7) {
                         sleep(500);
                         act++;
+                        sfx_play(R.raw.sfx_teleport);
                         current_floor[3][7] = 57;
                         refresh_ctr = true;
                     } else if (act == 8) {
                         sleep(500);
                         act++;
+                        sfx_play(R.raw.sfx_teleport);
                         current_floor[4][7] = 57;
                         refresh_ctr = true;
                     } else if (act == 9) {
                         sleep(500);
                         act++;
+                        sfx_play(R.raw.sfx_teleport);
                         current_floor[4][6] = 57;
                         refresh_ctr = true;
                     } else if (act == 10) {
                         sleep(500);
                         act++;
+                        sfx_play(R.raw.sfx_teleport);
                         current_floor[4][5] = 57;
                         refresh_ctr = true;
                     } else if (act == 11) {
                         sleep(500);
                         act++;
+                        sfx_play(R.raw.sfx_teleport);
                         current_floor[3][5] = 57;
                         refresh_ctr = true;
                         isEvent = false;
@@ -4229,10 +4581,6 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
                         sleep(500);
                         if (background_music != null)           // kill the old music first
                             background_music.release();
-                        background_music = MediaPlayer.create(getApplicationContext(), bgm_list[4]);
-                        background_music.setLooping(true);
-                        if (music_settings[0])                  // if bgm option is checked
-                            background_music.start();
                         act++;
                         current_floor[2][5] = 1;
                         current_floor[2][7] = 1;
@@ -4243,13 +4591,15 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
                     } else if (act == 16) {
                         sleep(500);
                         act++;
+                        sfx_play(R.raw.sfx_rewards);
                         current_floor[5][5] = 75;
                         current_floor[5][6] = 75;
                         current_floor[5][7] = 75;
                         refresh_ctr = true;
                     } else if (act == 17) {
-                        sleep(500);
+                        sleep(700);
                         act++;
+                        sfx_play(R.raw.sfx_rewards);
                         current_floor[4][2] = 76;
                         current_floor[4][3] = 76;
                         current_floor[4][4] = 76;
@@ -4258,8 +4608,9 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
                         current_floor[4][10] = 77;
                         refresh_ctr = true;
                     } else {
-                        sleep(500);
+                        sleep(700);
                         act = 0;
+                        sfx_play(R.raw.sfx_rewards);
                         current_floor[2][5] = 73;
                         current_floor[2][7] = 91;
                         refresh_ctr = true;
@@ -4267,11 +4618,120 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
                     }
                     break;
                 case 50:
-                    if (thief_event_count == 0) {
+                    if (act == 0) {
+                        if (!proceed)
+                            return;
+                        proceed = false;
+                        parent.runOnUiThread(new Runnable() {
+                            public void run() {
+                                AlertDialog.Builder f50_builder1 = new AlertDialog.Builder(parent);
+                                f50_builder1.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialogInterface, int i) {
+                                        proceed = true;
+                                    }
+                                });
+                                f50_builder1.setMessage(R.string.thief8);
+                                AlertDialog f50_dialog1 = f50_builder1.create();
+                                f50_dialog1.setCanceledOnTouchOutside(false);
+                                f50_dialog1.show();
+                            }
+                        });
+                        act++;
+                    } else if (act == 1) {
+                        if (!proceed)
+                            return;
+                        proceed = false;
+                        parent.runOnUiThread(new Runnable() {
+                            public void run() {
+                                AlertDialog.Builder f50_builder2 = new AlertDialog.Builder(parent);
+                                f50_builder2.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialogInterface, int i) {
+                                        proceed = true;
+                                    }
+                                });
+                                f50_builder2.setMessage(R.string.thief9);
+                                AlertDialog f50_dialog2 = f50_builder2.create();
+                                f50_dialog2.setCanceledOnTouchOutside(false);
+                                f50_dialog2.show();
+                            }
+                        });
+                        act++;
+                    } else if (act == 2) {
+                        if (!proceed)
+                            return;
+                        proceed = false;
+                        parent.runOnUiThread(new Runnable() {
+                            public void run() {
+                                AlertDialog.Builder f50_builder3 = new AlertDialog.Builder(parent);
+                                f50_builder3.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialogInterface, int i) {
+                                        proceed = true;
+                                    }
+                                });
+                                f50_builder3.setMessage(R.string.thief10);
+                                AlertDialog f50_dialog3 = f50_builder3.create();
+                                f50_dialog3.setCanceledOnTouchOutside(false);
+                                f50_dialog3.show();
+                            }
+                        });
+                        act++;
+                    } else if (act == 3) {
+                        if (!proceed)
+                            return;
+                        proceed = false;
+                        parent.runOnUiThread(new Runnable() {
+                            public void run() {
+                                AlertDialog.Builder f50_builder4 = new AlertDialog.Builder(parent);
+                                f50_builder4.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialogInterface, int i) {
+                                        proceed = true;
+                                    }
+                                });
+                                f50_builder4.setMessage(R.string.thief11);
+                                AlertDialog f50_dialog4 = f50_builder4.create();
+                                f50_dialog4.setCanceledOnTouchOutside(false);
+                                f50_dialog4.show();
+                            }
+                        });
+                        act++;
+                    } else if (act == 4) {
+                        if (!proceed)
+                            return;
+                        proceed = false;
+                        parent.runOnUiThread(new Runnable() {
+                            public void run() {
+                                AlertDialog.Builder f50_builder5 = new AlertDialog.Builder(parent);
+                                f50_builder5.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialogInterface, int i) {
+                                        proceed = true;
+                                    }
+                                });
+                                f50_builder5.setMessage(R.string.thief12);
+                                AlertDialog f50_dialog5 = f50_builder5.create();
+                                f50_dialog5.setCanceledOnTouchOutside(false);
+                                f50_dialog5.show();
+                            }
+                        });
+                        act++;
+                    } else if (act == 5) {
+                        if (!proceed)
+                            return;
+                        proceed = false;
+                        sleep(500);
+                        act++;
+                        sfx_play(R.raw.sfx_rewards);
+                    } else if (act == 6) {
+                        sleep(200);
+                        act = 0;
                         current_floor[5][6] = 66;
                         refresh_ctr = true;
+                        isEvent = false;
                     }
-                    isEvent = false;
                     break;
                 default:
                     isEvent = true;
@@ -4331,47 +4791,75 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
                 case STAFF2:
                     break;
                 case FLY_UP:
-                    sleep(150);
-                    sfx_music = MediaPlayer.create(getApplicationContext(), R.raw.sfx_teleport);
-                    if (music_settings[1])
-                        sfx_music.start();
-                    if (floor_num%10 == 0 && floor_num != 0) {  // if needs to change music
-                        if (background_music != null)           // kill the old music first
-                            background_music.release();
-                        background_music = MediaPlayer.create(getApplicationContext(), bgm_list[floor_num/10]);
-                        background_music.setLooping(true);
-                        if (music_settings[0])                  // if bgm option is checked
-                            background_music.start();
-                    }
-                    if (floor_num < 50) {
-                        current_game.put_one_floor(floor_num, current_floor);
-                        floor_num++;
-                        int pairup[] = find_hero_next_floor(true, floor_num);
-                        refresh_ctr = true;
-                        hero_y = pairup[0];
-                        hero_x = pairup[1];
+                    if (stf_space) {
+                        boolean can_teleport = false;
+                        if (current_floor[yu][xu] == 3 || current_floor[yu][xu] == 4) {
+                            can_teleport = true;
+                        } else if (current_floor[yd][xd] == 3 || current_floor[yd][xd] == 4) {
+                            can_teleport = true;
+                        } else if (current_floor[yl][xl] == 3 || current_floor[yl][xl] == 4) {
+                            can_teleport = true;
+                        } else if (current_floor[yr][xr] == 3 || current_floor[yr][xr] == 4) {
+                            can_teleport = true;
+                        }
+                        can_teleport &= floor_num < highest_floor;
+                        if (can_teleport || debug_fly) {
+                            sound_teleport = true;
+                            sleep(150);
+                            if (floor_num % 10 == 0 && floor_num != 0) {  // if needs to change music
+                                if (background_music != null)           // kill the old music first
+                                    background_music.release();
+                                background_music = MediaPlayer.create(getApplicationContext(), bgm_list[floor_num / 10]);
+                                background_music.setLooping(true);
+                                if (music_settings[0])                  // if bgm option is checked
+                                    background_music.start();
+                            }
+                            current_game.put_one_floor(floor_num, current_floor);
+                            if (floor_num == 43)
+                                floor_num = 45;
+                            else
+                                floor_num++;
+                            int pairup[] = find_hero_next_floor(true, floor_num);
+                            refresh_ctr = true;
+                            hero_y = pairup[0];
+                            hero_x = pairup[1];
+                        }
                     }
                     break;
                 case FLY_DOWN:
-                    sleep(150);
-                    sfx_music = MediaPlayer.create(getApplicationContext(), R.raw.sfx_teleport);
-                    if (music_settings[1])
-                        sfx_music.start();
-                    if (floor_num%10 == 1 && floor_num != 1) {  // if needs to change music
-                        if (background_music != null)           // kill the old music first
-                            background_music.release();
-                        background_music = MediaPlayer.create(getApplicationContext(), bgm_list[floor_num/10 - 1]);
-                        background_music.setLooping(true);
-                        if (music_settings[0])                  // if bgm option is checked
-                            background_music.start();
-                    }
-                    if (floor_num > 0) {
-                        current_game.put_one_floor(floor_num, current_floor);
-                        floor_num--;
-                        int pairup[] = find_hero_next_floor(false, floor_num);
-                        refresh_ctr = true;
-                        hero_y = pairup[0];
-                        hero_x = pairup[1];
+                    if (stf_space) {
+                        boolean can_teleport = false;
+                        if (current_floor[yu][xu] == 3 || current_floor[yu][xu] == 4) {
+                            can_teleport = true;
+                        } else if (current_floor[yd][xd] == 3 || current_floor[yd][xd] == 4) {
+                            can_teleport = true;
+                        } else if (current_floor[yl][xl] == 3 || current_floor[yl][xl] == 4) {
+                            can_teleport = true;
+                        } else if (current_floor[yr][xr] == 3 || current_floor[yr][xr] == 4) {
+                            can_teleport = true;
+                        }
+                        can_teleport &= floor_num > 1;
+                        if (can_teleport || debug_fly) {
+                            sound_teleport = true;
+                            sleep(150);
+                            if (floor_num % 10 == 1 && floor_num != 1) {  // if needs to change music
+                                if (background_music != null)           // kill the old music first
+                                    background_music.release();
+                                background_music = MediaPlayer.create(getApplicationContext(), bgm_list[floor_num / 10 - 1]);
+                                background_music.setLooping(true);
+                                if (music_settings[0])                  // if bgm option is checked
+                                    background_music.start();
+                            }
+                            current_game.put_one_floor(floor_num, current_floor);
+                            if (floor_num == 45)
+                                floor_num = 43;
+                            else
+                                floor_num--;
+                            int pairup[] = find_hero_next_floor(false, floor_num);
+                            refresh_ctr = true;
+                            hero_y = pairup[0];
+                            hero_x = pairup[1];
+                        }
                     }
                     break;
                 case ITEM1:     // cross
@@ -4443,6 +4931,7 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
                                             wall_nearby = true;
                                         }
                                         if (wall_nearby) {
+                                            sfx_play(R.raw.sfx_open_doors);
                                             m_mattock = false;
                                             refresh_ctr = true;
                                         }
@@ -4491,9 +4980,7 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
                                                 hero_y = pairup[0];
                                                 hero_x = pairup[1];
                                             }
-                                            sfx_music = MediaPlayer.create(getApplicationContext(), R.raw.sfx_items);
-                                            if (music_settings[1])
-                                                sfx_music.start();
+                                            sfx_play(R.raw.sfx_teleport);
                                             wing_up = false;
                                         }
                                     }
@@ -4530,9 +5017,7 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
                                             hero_y = 12 - hero_y;
                                             hero_x = 12 - hero_x;
                                             count_wing--;
-                                            sfx_music = MediaPlayer.create(getApplicationContext(), R.raw.sfx_items);
-                                            if (music_settings[1])
-                                                sfx_music.start();
+                                            sfx_play(R.raw.sfx_teleport);
                                             if (count_wing == 0)
                                                 wing_cent = false;
                                         }
@@ -4581,9 +5066,7 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
                                                 hero_y = pairup[0];
                                                 hero_x = pairup[1];
                                             }
-                                            sfx_music = MediaPlayer.create(getApplicationContext(), R.raw.sfx_items);
-                                            if (music_settings[1])
-                                                sfx_music.start();
+                                            sfx_play(R.raw.sfx_teleport);
                                             wing_down = false;
                                         }
                                     }
@@ -4659,6 +5142,7 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
                                             }
                                         }
                                         refresh_ctr = true;
+                                        sfx_play(R.raw.sfx_open_doors);
                                         e_mattock = false;
                                     }
                                 });
@@ -4686,9 +5170,7 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
                                     @Override
                                     public void onClick(DialogInterface dialogInterface, int in_int) {
                                         hp += 10*atk + 5*def;
-                                        sfx_music = MediaPlayer.create(getApplicationContext(), R.raw.sfx_potion);
-                                        if (music_settings[1])
-                                            sfx_music.start();
+                                        sfx_play(R.raw.sfx_potion);
                                         elixir = false;
                                     }
                                 });
@@ -4723,9 +5205,7 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
                                             }
                                         }
                                         refresh_ctr = true;
-                                        sfx_music = MediaPlayer.create(getApplicationContext(), R.raw.sfx_open_doors);
-                                        if (music_settings[1])
-                                            sfx_music.start();
+                                        sfx_play(R.raw.sfx_open_doors);
                                         key_enhac = false;
                                     }
                                 });
@@ -4784,6 +5264,8 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
                                             current_floor[yr][xr] = 1;
                                             bomb = false;
                                         }
+                                        if (!bomb)
+                                            sfx_play(R.raw.sfx_explosion);
                                         check_complete();
                                         refresh_ctr = true;
                                     }
@@ -4805,7 +5287,13 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
                         no_dialog = false;
                         Intent save_game = new Intent(Gamelogic.this, SaveActivity.class);
                         prepare_to_save_game();
+                        sfx_play(R.raw.sfx_choose);
                         save_game.putExtra("Game_Data", game_data_to_save);
+                        save_game.putExtra("Music_Settings", music_settings);
+                        if (background_music != null) {
+                            bgm_on = false;
+                            background_music.release();
+                        }
                         startActivity(save_game);
                     }
                     break;
@@ -5294,6 +5782,11 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
                             Sprite sp_snow_crystal = new Sprite(GameView.this, i_snow_crs, origin + j * sq_size, origin + i * sq_size, b);
                             all_sprites.add(sp_snow_crystal);
                             break;
+                        case 93:    // red_star
+                            b = 93;
+                            Sprite sp_red_star = new Sprite(GameView.this, t_r_star, origin + j * sq_size, origin + i * sq_size, b);
+                            all_sprites.add(sp_red_star);
+                            break;
                         default:    // debug
                             b = 10;
                             Sprite mydebug = new Sprite(GameView.this, t___logo, origin + j * sq_size, origin + i * sq_size, b);
@@ -5469,10 +5962,9 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
             my_text = "Save";
             canvas.drawText(my_text, sq_size*5 - margin*2, sq_size * 13 + margin * 8 + offset, textpaint);
             // ------------------- Debug purpose -----------------------
-
-            sleep(50);
+            sleep(60);
             //*/
-            canvas.drawBitmap(ball, x - ball.getWidth() / 2, y - ball.getHeight() / 2, null);
+            //canvas.drawBitmap(ball, x - ball.getWidth() / 2, y - ball.getHeight() / 2, null);
         }
 
         private void check_complete() {
@@ -5498,6 +5990,7 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
             switch (floor_num) {
                 case 2:
                     if (current_floor[2][6] == 1 && current_floor[2][8] == 1) {
+                        sfx_play(R.raw.sfx_open_doors);
                         current_floor[5][5] = 1;
                         current_floor[5][9] = 1;
                         current_floor[8][5] = 1;
@@ -5511,8 +6004,10 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
                         break;
                     if (hero_x != 9 && hero_x != 11)
                         break;
-                    if (current_floor[5][9] == 1 && current_floor[5][11] == 1)
+                    if (current_floor[5][9] == 1 && current_floor[5][11] == 1) {
+                        sfx_play(R.raw.sfx_open_doors);
                         current_floor[4][10] = 1;
+                    }
                     break;
                 case 10:
                     if (hero_x != 6 && current_floor[1][6] != 38)
@@ -5526,14 +6021,18 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
                     break;
                 case 11:
                     if (hero_x == 1 || hero_x == 3) {
-                        if (current_floor[5][1] == 1 && current_floor[5][3] == 1)
+                        if (current_floor[5][1] == 1 && current_floor[5][3] == 1) {
+                            sfx_play(R.raw.sfx_open_doors);
                             current_floor[4][2] = 1;
+                        }
                     }
                     break;
                 case 14:
                     if (hero_y == 1 ||(hero_x == 2 && hero_y == 2)) {
-                        if (current_floor[1][1] == 1 && current_floor[2][2] == 1 && current_floor[1][3] == 1)
+                        if (current_floor[1][1] == 1 && current_floor[2][2] == 1 && current_floor[1][3] == 1) {
+                            sfx_play(R.raw.sfx_rewards);
                             current_floor[3][1] = 73;
+                        }
                     }
                     break;
                 case 15:
@@ -5544,17 +6043,25 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
                     break;
                 case 17:
                     if ((hero_x == 1 || hero_x == 3)&& hero_y == 8)
-                        if (current_floor[8][1] == 1 && current_floor[8][3] == 1)
+                        if (current_floor[8][1] == 1 && current_floor[8][3] == 1) {
+                            sfx_play(R.raw.sfx_open_doors);
                             current_floor[7][2] = 1;
+                        }
                     if ((hero_x == 1 || hero_x == 3)&& hero_y == 5)
-                        if (current_floor[5][1] == 1 && current_floor[5][3] == 1)
+                        if (current_floor[5][1] == 1 && current_floor[5][3] == 1) {
+                            sfx_play(R.raw.sfx_open_doors);
                             current_floor[4][2] = 1;
+                        }
                     if ((hero_x == 9 || hero_x == 11)&& hero_y == 8)
-                        if (current_floor[8][9] == 1 && current_floor[8][11] == 1)
+                        if (current_floor[8][9] == 1 && current_floor[8][11] == 1) {
+                            sfx_play(R.raw.sfx_open_doors);
                             current_floor[7][10] = 1;
+                        }
                     if ((hero_x == 9 || hero_x == 11)&& hero_y == 5)
-                        if (current_floor[5][9] == 1 && current_floor[5][11] == 1)
+                        if (current_floor[5][9] == 1 && current_floor[5][11] == 1) {
+                            sfx_play(R.raw.sfx_open_doors);
                             current_floor[4][10] = 1;
+                        }
                     break;
                 case 20:
                     if (hero_x != 6)
@@ -5575,6 +6082,10 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
                 case 32:
                     if (hero_x == 6)
                         isEvent = true;
+                    else if (hero_y == 10 && current_floor[10][1] == 1 && current_floor[10][3] == 1) {
+                        sfx_play(R.raw.sfx_open_doors);
+                        current_floor[9][2] = 1;
+                    }
                     break;
                 case 33:
                     if (hero_x < 8)
@@ -5582,6 +6093,7 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
                     boolean open33f = current_floor[5][9] == 1 && current_floor[5][11] == 1;
                     open33f &= current_floor[7][9] == 1 && current_floor[7][11] == 1;
                     if (open33f) {
+                        sfx_play(R.raw.sfx_open_doors);
                         current_floor[4][10] = 1;
                         current_floor[8][10] = 1;
                     }
@@ -5594,6 +6106,7 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
                     open34f &= current_floor[8][5] == 1 && current_floor[8][7] == 1;
                     open34f &= current_floor[8][9] == 1 && current_floor[8][11] == 1;
                     if (open34f) {
+                        sfx_play(R.raw.sfx_rewards);
                         current_floor[5][1] = 71;
                         current_floor[5][3] = 71;
                         current_floor[6][2] = 73;
@@ -5623,6 +6136,7 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
                         current_floor[2][3] = 1;
                         if (current_floor[2][1] == -7)
                             current_floor[2][1] = 1;
+                        sfx_play(R.raw.sfx_teleport);
                         current_floor[2][10] = -3;
                         break;
                     }
@@ -5696,8 +6210,10 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
                     break;
 
                 case 44:
-                    if (current_floor[9][5] == 1 && current_floor[9][7] == 1)
+                    if (current_floor[9][5] == 1 && current_floor[9][7] == 1) {
+                        sfx_play(R.raw.sfx_open_doors);
                         current_floor[8][6] = 1;
+                    }
                     break;
                 case 45:
                     if (hero_x == 5) {
@@ -5720,8 +6236,10 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
                             else
                                 current_floor[4][5] = 1;
                         } else if (hero_y == 9 || hero_y == 11) {
-                            if (current_floor[9][5] == 1 && current_floor[11][5] == 1)
+                            if (current_floor[9][5] == 1 && current_floor[11][5] == 1) {
+                                sfx_play(R.raw.sfx_open_doors);
                                 current_floor[10][4] = 1;
+                            }
                         }
                         break;
                     }
@@ -5750,12 +6268,16 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
                     if (hero_x == 8) {
                         if (hero_y == 9) {
                             current_floor[10][8] = 1;
-                            if (current_floor[11][8] == 1)
+                            if (current_floor[11][8] == 1) {
+                                sfx_play(R.raw.sfx_open_doors);
                                 current_floor[10][7] = 1;
+                            }
                         } else if (hero_y == 11) {
                             current_floor[10][8] = 1;
-                            if (current_floor[9][8] == 1)
+                            if (current_floor[9][8] == 1) {
+                                sfx_play(R.raw.sfx_open_doors);
                                 current_floor[10][7] = 1;
+                            }
                         }
                         break;
                     }
@@ -5796,6 +6318,7 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
                             current_floor[hero_y + 1][1] = -7;
                             if (current_floor[hero_y + 1][2] == -7)
                                 current_floor[hero_y + 1][2] = 1;
+                            sfx_play(R.raw.sfx_teleport);
                             current_floor[hero_y + 2][1] = 56;
                             if (current_floor[hero_y + 2][2] == 1)
                                 current_floor[hero_y + 2][2] = -7;
@@ -5806,6 +6329,7 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
                             current_floor[hero_y - 1][1] = -7;
                             if (current_floor[hero_y - 1][2] == -7)
                                 current_floor[hero_y - 1][2] = 1;
+                            sfx_play(R.raw.sfx_teleport);
                             current_floor[hero_y - 2][1] = 56;
                             if (current_floor[hero_y - 2][2] == 1)
                                 current_floor[hero_y - 2][2] = -7;
@@ -5822,6 +6346,7 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
                     } else if (hero_x == 4 && hero_y == 4) {
                         current_floor[4][4] = 1;
                         current_floor[4][5] = -7;
+                        sfx_play(R.raw.sfx_teleport);
                         current_floor[4][6] = 56;
                         if (current_floor[5][5] == -8)
                             current_floor[5][5] = -6;
@@ -5866,6 +6391,7 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
                             current_floor[3][8] = 1;
                             current_floor[2][8] = -7;
                             current_floor[1][9] = -7;
+                            sfx_play(R.raw.sfx_teleport);
                             current_floor[1][8] = 56;
                         } else if (hero_y == 2 && current_floor[1][8] == -7) {
                             current_floor[1][8] = 1;
@@ -5890,14 +6416,17 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
                         if (hero_y == 9) {
                             current_floor[8][1] = 1;
                             current_floor[10][1] = 1;
-                        } else if (hero_y == 1)
+                        } else if (hero_y == 1) {
+                            sfx_play(R.raw.sfx_open_doors);
                             current_floor[8][8] = 1;
+                        }
                     } else if (hero_x == 2) {
                         if (hero_y == 4){
                             current_floor[4][2] = 1;
                             current_floor[3][2] = -7;
                             current_floor[3][1] = 1;
                             current_floor[3][3] = 1;
+                            sfx_play(R.raw.sfx_teleport);
                             current_floor[2][2] = 56;
                             current_floor[2][1] = -7;
                             if (current_floor[1][2] == 1)
@@ -5931,6 +6460,7 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
                                 current_floor[10][6] = -7;
                             else {
                                 current_floor[10][6] = 1;
+                                sfx_play(R.raw.sfx_open_doors);
                                 current_floor[9][6] = 1;
                             }
                         } else if (hero_x == 7){
@@ -5939,13 +6469,16 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
                                 current_floor[10][6] = -7;
                             else {
                                 current_floor[10][6] = 1;
+                                sfx_play(R.raw.sfx_open_doors);
                                 current_floor[9][6] = 1;
                             }
                         }
                     }
                     else if (hero_y == 8) {
-                        if (current_floor[8][5] == 1 && current_floor[8][7] == 1)
+                        if (current_floor[8][5] == 1 && current_floor[8][7] == 1) {
+                            sfx_play(R.raw.sfx_open_doors);
                             current_floor[7][6] = 1;
+                        }
                     } else if (hero_y < 6) {
                         if (hero_x == 6 && hero_y == 3)
                             isEvent = true;
@@ -5958,6 +6491,26 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
                                 isEvent = true;
                         }
                     }
+                    break;
+                case 50:
+                    parent.runOnUiThread(new Runnable() {
+                        public void run() {
+                            AlertDialog.Builder game_finish_builder = new AlertDialog.Builder(parent);
+                            game_finish_builder.setTitle(R.string.game_finish_title);
+                            game_finish_builder.setMessage(R.string.game_finish_message);
+                            game_finish_builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialogInterface, int i) {
+                                    if (background_music != null)
+                                        background_music.release();
+                                    finish();
+                                }
+                            });
+                            AlertDialog game_finish_dialog = game_finish_builder.create();
+                            game_finish_dialog.setCanceledOnTouchOutside(false);
+                            game_finish_dialog.show();
+                        }
+                    });
                     break;
                 default:
                     break;
@@ -6040,9 +6593,10 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
                         return 1;
                     }
                 case -5:        // invisible wall
-                    sfx_music = MediaPlayer.create(getApplicationContext(), R.raw.sfx_blocked);
-                    if (music_settings[1])
-                        sfx_music.start();
+                    if (sound_block) {
+                        sound_block = false;
+                        sfx_play(R.raw.sfx_blocked);
+                    }
                     return 0;
                 case -4:        // event floor
                     isEvent = true;
@@ -6072,9 +6626,10 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
                     return 0;
                 case -2:        // fake floor
                     if (floor_num == 23) {
-                        sfx_music = MediaPlayer.create(getApplicationContext(), R.raw.sfx_blocked);
-                        if (music_settings[1])
-                            sfx_music.start();
+                        if (sound_block) {
+                            sound_block = false;
+                            sfx_play(R.raw.sfx_blocked);
+                        }
                         current_floor[i][j] = 0;
                         refresh_ctr = true;
                         for (int q = 1; q < 12; q++) {
@@ -6096,17 +6651,16 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
                     refresh_ctr = true;
                     return 1;
                 case 0:         // wall
-                    sfx_music = MediaPlayer.create(getApplicationContext(), R.raw.sfx_blocked);
-                    if (music_settings[1])
-                        sfx_music.start();
+                    if (sound_block) {
+                        sound_block = false;
+                        sfx_play(R.raw.sfx_blocked);
+                    }
                     return 0;
                 case 1:         // floor
                     return 1;
                 case 3:         // upstairs
-                    sleep(150);
-                    sfx_music = MediaPlayer.create(getApplicationContext(), R.raw.sfx_stairs);
-                    if (music_settings[1])
-                        sfx_music.start();
+                    sleep(350);
+                    sfx_play(R.raw.sfx_stairs);
                     if (floor_num%10 == 0 && floor_num != 0) {  // if needs to change music
                         if (background_music != null)           // kill the old music first
                             background_music.release();
@@ -6127,14 +6681,16 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
                     if (floor_num > highest_floor) {
                         if (floor_num == 32 || floor_num == 35 || floor_num == 42)
                             isEvent = true;
+                        else if (floor_num == 36) {
+                            current_game.change_2f_again();
+                            current_game.change_35f_again();
+                        }
                         highest_floor = floor_num;
                     }
                     return 0;
                 case 4:         // downstairs
-                    sleep(150);
-                    sfx_music = MediaPlayer.create(getApplicationContext(), R.raw.sfx_stairs);
-                    if (music_settings[1])
-                        sfx_music.start();
+                    sleep(350);
+                    sfx_play(R.raw.sfx_stairs);
                     if (floor_num%10 == 1 && floor_num != 1) {  // if needs to change music
                         if (background_music != null)           // kill the old music first
                             background_music.release();
@@ -6155,9 +6711,7 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
                     return 0;
                 case 5:         // yellow door
                     if (count_y > 0) {
-                        sfx_music = MediaPlayer.create(getApplicationContext(), R.raw.sfx_open_doors);
-                        if (music_settings[1])
-                            sfx_music.start();
+                        sfx_play(R.raw.sfx_open_doors);
                         count_y--;
                         current_floor[i][j] = 1;
                         refresh_ctr = true;
@@ -6166,8 +6720,10 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
                             condition &= current_floor[2][6] == 5 && current_floor[4][2] == 5;
                             condition &= current_floor[4][6] == 1 && current_floor[6][2] == 5;
                             condition &= current_floor[6][4] == 5 && current_floor[6][6] == 5;
-                            if (condition)
+                            if (condition) {
+                                sfx_play(R.raw.sfx_teleport);
                                 current_floor[4][4] = 84;
+                            }
                         } else if (floor_num == 41) {
                             if (i == 2 && j == 1 && current_floor[2][2] == 56) {
                                 current_floor[2][1] = -7;
@@ -6209,16 +6765,15 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
                         }
                         return 1;
                     } else {
-                        sfx_music = MediaPlayer.create(getApplicationContext(), R.raw.sfx_blocked);
-                        if (music_settings[1])
-                            sfx_music.start();
+                        if (sound_block) {
+                            sound_block = false;
+                            sfx_play(R.raw.sfx_blocked);
+                        }
                         return 0;
                     }
                 case 6:         // blue door
                     if (count_b > 0) {
-                        sfx_music = MediaPlayer.create(getApplicationContext(), R.raw.sfx_open_doors);
-                        if (music_settings[1])
-                            sfx_music.start();
+                        sfx_play(R.raw.sfx_open_doors);
                         count_b--;
                         current_floor[i][j] = 1;
                         refresh_ctr = true;
@@ -6230,37 +6785,40 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
                         }
                         return 1;
                     } else {
-                        sfx_music = MediaPlayer.create(getApplicationContext(), R.raw.sfx_blocked);
-                        if (music_settings[1])
-                            sfx_music.start();
+                        if (sound_block) {
+                            sound_block = false;
+                            sfx_play(R.raw.sfx_blocked);
+                        }
                         return 0;
                     }
                 case 7:         // red door
                     if (count_r > 0) {
-                        sfx_music = MediaPlayer.create(getApplicationContext(), R.raw.sfx_open_doors);
-                        if (music_settings[1])
-                            sfx_music.start();
+                        sfx_play(R.raw.sfx_open_doors);
                         count_r--;
                         current_floor[i][j] = 1;
                         refresh_ctr = true;
                         return 1;
                     } else {
-                        sfx_music = MediaPlayer.create(getApplicationContext(), R.raw.sfx_blocked);
-                        if (music_settings[1])
-                            sfx_music.start();
+                        if (sound_block) {
+                            sound_block = false;
+                            sfx_play(R.raw.sfx_blocked);
+                        }
                         return 0;
                     }
                 case 8:         // magic door
-                    sfx_music = MediaPlayer.create(getApplicationContext(), R.raw.sfx_blocked);
-                    if (music_settings[1])
-                        sfx_music.start();
+                    if (sound_block) {
+                        sound_block = false;
+                        sfx_play(R.raw.sfx_blocked);
+                    }
                     return 0;
                 case 9:         // prison
-                    sfx_music = MediaPlayer.create(getApplicationContext(), R.raw.sfx_blocked);
-                    if (music_settings[1])
-                        sfx_music.start();
+                    if (sound_block) {
+                        sound_block = false;
+                        sfx_play(R.raw.sfx_blocked);
+                    }
                     return 0;
                 case 11:        // iron sword
+                    sfx_play(R.raw.sfx_items);
                     parent.runOnUiThread(new Runnable() {
                         public void run() {
                             AlertDialog.Builder pick_up_builder = new AlertDialog.Builder(parent);
@@ -6270,14 +6828,12 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
                             pick_up_dialog.show();
                         }
                     });
-                    sfx_music = MediaPlayer.create(getApplicationContext(), R.raw.sfx_items);
-                    if (music_settings[1])
-                        sfx_music.start();
                     current_floor[i][j] = 1;
                     atk += 10;
                     refresh_ctr = true;
                     return 1;
                 case 12:        // iron shield
+                    sfx_play(R.raw.sfx_items);
                     parent.runOnUiThread(new Runnable() {
                         public void run() {
                             AlertDialog.Builder pick_up_builder = new AlertDialog.Builder(parent);
@@ -6287,14 +6843,12 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
                             pick_up_dialog.show();
                         }
                     });
-                    sfx_music = MediaPlayer.create(getApplicationContext(), R.raw.sfx_items);
-                    if (music_settings[1])
-                        sfx_music.start();
                     current_floor[i][j] = 1;
                     def += 10;
                     refresh_ctr = true;
                     return 1;
                 case 13:        // silver sword
+                    sfx_play(R.raw.sfx_items);
                     parent.runOnUiThread(new Runnable() {
                         public void run() {
                             AlertDialog.Builder pick_up_builder = new AlertDialog.Builder(parent);
@@ -6304,14 +6858,12 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
                             pick_up_dialog.show();
                         }
                     });
-                    sfx_music = MediaPlayer.create(getApplicationContext(), R.raw.sfx_items);
-                    if (music_settings[1])
-                        sfx_music.start();
                     current_floor[i][j] = 1;
                     atk += 20;
                     refresh_ctr = true;
                     return 1;
                 case 14:        // silver shield
+                    sfx_play(R.raw.sfx_items);
                     parent.runOnUiThread(new Runnable() {
                         public void run() {
                             AlertDialog.Builder pick_up_builder = new AlertDialog.Builder(parent);
@@ -6321,14 +6873,12 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
                             pick_up_dialog.show();
                         }
                     });
-                    sfx_music = MediaPlayer.create(getApplicationContext(), R.raw.sfx_items);
-                    if (music_settings[1])
-                        sfx_music.start();
                     current_floor[i][j] = 1;
                     def += 20;
                     refresh_ctr = true;
                     return 1;
                 case 15:        // knight sword
+                    sfx_play(R.raw.sfx_items);
                     parent.runOnUiThread(new Runnable() {
                         public void run() {
                             AlertDialog.Builder pick_up_builder = new AlertDialog.Builder(parent);
@@ -6338,15 +6888,13 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
                             pick_up_dialog.show();
                         }
                     });
-                    sfx_music = MediaPlayer.create(getApplicationContext(), R.raw.sfx_items);
-                    if (music_settings[1])
-                        sfx_music.start();
                     current_floor[i][j] = 1;
                     current_floor[10][8] = 0;
                     atk += 40;
                     refresh_ctr = true;
                     return 1;
                 case 16:        // knight shield
+                    sfx_play(R.raw.sfx_items);
                     parent.runOnUiThread(new Runnable() {
                         public void run() {
                             AlertDialog.Builder pick_up_builder = new AlertDialog.Builder(parent);
@@ -6356,15 +6904,13 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
                             pick_up_dialog.show();
                         }
                     });
-                    sfx_music = MediaPlayer.create(getApplicationContext(), R.raw.sfx_items);
-                    if (music_settings[1])
-                        sfx_music.start();
                     current_floor[i][j] = 1;
                     current_floor[5][2] = 0;
                     def += 40;
                     refresh_ctr = true;
                     return 1;
                 case 17:        // divine sword
+                    sfx_play(R.raw.sfx_items);
                     parent.runOnUiThread(new Runnable() {
                         public void run() {
                             AlertDialog.Builder pick_up_builder = new AlertDialog.Builder(parent);
@@ -6374,14 +6920,12 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
                             pick_up_dialog.show();
                         }
                     });
-                    sfx_music = MediaPlayer.create(getApplicationContext(), R.raw.sfx_items);
-                    if (music_settings[1])
-                        sfx_music.start();
                     current_floor[i][j] = 1;
                     atk += 50;
                     refresh_ctr = true;
                     return 1;
                 case 18:        // divine shield
+                    sfx_play(R.raw.sfx_items);
                     parent.runOnUiThread(new Runnable() {
                         public void run() {
                             AlertDialog.Builder pick_up_builder = new AlertDialog.Builder(parent);
@@ -6391,14 +6935,12 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
                             pick_up_dialog.show();
                         }
                     });
-                    sfx_music = MediaPlayer.create(getApplicationContext(), R.raw.sfx_items);
-                    if (music_settings[1])
-                        sfx_music.start();
                     current_floor[i][j] = 1;
                     def += 50;
                     refresh_ctr = true;
                     return 1;
                 case 19:        // sacred sword
+                    sfx_play(R.raw.sfx_items);
                     parent.runOnUiThread(new Runnable() {
                         public void run() {
                             AlertDialog.Builder pick_up_builder = new AlertDialog.Builder(parent);
@@ -6408,14 +6950,12 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
                             pick_up_dialog.show();
                         }
                     });
-                    sfx_music = MediaPlayer.create(getApplicationContext(), R.raw.sfx_items);
-                    if (music_settings[1])
-                        sfx_music.start();
                     current_floor[i][j] = 1;
                     atk += 100;
                     refresh_ctr = true;
                     return 1;
                 case 20:        // sacred shield
+                    sfx_play(R.raw.sfx_items);
                     parent.runOnUiThread(new Runnable() {
                         public void run() {
                             AlertDialog.Builder pick_up_builder = new AlertDialog.Builder(parent);
@@ -6425,9 +6965,6 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
                             pick_up_dialog.show();
                         }
                     });
-                    sfx_music = MediaPlayer.create(getApplicationContext(), R.raw.sfx_items);
-                    if (music_settings[1])
-                        sfx_music.start();
                     current_floor[i][j] = 1;
                     sacred_shield = true;
                     def += 100;
@@ -6444,16 +6981,12 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
                     return 0;
                 case 29:
                     if (snow_cryst) {
-                        sfx_music = MediaPlayer.create(getApplicationContext(), R.raw.sfx_lava_freezing);
-                        if (music_settings[1])
-                            sfx_music.start();
+                        sfx_play(R.raw.sfx_lava_freezing);
                         current_floor[i][j] = 1;
                         refresh_ctr = true;
                         return 1;
                     } else {
-                        sfx_music = MediaPlayer.create(getApplicationContext(), R.raw.sfx_lava_cant_pass);
-                        if (music_settings[1])
-                            sfx_music.start();
+                        sfx_play(R.raw.sfx_explosion);
                         return 0;
                     }
                 case 31:
@@ -6531,25 +7064,19 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
                 case 66:
                     return battle_preparation(34);
                 case 71:        // yellow key
-                    sfx_music = MediaPlayer.create(getApplicationContext(), R.raw.sfx_items);
-                    if (music_settings[1])
-                        sfx_music.start();
+                    sfx_play(R.raw.sfx_items);
                     current_floor[i][j] = 1;
                     count_y++;
                     refresh_ctr = true;
                     return 1;
                 case 72:        // blue key
-                    sfx_music = MediaPlayer.create(getApplicationContext(), R.raw.sfx_items);
-                    if (music_settings[1])
-                        sfx_music.start();
+                    sfx_play(R.raw.sfx_items);
                     current_floor[i][j] = 1;
                     count_b++;
                     refresh_ctr = true;
                     return 1;
                 case 73:        // red key
-                    sfx_music = MediaPlayer.create(getApplicationContext(), R.raw.sfx_items);
-                    if (music_settings[1])
-                        sfx_music.start();
+                    sfx_play(R.raw.sfx_items);
                     current_floor[i][j] = 1;
                     count_r++;
                     refresh_ctr = true;
@@ -6559,18 +7086,16 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
                         public void run() {
                             AlertDialog.Builder pick_up_builder = new AlertDialog.Builder(parent);
                             String full_message = getString(R.string.pick_up_red_potion);
-                            full_message += String.valueOf(50*(1+floor_num/10)) + ".";
+                            full_message += String.valueOf(50*(1+(floor_num-1)/10)) + ".";
                             pick_up_builder.setMessage(full_message);
                             AlertDialog pick_up_dialog = pick_up_builder.create();
                             pick_up_dialog.setCanceledOnTouchOutside(true);
                             pick_up_dialog.show();
                         }
                     });
-                    sfx_music = MediaPlayer.create(getApplicationContext(), R.raw.sfx_potion);
-                    if (music_settings[1])
-                        sfx_music.start();
+                    sfx_play(R.raw.sfx_potion);
                     current_floor[i][j] = 1;
-                    hp += 50 * (floor_num / 10 + 1);
+                    hp += 50 * ((floor_num-1) / 10 + 1);
                     refresh_ctr = true;
                     return 1;
                 case 75:        // blue potion
@@ -6578,18 +7103,16 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
                         public void run() {
                             AlertDialog.Builder pick_up_builder = new AlertDialog.Builder(parent);
                             String full_message = getString(R.string.pick_up_blue_potion);
-                            full_message += String.valueOf(200*(1+floor_num/10)) + ".";
+                            full_message += String.valueOf(200*(1+(floor_num-1)/10)) + ".";
                             pick_up_builder.setMessage(full_message);
                             AlertDialog pick_up_dialog = pick_up_builder.create();
                             pick_up_dialog.setCanceledOnTouchOutside(true);
                             pick_up_dialog.show();
                         }
                     });
-                    sfx_music = MediaPlayer.create(getApplicationContext(), R.raw.sfx_potion);
-                    if (music_settings[1])
-                        sfx_music.start();
+                    sfx_play(R.raw.sfx_potion);
                     current_floor[i][j] = 1;
-                    hp += 200 * (floor_num / 10 + 1);
+                    hp += 200 * ((floor_num-1) / 10 + 1);
                     refresh_ctr = true;
                     if (floor_num == 48 && i == 1 && j == 2 && current_floor[2][2] == 56)
                         current_floor[1][2] = -7;
@@ -6599,18 +7122,16 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
                         public void run() {
                             AlertDialog.Builder pick_up_builder = new AlertDialog.Builder(parent);
                             String full_message = getString(R.string.pick_up_red_crystal);
-                            full_message += String.valueOf(1+floor_num/10) + ".";
+                            full_message += String.valueOf(1+(floor_num-1)/10) + ".";
                             pick_up_builder.setMessage(full_message);
                             AlertDialog pick_up_dialog = pick_up_builder.create();
                             pick_up_dialog.setCanceledOnTouchOutside(true);
                             pick_up_dialog.show();
                         }
                     });
-                    sfx_music = MediaPlayer.create(getApplicationContext(), R.raw.sfx_crystal);
-                    if (music_settings[1])
-                        sfx_music.start();
+                    sfx_play(R.raw.sfx_crystal);
                     current_floor[i][j] = 1;
-                    atk += (floor_num / 10 + 1);
+                    atk += ((floor_num-1) / 10 + 1);
                     refresh_ctr = true;
                     return 1;
                 case 77:        // blue crystal
@@ -6618,18 +7139,16 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
                         public void run() {
                             AlertDialog.Builder pick_up_builder = new AlertDialog.Builder(parent);
                             String full_message = getString(R.string.pick_up_blue_crystal);
-                            full_message += String.valueOf(1+floor_num/10) + ".";
+                            full_message += String.valueOf(1+(floor_num-1)/10) + ".";
                             pick_up_builder.setMessage(full_message);
                             AlertDialog pick_up_dialog = pick_up_builder.create();
                             pick_up_dialog.setCanceledOnTouchOutside(true);
                             pick_up_dialog.show();
                         }
                     });
-                    sfx_music = MediaPlayer.create(getApplicationContext(), R.raw.sfx_crystal);
-                    if (music_settings[1])
-                        sfx_music.start();
+                    sfx_play(R.raw.sfx_crystal);
                     current_floor[i][j] = 1;
-                    def += (floor_num / 10 + 1);
+                    def += ((floor_num-1) / 10 + 1);
                     refresh_ctr = true;
                     return 1;
                 case 78:        // staff of wisdom
@@ -6647,9 +7166,7 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
                             pick_up_dialog.show();
                         }
                     });
-                    sfx_music = MediaPlayer.create(getApplicationContext(), R.raw.sfx_items);
-                    if (music_settings[1])
-                        sfx_music.start();
+                    sfx_play(R.raw.sfx_items);
                     current_floor[i][j] = 1;
                     stf_echo = true;
                     refresh_ctr = true;
@@ -6664,9 +7181,7 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
                             pick_up_dialog.show();
                         }
                     });
-                    sfx_music = MediaPlayer.create(getApplicationContext(), R.raw.sfx_items);
-                    if (music_settings[1])
-                        sfx_music.start();
+                    sfx_play(R.raw.sfx_items);
                     current_floor[i][j] = 1;
                     stf_space = true;
                     refresh_ctr = true;
@@ -6681,9 +7196,7 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
                             pick_up_dialog.show();
                         }
                     });
-                    sfx_music = MediaPlayer.create(getApplicationContext(), R.raw.sfx_items);
-                    if (music_settings[1])
-                        sfx_music.start();
+                    sfx_play(R.raw.sfx_items);
                     current_floor[i][j] = 1;
                     cross = true;
                     refresh_ctr = true;
@@ -6703,9 +7216,7 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
                             pick_up_dialog.show();
                         }
                     });
-                    sfx_music = MediaPlayer.create(getApplicationContext(), R.raw.sfx_items);
-                    if (music_settings[1])
-                        sfx_music.start();
+                    sfx_play(R.raw.sfx_items);
                     current_floor[i][j] = 1;
                     m_mattock = true;
                     refresh_ctr = true;
@@ -6720,10 +7231,9 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
                             pick_up_dialog.show();
                         }
                     });
-                    sfx_music = MediaPlayer.create(getApplicationContext(), R.raw.sfx_items);
-                    if (music_settings[1])
-                        sfx_music.start();
+                    sfx_play(R.raw.sfx_items);
                     current_floor[i][j] = 1;
+                    count_wing = 3;
                     wing_cent = true;
                     refresh_ctr = true;
                     return 1;
@@ -6742,9 +7252,7 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
                             pick_up_dialog.show();
                         }
                     });
-                    sfx_music = MediaPlayer.create(getApplicationContext(), R.raw.sfx_items);
-                    if (music_settings[1])
-                        sfx_music.start();
+                    sfx_play(R.raw.sfx_items);
                     current_floor[i][j] = 1;
                     bomb = true;
                     refresh_ctr = true;
@@ -6759,9 +7267,7 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
                             pick_up_dialog.show();
                         }
                     });
-                    sfx_music = MediaPlayer.create(getApplicationContext(), R.raw.sfx_items);
-                    if (music_settings[1])
-                        sfx_music.start();
+                    sfx_play(R.raw.sfx_items);
                     current_floor[i][j] = 1;
                     wing_up = true;
                     refresh_ctr = true;
@@ -6776,9 +7282,7 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
                             pick_up_dialog.show();
                         }
                     });
-                    sfx_music = MediaPlayer.create(getApplicationContext(), R.raw.sfx_items);
-                    if (music_settings[1])
-                        sfx_music.start();
+                    sfx_play(R.raw.sfx_items);
                     current_floor[i][j] = 1;
                     key_enhac = true;
                     refresh_ctr = true;
@@ -6793,9 +7297,7 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
                             pick_up_dialog.show();
                         }
                     });
-                    sfx_music = MediaPlayer.create(getApplicationContext(), R.raw.sfx_items);
-                    if (music_settings[1])
-                        sfx_music.start();
+                    sfx_play(R.raw.sfx_items);
                     current_floor[i][j] = 1;
                     wing_down = true;
                     refresh_ctr = true;
@@ -6810,9 +7312,7 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
                             pick_up_dialog.show();
                         }
                     });
-                    sfx_music = MediaPlayer.create(getApplicationContext(), R.raw.sfx_items);
-                    if (music_settings[1])
-                        sfx_music.start();
+                    sfx_play(R.raw.sfx_items);
                     current_floor[i][j] = 1;
                     lucky_gold = true;
                     refresh_ctr = true;
@@ -6827,9 +7327,7 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
                             pick_up_dialog.show();
                         }
                     });
-                    sfx_music = MediaPlayer.create(getApplicationContext(), R.raw.sfx_items);
-                    if (music_settings[1])
-                        sfx_music.start();
+                    sfx_play(R.raw.sfx_items);
                     current_floor[i][j] = 1;
                     dragonsbane = true;
                     refresh_ctr = true;
@@ -6844,9 +7342,7 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
                             pick_up_dialog.show();
                         }
                     });
-                    sfx_music = MediaPlayer.create(getApplicationContext(), R.raw.sfx_items);
-                    if (music_settings[1])
-                        sfx_music.start();
+                    sfx_play(R.raw.sfx_items);
                     current_floor[i][j] = 1;
                     snow_cryst = true;
                     refresh_ctr = true;
@@ -6859,7 +7355,7 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
 
         private int[] find_hero_next_floor(boolean dir, int in_floor_num) {
             byte[][] floor = current_game.get_one_floor(in_floor_num);
-            int i = 6, j = 6;
+            int i = 1, j = 1;
             for (int a = 1; a < 12; a++) {
                 for (int b = 1; b < 12; b++) {
                     if (dir) {  // going up
@@ -6891,7 +7387,7 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
                 hero_sprite.set_direction(RIGHT);
                 return new int[]{i, j + 1};
             }
-            return new int[]{12, 1};
+            return new int[]{10, 1};
         }
 
         private int battle_preparation(int m_idx) {

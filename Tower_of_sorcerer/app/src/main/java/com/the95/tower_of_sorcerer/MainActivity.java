@@ -9,12 +9,11 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 
-import java.util.ArrayList;
-
 public class MainActivity extends AppCompatActivity {
 
     private MediaPlayer OpeningThemeMusic;
     private boolean[]   music_settings;
+    private boolean     bgm_on;
     private static final String TAG = "debuuuuuuuuuuuuuuuuuug";
     //Log.v(TAG, "x = " + me.getX() + " y = " + me.getY());
 
@@ -24,6 +23,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         music_settings = new boolean[]{true, true};
+        bgm_on = true;
         OpeningThemeMusic = MediaPlayer.create(getApplicationContext(), R.raw.bgm_opening);
         OpeningThemeMusic.setLooping(true);
         OpeningThemeMusic.start();
@@ -34,14 +34,36 @@ public class MainActivity extends AppCompatActivity {
         findViewById(R.id.exit).setOnClickListener(myListener);
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (!bgm_on && music_settings[0]) {
+            bgm_on = true;
+            OpeningThemeMusic = MediaPlayer.create(getApplicationContext(), R.raw.bgm_opening);
+            OpeningThemeMusic.setLooping(true);
+            OpeningThemeMusic.start();
+        }
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        if (bgm_on) {
+            bgm_on = false;
+            OpeningThemeMusic.release();
+        }
+    }
+
     public View.OnClickListener myListener = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
-            MediaPlayer SelectMusic = MediaPlayer.create(getApplicationContext(), R.raw.sfx_choose);
+            final MediaPlayer SelectMusic = MediaPlayer.create(getApplicationContext(), R.raw.sfx_choose);
             switch (view.getId()) {
                 case R.id.new_game:
-                    if (OpeningThemeMusic != null)
+                    if (OpeningThemeMusic != null) {
                         OpeningThemeMusic.release();
+                        bgm_on = false;
+                    }
                     if (music_settings[1])
                         SelectMusic.start();
                     Intent game = new Intent(MainActivity.this, Gamelogic.class);
@@ -50,8 +72,10 @@ public class MainActivity extends AppCompatActivity {
                     break;
 
                 case R.id.load:
-                    if (OpeningThemeMusic != null)
+                    if (OpeningThemeMusic != null) {
                         OpeningThemeMusic.release();
+                        bgm_on = false;
+                    }
                     if (music_settings[1])
                         SelectMusic.start();
                     Intent load_screen = new Intent(MainActivity.this, LoadActivity.class);
@@ -60,8 +84,6 @@ public class MainActivity extends AppCompatActivity {
                     break;
 
                 case R.id.settings:
-                    if (OpeningThemeMusic != null)
-                        OpeningThemeMusic.release();
                     if (music_settings[1])
                         SelectMusic.start();
                     Log.v(TAG, "x = " + String.valueOf(music_settings[0]) + " y = " + String.valueOf(music_settings[1]));
@@ -78,6 +100,17 @@ public class MainActivity extends AppCompatActivity {
                     music_builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int id) {
+                            if (music_settings[1])
+                                SelectMusic.start();
+                            if (!music_settings[0] && bgm_on) {
+                                bgm_on = false;
+                                OpeningThemeMusic.release();
+                            } else if (music_settings[0] && !bgm_on){
+                                bgm_on = true;
+                                OpeningThemeMusic = MediaPlayer.create(getApplicationContext(), R.raw.bgm_opening);
+                                OpeningThemeMusic.setLooping(true);
+                                OpeningThemeMusic.start();
+                            }
                         }
                     });
                     AlertDialog music_dialog = music_builder.create();

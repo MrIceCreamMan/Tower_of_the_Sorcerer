@@ -15,6 +15,7 @@ import java.io.IOException;
 public class LoadActivity extends AppCompatActivity {
     private byte[] game_data;
     private boolean[] music_settings;
+    private boolean[] can_load;
     private static final String TAG = "debuuuuuuuuuuuuuuuuuug";
 
     @Override
@@ -23,6 +24,7 @@ public class LoadActivity extends AppCompatActivity {
         setContentView(R.layout.activity_load);
 
         Bundle extras = getIntent().getExtras();
+        can_load = new boolean[]{false, false, false, false};
         if (extras != null) {
             music_settings = extras.getBooleanArray("Music_Settings");
         }
@@ -37,6 +39,10 @@ public class LoadActivity extends AppCompatActivity {
         load_partial_data_from_save_file(2);
         load_partial_data_from_save_file(3);
         load_partial_data_from_save_file(4);
+        findViewById(R.id.load_1).setEnabled(can_load[0]);
+        findViewById(R.id.load_2).setEnabled(can_load[1]);
+        findViewById(R.id.load_3).setEnabled(can_load[2]);
+        findViewById(R.id.load_4).setEnabled(can_load[3]);
     }
 
     private void load_partial_data_from_save_file(int save_idx) {
@@ -80,7 +86,7 @@ public class LoadActivity extends AppCompatActivity {
             byte[] meta_data = new byte[25];
             int field_count = 0;
             int total_bytes_read = fis.read(meta_data, 0, 25);
-            Log.v(TAG, "meta data bytes = " + String.valueOf(total_bytes_read));
+            Log.v(TAG, "meta data bytes = " + String.valueOf(total_bytes_read) + " " + String.valueOf(save_idx));
             int i = 0;
             StringBuilder sb = new StringBuilder();
             while(field_count < 5 && i < 25) {
@@ -96,6 +102,7 @@ public class LoadActivity extends AppCompatActivity {
                 }
                 i++;
             }
+            can_load[save_idx-1] = true;
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         } catch (IOException e) {
