@@ -1,3 +1,3 @@
 # Tower_of_the_Sorcerer
-Android game development practice
+An interesting android game
 
