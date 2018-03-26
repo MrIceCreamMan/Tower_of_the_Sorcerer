@@ -18,7 +18,7 @@ public class SaveActivity extends AppCompatActivity {
     final String    FILENAME3 = "save3.txt";
     final String    FILENAME4 = "save4.txt";
     private byte[]  game_data;
-    private boolean[] music_settings;
+    private boolean[] game_settings;
     private static final String TAG = "debuuuuuuuuuuuuuuuuuug";
 
     @Override
@@ -29,7 +29,7 @@ public class SaveActivity extends AppCompatActivity {
         Bundle extras = getIntent().getExtras();
         if (extras != null) {
             game_data = extras.getByteArray("Game_Data");
-            music_settings = extras.getBooleanArray("Music_Settings");
+            game_settings = extras.getBooleanArray("Game_Settings");
         }
 
         findViewById(R.id.save_1).setOnClickListener(Save_Game);
@@ -124,7 +124,7 @@ public class SaveActivity extends AppCompatActivity {
             MediaPlayer CancelMusic = MediaPlayer.create(getApplicationContext(), R.raw.sfx_cancel);
             switch (view.getId()) {
                 case R.id.save_1:
-                    if (music_settings[1])
+                    if (game_settings[1])
                         SelectMusic.start();
                     /*
                     File f = new File(FILENAME);
@@ -149,7 +149,7 @@ public class SaveActivity extends AppCompatActivity {
                     break;
 
                 case R.id.save_2:
-                    if (music_settings[1])
+                    if (game_settings[1])
                         SelectMusic.start();
                     try {
                         fos = openFileOutput(FILENAME2, Context.MODE_PRIVATE);
@@ -164,7 +164,7 @@ public class SaveActivity extends AppCompatActivity {
                     break;
 
                 case R.id.save_3:
-                    if (music_settings[1])
+                    if (game_settings[1])
                         SelectMusic.start();
                     try {
                         fos = openFileOutput(FILENAME3, Context.MODE_PRIVATE);
@@ -179,7 +179,7 @@ public class SaveActivity extends AppCompatActivity {
                     break;
 
                 case R.id.save_4:
-                    if (music_settings[1])
+                    if (game_settings[1])
                         SelectMusic.start();
                     try {
                         fos = openFileOutput(FILENAME4, Context.MODE_PRIVATE);
@@ -194,7 +194,7 @@ public class SaveActivity extends AppCompatActivity {
                     break;
 
                 case R.id.cancel:
-                    if (music_settings[1])
+                    if (game_settings[1])
                         CancelMusic.start();
                     finish();
                     break;

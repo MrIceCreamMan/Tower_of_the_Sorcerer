@@ -83,9 +83,9 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
     private ArrayList<String>   monsters_name1, monsters_name2;
     private static Gamelogic    parent;
     private byte[]              game_data_to_save;
-    private MediaPlayer         background_music, sfx_music;
+    private MediaPlayer         background_music;
     private String              instruction;
-    private boolean[]           music_settings;
+    private boolean[]           game_settings;
     private int                 walk_result,    walk_count,     which_button,       sq_size;
     private int                 m_hp,           m_atk,          m_def,              m_gold;
     private float               x,              y,              page,               total_page;
@@ -95,6 +95,7 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
     private boolean             hero_attack,    show_hero,      not_show_hero,      show_fight;
     private boolean             blackout,       proceed,        no_dialog,          which_surface_view;
     private boolean             sound_block,    sound_teleport, debug_fly,          bgm_on;
+    private boolean             npc_dialog;
     //  current game data
     private Floors      current_game;
     private byte[][]    current_floor;
@@ -157,6 +158,7 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
         hero_attack = true;     show_hero = true;       not_show_hero = false;  show_fight = false;
         blackout = false;       proceed = false;        no_dialog = true;       which_surface_view = true;
         sound_block = true;     sound_teleport = false; debug_fly = false;      bgm_on = false;
+        npc_dialog = false;
 
         // initialize current game data
         current_game = new Floors();
@@ -177,7 +179,7 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
         // check if needs to load game
         Bundle extras = getIntent().getExtras();
         if (extras != null) {
-            music_settings = extras.getBooleanArray("Music_Settings");
+            game_settings = extras.getBooleanArray("Game_Settings");
             byte[] game_data_to_load_1 = extras.getByteArray("Game_File_1");
             byte[] game_data_to_load_2 = extras.getByteArray("Game_File_2");
             byte[] game_data_to_load_3 = extras.getByteArray("Game_File_3");
@@ -212,7 +214,7 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
             which_music = bgm_list[floor_num/10];
         background_music = MediaPlayer.create(getApplicationContext(), which_music);
         background_music.setLooping(true);
-        if (music_settings[0]) {
+        if (game_settings[0]) {
             bgm_on = true;
             background_music.start();
         }
@@ -371,7 +373,6 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
     @Override
     public boolean onTouch(View v, MotionEvent me) {
         sleep(25);
-
         switch (me.getAction()) {
             case MotionEvent.ACTION_DOWN:
                 if (!which_surface_view) {
@@ -439,15 +440,12 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
                         final AlertDialog staff_echo_dialog = staff_echo_builder.create();
                         staff_echo_dialog.setCanceledOnTouchOutside(true);
                         final AlertDialog.Builder echo_builder = new AlertDialog.Builder(Gamelogic.this);
-                        final MediaPlayer CancelMusic = MediaPlayer.create(getApplicationContext(), R.raw.sfx_cancel);
-                        final MediaPlayer SelectMusic = MediaPlayer.create(getApplicationContext(), R.raw.sfx_choose);
 
                         Button btn1 = staff_of_echo_view.findViewById(R.id.button1);
                         btn1.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View view) {
-                                if (music_settings[1])
-                                    SelectMusic.start();
+                                sfx_play(R.raw.sfx_choose);
                                 if (echo_history[0] == 0) {
                                     echo_builder.setMessage(R.string.no_echo);
                                     staff_echo_dialog.dismiss();
@@ -469,8 +467,7 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
                         btn2.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View view) {
-                                if (music_settings[1])
-                                    SelectMusic.start();
+                                sfx_play(R.raw.sfx_choose);
                                 if (echo_history[1] == 0) {
                                     echo_builder.setMessage(R.string.no_echo);
                                     staff_echo_dialog.dismiss();
@@ -492,8 +489,7 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
                         btn3.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View view) {
-                                if (music_settings[1])
-                                    SelectMusic.start();
+                                sfx_play(R.raw.sfx_choose);
                                 if (echo_history[2] == 0) {
                                     echo_builder.setMessage(R.string.no_echo);
                                     staff_echo_dialog.dismiss();
@@ -515,8 +511,7 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
                         btn4.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View view) {
-                                if (music_settings[1])
-                                    SelectMusic.start();
+                                sfx_play(R.raw.sfx_choose);
                                 if (echo_history[3] == 0) {
                                     echo_builder.setMessage(R.string.no_echo);
                                     staff_echo_dialog.dismiss();
@@ -538,8 +533,7 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
                         btn5.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View view) {
-                                if (music_settings[1])
-                                    SelectMusic.start();
+                                sfx_play(R.raw.sfx_choose);
                                 if (echo_history[4] == 0) {
                                     echo_builder.setMessage(R.string.no_echo);
                                     staff_echo_dialog.dismiss();
@@ -561,8 +555,7 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
                         btn6.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View view) {
-                                if (music_settings[1])
-                                    SelectMusic.start();
+                                sfx_play(R.raw.sfx_choose);
                                 if (echo_history[5] == 0) {
                                     echo_builder.setMessage(R.string.no_echo);
                                     staff_echo_dialog.dismiss();
@@ -584,8 +577,7 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
                         btn7.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View view) {
-                                if (music_settings[1])
-                                    SelectMusic.start();
+                                sfx_play(R.raw.sfx_choose);
                                 if (echo_history[6] == 0) {
                                     echo_builder.setMessage(R.string.no_echo);
                                     staff_echo_dialog.dismiss();
@@ -607,8 +599,7 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
                         btn8.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View view) {
-                                if (music_settings[1])
-                                    SelectMusic.start();
+                                sfx_play(R.raw.sfx_choose);
                                 if (echo_history[7] == 0) {
                                     echo_builder.setMessage(R.string.no_echo);
                                     staff_echo_dialog.dismiss();
@@ -630,8 +621,7 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
                         btn9.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View view) {
-                                if (music_settings[1])
-                                    SelectMusic.start();
+                                sfx_play(R.raw.sfx_choose);
                                 if (echo_history[8] == 0) {
                                     echo_builder.setMessage(R.string.no_echo);
                                     staff_echo_dialog.dismiss();
@@ -653,8 +643,7 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
                         btn10.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View view) {
-                                if (music_settings[1])
-                                    SelectMusic.start();
+                                sfx_play(R.raw.sfx_choose);
                                 if (echo_history[9] == 0) {
                                     echo_builder.setMessage(R.string.no_echo);
                                     staff_echo_dialog.dismiss();
@@ -676,8 +665,7 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
                         btn11.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View view) {
-                                if (music_settings[1])
-                                    SelectMusic.start();
+                                sfx_play(R.raw.sfx_choose);
                                 if (echo_history[10] == 0) {
                                     echo_builder.setMessage(R.string.no_echo);
                                     staff_echo_dialog.dismiss();
@@ -699,8 +687,7 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
                         btn12.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View view) {
-                                if (music_settings[1])
-                                    SelectMusic.start();
+                                sfx_play(R.raw.sfx_choose);
                                 if (echo_history[11] == 0) {
                                     echo_builder.setMessage(R.string.no_echo);
                                     staff_echo_dialog.dismiss();
@@ -722,8 +709,7 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
                         btn13.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View view) {
-                                if (music_settings[1])
-                                    SelectMusic.start();
+                                sfx_play(R.raw.sfx_choose);
                                 if (echo_history[12] == 0) {
                                     echo_builder.setMessage(R.string.no_echo);
                                     staff_echo_dialog.dismiss();
@@ -745,8 +731,7 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
                         btn14.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View view) {
-                                if (music_settings[1])
-                                    SelectMusic.start();
+                                sfx_play(R.raw.sfx_choose);
                                 if (echo_history[13] == 0) {
                                     echo_builder.setMessage(R.string.no_echo);
                                     staff_echo_dialog.dismiss();
@@ -768,8 +753,7 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
                         btn15.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View view) {
-                                if (music_settings[1])
-                                    SelectMusic.start();
+                                sfx_play(R.raw.sfx_choose);
                                 if (echo_history[14] == 0) {
                                     echo_builder.setMessage(R.string.no_echo);
                                     staff_echo_dialog.dismiss();
@@ -791,8 +775,7 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
                         btn16.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View view) {
-                                if (music_settings[1])
-                                    SelectMusic.start();
+                                sfx_play(R.raw.sfx_choose);
                                 if (echo_history[15] == 0) {
                                     echo_builder.setMessage(R.string.no_echo);
                                     staff_echo_dialog.dismiss();
@@ -814,8 +797,7 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
                         btn17.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View view) {
-                                if (music_settings[1])
-                                    SelectMusic.start();
+                                sfx_play(R.raw.sfx_choose);
                                 if (echo_history[16] == 0) {
                                     echo_builder.setMessage(R.string.no_echo);
                                     staff_echo_dialog.dismiss();
@@ -837,8 +819,7 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
                         btn18.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View view) {
-                                if (music_settings[1])
-                                    SelectMusic.start();
+                                sfx_play(R.raw.sfx_choose);
                                 if (echo_history[17] == 0) {
                                     echo_builder.setMessage(R.string.no_echo);
                                     staff_echo_dialog.dismiss();
@@ -860,8 +841,7 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
                         btn19.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View view) {
-                                if (music_settings[1])
-                                    SelectMusic.start();
+                                sfx_play(R.raw.sfx_choose);
                                 if (echo_history[18] == 0) {
                                     echo_builder.setMessage(R.string.no_echo);
                                     staff_echo_dialog.dismiss();
@@ -883,8 +863,7 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
                         btn20.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View view) {
-                                if (music_settings[1])
-                                    SelectMusic.start();
+                                sfx_play(R.raw.sfx_choose);
                                 if (echo_history[19] == 0) {
                                     echo_builder.setMessage(R.string.no_echo);
                                     staff_echo_dialog.dismiss();
@@ -906,8 +885,7 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
                         btn21.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View view) {
-                                if (music_settings[1])
-                                    SelectMusic.start();
+                                sfx_play(R.raw.sfx_choose);
                                 if (echo_history[20] == 0) {
                                     echo_builder.setMessage(R.string.no_echo);
                                     staff_echo_dialog.dismiss();
@@ -929,8 +907,7 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
                         btn22.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View view) {
-                                if (music_settings[1])
-                                    SelectMusic.start();
+                                sfx_play(R.raw.sfx_choose);
                                 if (echo_history[21] == 0) {
                                     echo_builder.setMessage(R.string.no_echo);
                                     staff_echo_dialog.dismiss();
@@ -952,8 +929,7 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
                         btn23.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View view) {
-                                if (music_settings[1])
-                                    SelectMusic.start();
+                                sfx_play(R.raw.sfx_choose);
                                 if (echo_history[22] == 0) {
                                     echo_builder.setMessage(R.string.no_echo);
                                     staff_echo_dialog.dismiss();
@@ -975,8 +951,7 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
                         btn24.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View view) {
-                                if (music_settings[1])
-                                    SelectMusic.start();
+                                sfx_play(R.raw.sfx_choose);
                                 if (echo_history[23] == 0) {
                                     echo_builder.setMessage(R.string.no_echo);
                                     staff_echo_dialog.dismiss();
@@ -998,8 +973,7 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
                         btn_cancel.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View view) {
-                                if (music_settings[1])
-                                    CancelMusic.start();
+                                sfx_play(R.raw.sfx_cancel);
                                 staff_echo_dialog.cancel();
                             }
                         });
@@ -1080,7 +1054,6 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
                     sound_teleport = false;
                     sfx_play(R.raw.sfx_teleport);
                 }
-                checkNextPosition(v, temp_x, temp_y);
                 return true;
             default:
                 if (!which_surface_view) {
@@ -1117,8 +1090,8 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
 
     // play sfx sound function
     private void sfx_play(int which_sfx) {
-        sfx_music = MediaPlayer.create(getApplicationContext(), which_sfx);
-        if (music_settings[1])
+        MediaPlayer sfx_music = MediaPlayer.create(getApplicationContext(), which_sfx);
+        if (game_settings[1])
             sfx_music.start();
         sfx_music.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
             @Override
@@ -1178,7 +1151,7 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
         game_data += bool_to_0n1(lucky_gold) + "\n"  + bool_to_0n1(dragonsbane) + "\n";
         game_data += bool_to_0n1(snow_cryst) + "\n"  + bool_to_0n1(sacred_shield) + "\n";
         StringBuilder sb = new StringBuilder(game_data);
-        //
+
         for (int i = 0; i < 12; i++)
             sb.append(String.valueOf(merchant_history[i]));
         for (int j = 0; j < 19; j++)
@@ -1202,7 +1175,6 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
                 }
             }
         }
-        //*/
     }
 
     // load game from save file
@@ -1352,705 +1324,6 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
         current_game = new Floors(temp_floors);
     }
 
-    // interactions with npc: thief, saint, merchant, altar, and princess)
-    public void checkNextPosition(View v, int j, int i) {
-        //Log.v(TAG, "next called  " + String.valueOf(current_floor[i][j]));
-        switch (current_floor[i][j]) {
-            case 21:        // thief
-                AlertDialog.Builder thief_builder = new AlertDialog.Builder(v.getContext());
-                if (thief_event_count == 0) {
-                    thief_event_count++;
-                    thief_builder.setMessage(R.string.thief0);
-                } else if (thief_event_count == 1) {
-                    thief_event_count++;
-                    thief_builder.setMessage(R.string.thief1);
-                } else if (thief_event_count == 2) {
-                    thief_event_count++;
-                    thief_builder.setMessage(R.string.thief2);
-                } else if (thief_event_count == 3) {
-                    thief_event_count++;
-                    thief_builder.setMessage(R.string.thief3);
-                } else if (thief_event_count == 4) {
-                    thief_event_count++;
-                    thief_builder.setMessage(R.string.thief4);
-                } else if (thief_event_count == 5) {
-                    if (floor_num == 29)
-                        thief_builder.setMessage(R.string.thief4);
-                    else {
-                        thief_event_count = 6;
-                        thief_builder.setMessage(R.string.thief5);
-                        current_game.change_35f();
-                    }
-                } else if (thief_event_count == 6) {
-                    if (floor_num == 2)
-                        thief_builder.setMessage(R.string.thief6_1);
-                    else {
-                        thief_event_count++;
-                        thief_builder.setMessage(R.string.thief6_2);
-                    }
-                } else {
-                    thief_event_count = 0;
-                    thief_builder.setMessage(R.string.thief7);
-                }
-                thief_builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        proceed = true;
-                    }
-                });
-                AlertDialog thief_dialog = thief_builder.create();
-                thief_dialog.setCanceledOnTouchOutside(false);
-                isEvent = true;
-                thief_dialog.show();
-                break;
-            case 22:        // saint
-                AlertDialog.Builder saint_builder = new AlertDialog.Builder(v.getContext());
-                saint_builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        sfx_play(R.raw.sfx_choose);
-                    }
-                });
-                switch (floor_num) {
-                    case 2:
-                        if (saint_history[0] == 0) {
-                            saint_builder.setMessage(R.string.saint_2f);
-                            saint_builder.setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialogInterface, int i) {
-                                    sfx_play(R.raw.sfx_choose);
-                                    atk = atk * 103 / 100;
-                                    def = def * 103 / 100;
-                                    saint_history[0]++;
-                                }
-                            });
-                            saint_builder.setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialogInterface, int i) {
-                                    sfx_play(R.raw.sfx_cancel);
-                                }
-                            });
-                        } else
-                            saint_builder.setMessage(R.string.saint_default);
-                        break;
-                    case 3:
-                        if (saint_history[1] == 0) {
-                            saint_history[1]++;
-                            saint_builder.setMessage(R.string.saint_3f);
-                            sfx_play(R.raw.sfx_items);
-                            stf_wsdm = true;
-                        } else
-                            saint_builder.setMessage(R.string.saint_default);
-                        break;
-                    case 4:
-                        if (saint_history[2] == 0) {
-                            saint_history[2]++;
-                            echo_history[0]++;
-                            saint_builder.setMessage(R.string.saint_4f);
-                        } else
-                            saint_builder.setMessage(R.string.saint_default);
-                        break;
-                    case 6:
-                        if (saint_history[3] == 0) {
-                            saint_history[3]++;
-                            echo_history[1]++;
-                            saint_builder.setMessage(R.string.saint_6f);
-                        } else
-                            saint_builder.setMessage(R.string.saint_default);
-                        break;
-                    case 16:
-                        if (j == 1)
-                            if (saint_history[4] == 0) {
-                                saint_history[4]++;
-                                echo_history[6]++;
-                                saint_builder.setMessage(R.string.saint_16f);
-                            } else
-                                saint_builder.setMessage(R.string.saint_default);
-                        else {
-                            if (saint_history[5] == 0) {
-                                saint_history[5]++;
-                                saint_builder.setMessage(R.string.saint_16fh);
-                                sfx_play(R.raw.sfx_items);
-                                elixir = true;
-                            } else
-                                saint_builder.setMessage(R.string.saint_default);
-                        }
-                        break;
-                    case 18:
-                        if (saint_history[6] == 0) {
-                            saint_history[6]++;
-                            echo_history[7]++;
-                            saint_builder.setMessage(R.string.saint_18f);
-                        } else
-                            saint_builder.setMessage(R.string.saint_default);
-                        break;
-                    case 21:
-                        if (saint_history[7] == 0) {
-                            saint_history[7]++;
-                            echo_history[8]++;
-                            saint_builder.setMessage(R.string.saint_21f);
-                        } else
-                            saint_builder.setMessage(R.string.saint_default);
-                        break;
-                    case 23:
-                        if (saint_history[8] == 0) {
-                            saint_builder.setMessage(R.string.saint_23f0);
-                        } else
-                            saint_builder.setMessage(R.string.saint_23f1);
-                        break;
-                    case 27:
-                        if (saint_history[9] == 0) {
-                            saint_history[9]++;
-                            echo_history[9]++;
-                            saint_builder.setMessage(R.string.saint_27f);
-                        } else
-                            saint_builder.setMessage(R.string.saint_default);
-                        break;
-                    case 31:
-                        if (saint_history[10] == 0) {
-                            saint_history[10]++;
-                            echo_history[10]++;
-                            saint_builder.setMessage(R.string.saint_31f);
-                        } else
-                            saint_builder.setMessage(R.string.saint_default);
-                        break;
-                    case 33:
-                        if (saint_history[11] == 0) {
-                            saint_history[11]++;
-                            echo_history[12]++;
-                            saint_builder.setMessage(R.string.saint_33f);
-                        } else
-                            saint_builder.setMessage(R.string.saint_default);
-                        break;
-                    case 36:
-                        if (saint_history[12] == 0) {
-                            saint_history[12]++;
-                            echo_history[13]++;
-                            saint_builder.setMessage(R.string.saint_36f);
-                        } else
-                            saint_builder.setMessage(R.string.saint_default);
-                        break;
-                    case 37:
-                        if (saint_history[13] == 0) {
-                            saint_history[13]++;
-                            echo_history[14]++;
-                            saint_builder.setMessage(R.string.saint_37f);
-                        } else
-                            saint_builder.setMessage(R.string.saint_default);
-                        break;
-                    case 39:
-                        if (saint_history[14] == 0) {
-                            saint_history[14]++;
-                            echo_history[16]++;
-                            saint_builder.setMessage(R.string.saint_39f);
-                        } else
-                            saint_builder.setMessage(R.string.saint_default);
-                        break;
-                    case 42:
-                        if (saint_history[15] == 0) {
-                            saint_history[15]++;
-                            echo_history[18]++;
-                            saint_builder.setMessage(R.string.saint_42f);
-                        } else
-                            saint_builder.setMessage(R.string.saint_default);
-                        break;
-                    case 45:
-                        if (saint_history[16] == 0) {
-                            saint_history[16]++;
-                            echo_history[19]++;
-                            saint_builder.setMessage(R.string.saint_45f);
-                        } else
-                            saint_builder.setMessage(R.string.saint_default);
-                        break;
-                    case 46:
-                        if (saint_history[17] == 0) {
-                            saint_history[17]++;
-                            echo_history[21]++;
-                            saint_builder.setMessage(R.string.saint_46f);
-                        } else
-                            saint_builder.setMessage(R.string.saint_default);
-                        break;
-                    case 48:
-                        if (saint_history[18] == 0) {
-                            saint_history[18]++;
-                            echo_history[23]++;
-                            saint_builder.setMessage(R.string.saint_48f);
-                        } else
-                            saint_builder.setMessage(R.string.saint_default);
-                        break;
-                    default:
-                        saint_builder.setMessage("Saint dialog bug in checkNextPostion()");
-                        break;
-                }
-                AlertDialog saint_dialog = saint_builder.create();
-                saint_dialog.setCanceledOnTouchOutside(false);
-                saint_dialog.show();
-                break;
-            case 23:        // merchant
-                final AlertDialog.Builder merchant_builder = new AlertDialog.Builder(v.getContext());
-                merchant_builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        sfx_play(R.raw.sfx_choose);
-                    }
-                });
-                final AlertDialog.Builder no_gold_builder = new AlertDialog.Builder(v.getContext());
-                switch (floor_num) {
-                    case 2:
-                        if (merchant_history[0] == 0) {
-                            merchant_history[0]++;
-                            merchant_builder.setMessage(R.string.merchant_2f0);
-                            gold += 1000;
-                        } else {
-                            merchant_builder.setMessage(R.string.merchant_2f1);
-                        }
-                        break;
-                    case 6:
-                        if (merchant_history[1] == 0) {
-                            merchant_builder.setMessage(R.string.merchant_6f0);
-                            merchant_builder.setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialogInterface, int i) {
-                                    if (gold >= 50) {
-                                        sfx_play(R.raw.sfx_choose);
-                                        merchant_history[1]++;
-                                        gold -= 50;
-                                        count_b++;
-                                    } else {
-                                        sfx_play(R.raw.sfx_cancel);
-                                        no_gold_builder.setMessage(R.string.purchase_fail);
-                                        AlertDialog no_gold_dialog = no_gold_builder.create();
-                                        no_gold_dialog.setCanceledOnTouchOutside(true);
-                                        no_gold_dialog.show();
-                                    }
-                                }
-                            });
-                            merchant_builder.setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialogInterface, int i) {
-                                    sfx_play(R.raw.sfx_cancel);
-                                }
-                            });
-                        } else if (merchant_history[1] == 1) {
-                            merchant_history[1]++;
-                            echo_history[2]++;
-                            merchant_builder.setMessage(R.string.merchant_6f1);
-                        } else {
-                            merchant_builder.setMessage(R.string.merchant_default);
-                        }
-                        break;
-                    case 7:
-                        if (merchant_history[2] == 0) {
-                            merchant_builder.setMessage(R.string.merchant_7f0);
-                            merchant_builder.setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialogInterface, int i) {
-                                    if (gold >= 50) {
-                                        sfx_play(R.raw.sfx_choose);
-                                        merchant_history[2]++;
-                                        gold -= 50;
-                                        count_y += 5;
-                                    } else {
-                                        sfx_play(R.raw.sfx_cancel);
-                                        no_gold_builder.setMessage(R.string.purchase_fail);
-                                        AlertDialog no_gold_dialog = no_gold_builder.create();
-                                        no_gold_dialog.setCanceledOnTouchOutside(true);
-                                        no_gold_dialog.show();
-                                    }
-                                }
-                            });
-                            merchant_builder.setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialogInterface, int i) {
-                                    sfx_play(R.raw.sfx_cancel);
-                                }
-                            });
-                        } else if (merchant_history[2] == 1) {
-                            merchant_history[2]++;
-                            echo_history[3]++;
-                            merchant_builder.setMessage(R.string.merchant_7f1);
-                        } else {
-                            merchant_builder.setMessage(R.string.merchant_default);
-                        }
-                        break;
-                    case 12:
-                        if (hero_x < 6) {
-                            if (merchant_history[3] == 0) {
-                                merchant_builder.setMessage(R.string.merchant_12f0);
-                                merchant_builder.setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
-                                    @Override
-                                    public void onClick(DialogInterface dialogInterface, int i) {
-                                        if (gold >= 800) {
-                                            sfx_play(R.raw.sfx_choose);
-                                            merchant_history[3]++;
-                                            gold -= 800;
-                                            count_r++;
-                                        } else {
-                                            sfx_play(R.raw.sfx_cancel);
-                                            no_gold_builder.setMessage(R.string.purchase_fail);
-                                            AlertDialog no_gold_dialog = no_gold_builder.create();
-                                            no_gold_dialog.setCanceledOnTouchOutside(true);
-                                            no_gold_dialog.show();
-                                        }
-                                    }
-                                });
-                                merchant_builder.setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {
-                                    @Override
-                                    public void onClick(DialogInterface dialogInterface, int i) {
-                                        sfx_play(R.raw.sfx_cancel);
-                                    }
-                                });
-                            } else if (merchant_history[3] == 1) {
-                                merchant_history[3]++;
-                                echo_history[4]++;
-                                merchant_builder.setMessage(R.string.merchant_12f1);
-                            } else {
-                                merchant_builder.setMessage(R.string.merchant_default);
-                            }
-                        } else {
-                            merchant_builder.setMessage(R.string.merchant_12fh);
-                            merchant_builder.setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialogInterface, int i) {
-                                    if (gold >= 1000) {
-                                        sfx_play(R.raw.sfx_choose);
-                                        merchant_history[4]++;
-                                        gold -= 1000;
-                                        count_y++;
-                                    } else {
-                                        sfx_play(R.raw.sfx_cancel);
-                                        no_gold_builder.setMessage(R.string.purchase_fail);
-                                        AlertDialog no_gold_dialog = no_gold_builder.create();
-                                        no_gold_dialog.setCanceledOnTouchOutside(true);
-                                        no_gold_dialog.show();
-                                    }
-                                }
-                            });
-                            merchant_builder.setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialogInterface, int i) {
-                                    sfx_play(R.raw.sfx_cancel);
-                                }
-                            });
-                        }
-                        break;
-                    case 15:
-                        if (merchant_history[5] == 0) {
-                            merchant_builder.setMessage(R.string.merchant_15f0);
-                            merchant_builder.setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialogInterface, int i) {
-                                    if (gold >= 200) {
-                                        sfx_play(R.raw.sfx_choose);
-                                        merchant_history[5]++;
-                                        gold -= 200;
-                                        count_b++;
-                                    } else {
-                                        sfx_play(R.raw.sfx_cancel);
-                                        no_gold_builder.setMessage(R.string.purchase_fail);
-                                        AlertDialog no_gold_dialog = no_gold_builder.create();
-                                        no_gold_dialog.setCanceledOnTouchOutside(true);
-                                        no_gold_dialog.show();
-                                    }
-                                }
-                            });
-                            merchant_builder.setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialogInterface, int i) {
-                                    sfx_play(R.raw.sfx_cancel);
-                                }
-                            });
-                        } else if (merchant_history[5] == 1) {
-                            merchant_history[5]++;
-                            echo_history[5]++;
-                            merchant_builder.setMessage(R.string.merchant_15f1);
-                        } else {
-                            merchant_builder.setMessage(R.string.merchant_default);
-                        }
-                        break;
-                    case 28:
-                        merchant_builder.setMessage(R.string.merchant_28f);
-                        merchant_builder.setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialogInterface, int i) {
-                                if (count_y > 0) {
-                                    sfx_play(R.raw.sfx_choose);
-                                    gold += 100;
-                                    count_y--;
-                                } else {
-                                    sfx_play(R.raw.sfx_cancel);
-                                    no_gold_builder.setMessage(R.string.purchase_fail_28f);
-                                    AlertDialog no_gold_dialog = no_gold_builder.create();
-                                    no_gold_dialog.setCanceledOnTouchOutside(true);
-                                    no_gold_dialog.show();
-                                }
-                            }
-                        });
-                        merchant_builder.setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialogInterface, int i) {
-                                sfx_play(R.raw.sfx_cancel);
-                            }
-                        });
-                        break;
-                    case 31:
-                        if (merchant_history[7] == 0) {
-                            merchant_builder.setMessage(R.string.merchant_31f0);
-                            merchant_builder.setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialogInterface, int i) {
-                                    if (gold >= 1000) {
-                                        sfx_play(R.raw.sfx_choose);
-                                        merchant_history[7]++;
-                                        gold -= 1000;
-                                        count_y += 4;
-                                        count_b++;
-                                    } else {
-                                        sfx_play(R.raw.sfx_cancel);
-                                        no_gold_builder.setMessage(R.string.purchase_fail);
-                                        AlertDialog no_gold_dialog = no_gold_builder.create();
-                                        no_gold_dialog.setCanceledOnTouchOutside(true);
-                                        no_gold_dialog.show();
-                                    }
-                                }
-                            });
-                            merchant_builder.setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialogInterface, int i) {
-                                    sfx_play(R.raw.sfx_cancel);
-                                }
-                            });
-                        } else if (merchant_history[7] == 1) {
-                            merchant_history[7]++;
-                            echo_history[11]++;
-                            merchant_builder.setMessage(R.string.merchant_31f1);
-                        } else {
-                            merchant_builder.setMessage(R.string.merchant_default);
-                        }
-                        break;
-                    case 38:
-                        if (merchant_history[8] == 0) {
-                            merchant_builder.setMessage(R.string.merchant_38f0);
-                            merchant_builder.setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialogInterface, int i) {
-                                    if (gold >= 200) {
-                                        sfx_play(R.raw.sfx_choose);
-                                        merchant_history[8]++;
-                                        gold -= 200;
-                                        count_y += 3;
-                                    } else {
-                                        sfx_play(R.raw.sfx_cancel);
-                                        no_gold_builder.setMessage(R.string.purchase_fail);
-                                        AlertDialog no_gold_dialog = no_gold_builder.create();
-                                        no_gold_dialog.setCanceledOnTouchOutside(true);
-                                        no_gold_dialog.show();
-                                    }
-                                }
-                            });
-                            merchant_builder.setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialogInterface, int i) {
-                                    sfx_play(R.raw.sfx_cancel);
-                                }
-                            });
-                        } else if (merchant_history[8] == 1) {
-                            merchant_history[8]++;
-                            echo_history[15]++;
-                            merchant_builder.setMessage(R.string.merchant_38f1);
-                        } else {
-                            merchant_builder.setMessage(R.string.merchant_default);
-                        }
-                        break;
-                    case 39:
-                        if (merchant_history[9] == 0) {
-                            merchant_builder.setMessage(R.string.merchant_39f0);
-                            merchant_builder.setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialogInterface, int i) {
-                                    if (gold >= 2000) {
-                                        sfx_play(R.raw.sfx_choose);
-                                        merchant_history[9]++;
-                                        gold -= 2000;
-                                        count_b += 3;
-                                    } else {
-                                        sfx_play(R.raw.sfx_cancel);
-                                        no_gold_builder.setMessage(R.string.purchase_fail);
-                                        AlertDialog no_gold_dialog = no_gold_builder.create();
-                                        no_gold_dialog.setCanceledOnTouchOutside(true);
-                                        no_gold_dialog.show();
-                                    }
-                                }
-                            });
-                            merchant_builder.setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialogInterface, int i) {
-                                    sfx_play(R.raw.sfx_cancel);
-                                }
-                            });
-                        } else if (merchant_history[9] == 1) {
-                            merchant_history[9]++;
-                            echo_history[17]++;
-                            merchant_builder.setMessage(R.string.merchant_39f1);
-                        } else {
-                            merchant_builder.setMessage(R.string.merchant_default);
-                        }
-                        break;
-                    case 45:
-                        if (merchant_history[10] == 0) {
-                            merchant_builder.setMessage(R.string.merchant_45f0);
-                            merchant_builder.setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialogInterface, int i) {
-                                    if (gold >= 1000) {
-                                        sfx_play(R.raw.sfx_choose);
-                                        merchant_history[10]++;
-                                        gold -= 1000;
-                                        hp += 2000;
-                                    } else {
-                                        sfx_play(R.raw.sfx_cancel);
-                                        no_gold_builder.setMessage(R.string.purchase_fail);
-                                        AlertDialog no_gold_dialog = no_gold_builder.create();
-                                        no_gold_dialog.setCanceledOnTouchOutside(true);
-                                        no_gold_dialog.show();
-                                    }
-                                }
-                            });
-                            merchant_builder.setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialogInterface, int i) {
-                                    sfx_play(R.raw.sfx_cancel);
-                                }
-                            });
-                        } else if (merchant_history[10] == 1) {
-                            merchant_history[10]++;
-                            echo_history[20]++;
-                            merchant_builder.setMessage(R.string.merchant_45f1);
-                        } else {
-                            merchant_builder.setMessage(R.string.merchant_default);
-                        }
-                        break;
-                    case 47:
-                        if (merchant_history[11] == 0) {
-                            merchant_builder.setMessage(R.string.merchant_47f0);
-                            merchant_builder.setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialogInterface, int i) {
-                                    if (gold >= 4000) {
-                                        sfx_play(R.raw.sfx_choose);
-                                        merchant_history[11]++;
-                                        gold -= 4000;
-                                        e_mattock = true;
-                                    } else {
-                                        sfx_play(R.raw.sfx_cancel);
-                                        no_gold_builder.setMessage(R.string.purchase_fail);
-                                        AlertDialog no_gold_dialog = no_gold_builder.create();
-                                        no_gold_dialog.setCanceledOnTouchOutside(true);
-                                        no_gold_dialog.show();
-                                    }
-                                }
-                            });
-                            merchant_builder.setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialogInterface, int i) {
-                                    sfx_play(R.raw.sfx_cancel);
-                                }
-                            });
-                        } else if (merchant_history[11] == 1) {
-                            merchant_history[11]++;
-                            echo_history[22]++;
-                            merchant_builder.setMessage(R.string.merchant_47f1);
-                        } else {
-                            merchant_builder.setMessage(R.string.merchant_default);
-                        }
-                        break;
-                    default:
-                        merchant_builder.setMessage("Merchant dialog bug in checkNextPostion()");
-                        break;
-                }
-                AlertDialog merchant_dialog = merchant_builder.create();
-                merchant_dialog.show();
-                break;
-            case 26:        // altar
-                final int price = 10 * price_idx * price_idx + 10 * price_idx + 20;
-                String item_atk = "Attack + " + String.valueOf(2 + 2 * (floor_num / 10));
-                String item_def = "Defence + " + String.valueOf(4 + 4 * (floor_num / 10));
-                String offer = "Would you like to offer " + String.valueOf(price) + " gold for one of the following items";
-                String[] item_list = {"Health + 1000", item_atk, item_def, "Not this time"};
-                final AlertDialog.Builder altar_builder = new AlertDialog.Builder(v.getContext());
-                final AlertDialog.Builder fail_offer_builder = new AlertDialog.Builder(v.getContext());
-                altar_builder.setTitle(offer);
-                altar_builder.setItems(item_list, new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int item) {
-                        if (item == 0) {
-                            if (gold > price) {
-                                gold -= price;
-                                price_idx++;
-                                hp += 1000;
-                                sfx_play(R.raw.sfx_gold_spent);
-                            } else {
-                                sfx_play(R.raw.sfx_cancel);
-                                fail_offer_builder.setMessage(R.string.purchase_fail);
-                                AlertDialog no_gold_dialog = fail_offer_builder.create();
-                                no_gold_dialog.setCanceledOnTouchOutside(true);
-                                no_gold_dialog.show();
-                            }
-                        } else if (item == 1) {
-                            if (gold > price) {
-                                sfx_play(R.raw.sfx_gold_spent);
-                                gold -= price;
-                                price_idx++;
-                                atk += (2 + 2 * (floor_num / 10));
-                            } else {
-                                sfx_play(R.raw.sfx_cancel);
-                                fail_offer_builder.setMessage(R.string.purchase_fail);
-                                AlertDialog no_gold_dialog = fail_offer_builder.create();
-                                no_gold_dialog.setCanceledOnTouchOutside(true);
-                                no_gold_dialog.show();
-                            }
-                        } else if (item == 2) {
-                            if (gold > price) {
-                                sfx_play(R.raw.sfx_gold_spent);
-                                gold -= price;
-                                price_idx++;
-                                def += (4 + 4 * (floor_num / 10));
-                            } else {
-                                sfx_play(R.raw.sfx_cancel);
-                                fail_offer_builder.setMessage(R.string.purchase_fail);
-                                AlertDialog no_gold_dialog = fail_offer_builder.create();
-                                no_gold_dialog.setCanceledOnTouchOutside(true);
-                                no_gold_dialog.show();
-                            }
-                        } else
-                            sfx_play(R.raw.sfx_cancel);
-                    }
-                });
-                AlertDialog altar_list = altar_builder.create();
-                altar_list.show();
-                break;
-            case 28:        // princess
-                AlertDialog.Builder princess_builder = new AlertDialog.Builder(v.getContext());
-                final AlertDialog.Builder zeno_builder = new AlertDialog.Builder(v.getContext());
-                princess_builder.setMessage(R.string.princess_dialog1);
-                AlertDialog princess_dialog = princess_builder.create();
-                princess_dialog.setCanceledOnTouchOutside(true);
-                princess_dialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
-                    @Override
-                    public void onCancel(DialogInterface dialogInterface) {
-                        current_game.change_24f();
-                        zeno_builder.setMessage(R.string.princess_dialog2);
-                        AlertDialog zeno_dialog = zeno_builder.create();
-                        zeno_dialog.setCanceledOnTouchOutside(true);
-                        zeno_dialog.show();
-                    }
-                });
-                princess_dialog.show();
-                break;
-            default:
-                break;
-        }
-    }
-
     // calculate the damage inflict to hero during battle
     public int damage_calculation(int idx){
         int initial_hp = hp;
@@ -2150,7 +1423,7 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
                     which_music = bgm_list[floor_num / 10];
                 background_music = MediaPlayer.create(getApplicationContext(), which_music);
                 background_music.setLooping(true);
-                if (music_settings[0])
+                if (game_settings[0])
                     background_music.start();
             }
         }
@@ -2184,7 +1457,7 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
                 }
                 if (which_surface_view) {
                     if (!isWalk) {
-                        if (button_click && !isBattle && !isEvent && !cantMove)
+                        if (button_click && !isBattle && !isEvent && !cantMove && !npc_dialog)
                             button_logic(which_button);
                         if (isBattle)
                             battle_animation(hero_attack, hero_y, hero_x);
@@ -2427,8 +1700,7 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
                         act++;
                     } else if (act == 1) {
                         sleep(500);
-                        if (music_settings[1])
-                            sfx_play(R.raw.sfx_teleport);
+                        sfx_play(R.raw.sfx_teleport);
                         parent.runOnUiThread(new Runnable() {
                             public void run() {
                                 AlertDialog.Builder f3_builder1 = new AlertDialog.Builder(parent);
@@ -2454,8 +1726,7 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
                             return;
                         proceed = false;
                         act++;
-                        if (music_settings[1])
-                            sfx_play(R.raw.sfx_teleport);
+                        sfx_play(R.raw.sfx_teleport);
                         current_floor[8][5] = 57;
                         current_floor[10][5] = 57;
                         current_floor[9][4] = 57;
@@ -2517,7 +1788,7 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
                             background_music.release();
                         background_music = MediaPlayer.create(getApplicationContext(), boss_music_list[0]);
                         background_music.setLooping(true);
-                        if (music_settings[0])                  // if bgm option is checked
+                        if (game_settings[0])                  // if bgm option is checked
                             background_music.start();
                         act++;
                         current_floor[4][6] = 1;
@@ -2895,7 +2166,7 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
                             background_music.release();
                         background_music = MediaPlayer.create(getApplicationContext(), boss_music_list[1]);
                         background_music.setLooping(true);
-                        if (music_settings[0])                  // if bgm option is checked
+                        if (game_settings[0])                  // if bgm option is checked
                             background_music.start();
                         act++;
                     } else if (act == 1) {
@@ -3050,7 +2321,7 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
                             background_music.release();
                         background_music = MediaPlayer.create(getApplicationContext(), R.raw.bgm_ending);
                         background_music.setLooping(true);
-                        if (music_settings[0])                  // if bgm option is checked
+                        if (game_settings[0])                  // if bgm option is checked
                             background_music.start();
                     } else if (act == 1) {
                         sleep(500);
@@ -3122,7 +2393,7 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
                             background_music.release();
                         background_music = MediaPlayer.create(getApplicationContext(), boss_music_list[3]);
                         background_music.setLooping(true);
-                        if (music_settings[0])                  // if bgm option is checked
+                        if (game_settings[0])                  // if bgm option is checked
                             background_music.start();
                         act++;
                         current_floor[9][6] = 1;
@@ -3548,7 +2819,7 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
                             background_music.release();
                         background_music = MediaPlayer.create(getApplicationContext(), boss_music_list[3]);
                         background_music.setLooping(true);
-                        if (music_settings[0])                  // if bgm option is checked
+                        if (game_settings[0])                  // if bgm option is checked
                             background_music.start();
                         boolean no_teleport = current_floor[2][2] != 1 && current_floor[2][3] != 1 && current_floor[2][4] != 1;
                         no_teleport &= current_floor[2][8] != 1 && current_floor[2][9] != 1 && current_floor[2][10] != 1;
@@ -4463,7 +3734,7 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
                             background_music.release();
                         background_music = MediaPlayer.create(getApplicationContext(), boss_music_list[4]);
                         background_music.setLooping(true);
-                        if (music_settings[0])                  // if bgm option is checked
+                        if (game_settings[0])                  // if bgm option is checked
                             background_music.start();
                         current_floor[6][6] = 1;
                     } else if (act == 1) {
@@ -4811,7 +4082,7 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
                                     background_music.release();
                                 background_music = MediaPlayer.create(getApplicationContext(), bgm_list[floor_num / 10]);
                                 background_music.setLooping(true);
-                                if (music_settings[0])                  // if bgm option is checked
+                                if (game_settings[0])                  // if bgm option is checked
                                     background_music.start();
                             }
                             current_game.put_one_floor(floor_num, current_floor);
@@ -4847,7 +4118,7 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
                                     background_music.release();
                                 background_music = MediaPlayer.create(getApplicationContext(), bgm_list[floor_num / 10 - 1]);
                                 background_music.setLooping(true);
-                                if (music_settings[0])                  // if bgm option is checked
+                                if (game_settings[0])                  // if bgm option is checked
                                     background_music.start();
                             }
                             current_game.put_one_floor(floor_num, current_floor);
@@ -5289,7 +4560,7 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
                         prepare_to_save_game();
                         sfx_play(R.raw.sfx_choose);
                         save_game.putExtra("Game_Data", game_data_to_save);
-                        save_game.putExtra("Music_Settings", music_settings);
+                        save_game.putExtra("Game_Settings", game_settings);
                         if (background_music != null) {
                             bgm_on = false;
                             background_music.release();
@@ -5961,9 +5232,12 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
             textpaint.setColor(Color.rgb(40, 50, 50));
             my_text = "Save";
             canvas.drawText(my_text, sq_size*5 - margin*2, sq_size * 13 + margin * 8 + offset, textpaint);
-            // ------------------- Debug purpose -----------------------
-            sleep(60);
-            //*/
+            // ------------------- Game Speed Control -----------------------
+            if (game_settings[2])
+                sleep(35);
+            else
+                sleep(50);
+            // ------------------- Debug Purpose -----------------------
             //canvas.drawBitmap(ball, x - ball.getWidth() / 2, y - ball.getHeight() / 2, null);
         }
 
@@ -6666,7 +5940,7 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
                             background_music.release();
                         background_music = MediaPlayer.create(getApplicationContext(), bgm_list[floor_num/10]);
                         background_music.setLooping(true);
-                        if (music_settings[0])                  // if bgm option is checked
+                        if (game_settings[0])                  // if bgm option is checked
                             background_music.start();
                     }
                     current_game.put_one_floor(floor_num, current_floor);
@@ -6696,7 +5970,7 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
                             background_music.release();
                         background_music = MediaPlayer.create(getApplicationContext(), bgm_list[floor_num/10 - 1]);
                         background_music.setLooping(true);
-                        if (music_settings[0])                  // if bgm option is checked
+                        if (game_settings[0])                  // if bgm option is checked
                             background_music.start();
                     }
                     current_game.put_one_floor(floor_num, current_floor);
@@ -6970,16 +6244,757 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
                     def += 100;
                     refresh_ctr = true;
                     return 1;
-                case 21:
-                case 22:
-                case 23:
-                case 24:
-                case 25:
-                case 26:
-                case 27:
-                case 28:
+                case 21:        // thief
+                    npc_dialog = true;
+                    parent.runOnUiThread(new Runnable() {
+                        public void run() {
+                            AlertDialog.Builder thief_builder = new AlertDialog.Builder(parent);
+                            if (thief_event_count == 0) {
+                                thief_event_count++;
+                                thief_builder.setMessage(R.string.thief0);
+                            } else if (thief_event_count == 1) {
+                                thief_event_count++;
+                                thief_builder.setMessage(R.string.thief1);
+                            } else if (thief_event_count == 2) {
+                                thief_event_count++;
+                                thief_builder.setMessage(R.string.thief2);
+                            } else if (thief_event_count == 3) {
+                                thief_event_count++;
+                                thief_builder.setMessage(R.string.thief3);
+                            } else if (thief_event_count == 4) {
+                                thief_event_count++;
+                                thief_builder.setMessage(R.string.thief4);
+                            } else if (thief_event_count == 5) {
+                                if (floor_num == 29)
+                                    thief_builder.setMessage(R.string.thief4);
+                                else {
+                                    thief_event_count = 6;
+                                    thief_builder.setMessage(R.string.thief5);
+                                    current_game.change_35f();
+                                }
+                            } else if (thief_event_count == 6) {
+                                if (floor_num == 2)
+                                    thief_builder.setMessage(R.string.thief6_1);
+                                else {
+                                    thief_event_count++;
+                                    thief_builder.setMessage(R.string.thief6_2);
+                                }
+                            } else {
+                                thief_event_count = 0;
+                                thief_builder.setMessage(R.string.thief7);
+                            }
+                            thief_builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialogInterface, int i) {
+                                    npc_dialog = false;
+                                    proceed = true;
+                                }
+                            });
+                            AlertDialog thief_dialog = thief_builder.create();
+                            thief_dialog.setCanceledOnTouchOutside(false);
+                            isEvent = true;
+                            thief_dialog.show();
+                        }
+                    });
                     return 0;
-                case 29:
+                case 22:        // saint
+                    npc_dialog = true;
+                    parent.runOnUiThread(new Runnable() {
+                        public void run() {
+                            AlertDialog.Builder saint_builder = new AlertDialog.Builder(parent);
+                            saint_builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialogInterface, int i) {
+                                    sfx_play(R.raw.sfx_choose);
+                                    npc_dialog = false;
+                                }
+                            });
+                            switch (floor_num) {
+                                case 2:
+                                    if (saint_history[0] == 0) {
+                                        saint_builder.setMessage(R.string.saint_2f);
+                                        saint_builder.setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
+                                            @Override
+                                            public void onClick(DialogInterface dialogInterface, int i) {
+                                                sfx_play(R.raw.sfx_choose);
+                                                npc_dialog = false;
+                                                atk = atk * 103 / 100;
+                                                def = def * 103 / 100;
+                                                saint_history[0]++;
+                                            }
+                                        });
+                                        saint_builder.setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {
+                                            @Override
+                                            public void onClick(DialogInterface dialogInterface, int i) {
+                                                sfx_play(R.raw.sfx_cancel);
+                                                npc_dialog = false;
+                                            }
+                                        });
+                                    } else
+                                        saint_builder.setMessage(R.string.saint_default);
+                                    break;
+                                case 3:
+                                    if (saint_history[1] == 0) {
+                                        saint_history[1]++;
+                                        saint_builder.setMessage(R.string.saint_3f);
+                                        sfx_play(R.raw.sfx_items);
+                                        stf_wsdm = true;
+                                    } else
+                                        saint_builder.setMessage(R.string.saint_default);
+                                    break;
+                                case 4:
+                                    if (saint_history[2] == 0) {
+                                        saint_history[2]++;
+                                        echo_history[0]++;
+                                        saint_builder.setMessage(R.string.saint_4f);
+                                    } else
+                                        saint_builder.setMessage(R.string.saint_default);
+                                    break;
+                                case 6:
+                                    if (saint_history[3] == 0) {
+                                        saint_history[3]++;
+                                        echo_history[1]++;
+                                        saint_builder.setMessage(R.string.saint_6f);
+                                    } else
+                                        saint_builder.setMessage(R.string.saint_default);
+                                    break;
+                                case 16:
+                                    if (hero_x == 1)
+                                        if (saint_history[4] == 0) {
+                                            saint_history[4]++;
+                                            echo_history[6]++;
+                                            saint_builder.setMessage(R.string.saint_16f);
+                                        } else
+                                            saint_builder.setMessage(R.string.saint_default);
+                                    else {
+                                        if (saint_history[5] == 0) {
+                                            saint_history[5]++;
+                                            saint_builder.setMessage(R.string.saint_16fh);
+                                            sfx_play(R.raw.sfx_items);
+                                            elixir = true;
+                                        } else
+                                            saint_builder.setMessage(R.string.saint_default);
+                                    }
+                                    break;
+                                case 18:
+                                    if (saint_history[6] == 0) {
+                                        saint_history[6]++;
+                                        echo_history[7]++;
+                                        saint_builder.setMessage(R.string.saint_18f);
+                                    } else
+                                        saint_builder.setMessage(R.string.saint_default);
+                                    break;
+                                case 21:
+                                    if (saint_history[7] == 0) {
+                                        saint_history[7]++;
+                                        echo_history[8]++;
+                                        saint_builder.setMessage(R.string.saint_21f);
+                                    } else
+                                        saint_builder.setMessage(R.string.saint_default);
+                                    break;
+                                case 23:
+                                    if (saint_history[8] == 0) {
+                                        saint_builder.setMessage(R.string.saint_23f0);
+                                    } else
+                                        saint_builder.setMessage(R.string.saint_23f1);
+                                    break;
+                                case 27:
+                                    if (saint_history[9] == 0) {
+                                        saint_history[9]++;
+                                        echo_history[9]++;
+                                        saint_builder.setMessage(R.string.saint_27f);
+                                    } else
+                                        saint_builder.setMessage(R.string.saint_default);
+                                    break;
+                                case 31:
+                                    if (saint_history[10] == 0) {
+                                        saint_history[10]++;
+                                        echo_history[10]++;
+                                        saint_builder.setMessage(R.string.saint_31f);
+                                    } else
+                                        saint_builder.setMessage(R.string.saint_default);
+                                    break;
+                                case 33:
+                                    if (saint_history[11] == 0) {
+                                        saint_history[11]++;
+                                        echo_history[12]++;
+                                        saint_builder.setMessage(R.string.saint_33f);
+                                    } else
+                                        saint_builder.setMessage(R.string.saint_default);
+                                    break;
+                                case 36:
+                                    if (saint_history[12] == 0) {
+                                        saint_history[12]++;
+                                        echo_history[13]++;
+                                        saint_builder.setMessage(R.string.saint_36f);
+                                    } else
+                                        saint_builder.setMessage(R.string.saint_default);
+                                    break;
+                                case 37:
+                                    if (saint_history[13] == 0) {
+                                        saint_history[13]++;
+                                        echo_history[14]++;
+                                        saint_builder.setMessage(R.string.saint_37f);
+                                    } else
+                                        saint_builder.setMessage(R.string.saint_default);
+                                    break;
+                                case 39:
+                                    if (saint_history[14] == 0) {
+                                        saint_history[14]++;
+                                        echo_history[16]++;
+                                        saint_builder.setMessage(R.string.saint_39f);
+                                    } else
+                                        saint_builder.setMessage(R.string.saint_default);
+                                    break;
+                                case 42:
+                                    if (saint_history[15] == 0) {
+                                        saint_history[15]++;
+                                        echo_history[18]++;
+                                        saint_builder.setMessage(R.string.saint_42f);
+                                    } else
+                                        saint_builder.setMessage(R.string.saint_default);
+                                    break;
+                                case 45:
+                                    if (saint_history[16] == 0) {
+                                        saint_history[16]++;
+                                        echo_history[19]++;
+                                        saint_builder.setMessage(R.string.saint_45f);
+                                    } else
+                                        saint_builder.setMessage(R.string.saint_default);
+                                    break;
+                                case 46:
+                                    if (saint_history[17] == 0) {
+                                        saint_history[17]++;
+                                        echo_history[21]++;
+                                        saint_builder.setMessage(R.string.saint_46f);
+                                    } else
+                                        saint_builder.setMessage(R.string.saint_default);
+                                    break;
+                                case 48:
+                                    if (saint_history[18] == 0) {
+                                        saint_history[18]++;
+                                        echo_history[23]++;
+                                        saint_builder.setMessage(R.string.saint_48f);
+                                    } else
+                                        saint_builder.setMessage(R.string.saint_default);
+                                    break;
+                                default:
+                                    saint_builder.setMessage("Saint dialog bug in checkNextPostion()");
+                                    break;
+                            }
+                            AlertDialog saint_dialog = saint_builder.create();
+                            saint_dialog.setCanceledOnTouchOutside(false);
+                            saint_dialog.show();
+                        }
+                    });
+                    return 0;
+                case 23:        // merchant
+                    npc_dialog = true;
+                    parent.runOnUiThread(new Runnable() {
+                        public void run() {
+                            final AlertDialog.Builder merchant_builder = new AlertDialog.Builder(parent);
+                            merchant_builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialogInterface, int i) {
+                                    sfx_play(R.raw.sfx_choose);
+                                    npc_dialog = false;
+                                }
+                            });
+                            final AlertDialog.Builder no_gold_builder = new AlertDialog.Builder(parent);
+                            switch (floor_num) {
+                                case 2:
+                                    if (merchant_history[0] == 0) {
+                                        merchant_history[0]++;
+                                        merchant_builder.setMessage(R.string.merchant_2f0);
+                                        gold += 1000;
+                                    } else {
+                                        merchant_builder.setMessage(R.string.merchant_2f1);
+                                    }
+                                    break;
+                                case 6:
+                                    if (merchant_history[1] == 0) {
+                                        merchant_builder.setMessage(R.string.merchant_6f0);
+                                        merchant_builder.setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
+                                            @Override
+                                            public void onClick(DialogInterface dialogInterface, int i) {
+                                                npc_dialog = false;
+                                                if (gold >= 50) {
+                                                    sfx_play(R.raw.sfx_choose);
+                                                    merchant_history[1]++;
+                                                    gold -= 50;
+                                                    count_b++;
+                                                } else {
+                                                    sfx_play(R.raw.sfx_cancel);
+                                                    no_gold_builder.setMessage(R.string.purchase_fail);
+                                                    AlertDialog no_gold_dialog = no_gold_builder.create();
+                                                    no_gold_dialog.setCanceledOnTouchOutside(true);
+                                                    no_gold_dialog.show();
+                                                }
+                                            }
+                                        });
+                                        merchant_builder.setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {
+                                            @Override
+                                            public void onClick(DialogInterface dialogInterface, int i) {
+                                                npc_dialog = false;
+                                                sfx_play(R.raw.sfx_cancel);
+                                            }
+                                        });
+                                    } else if (merchant_history[1] == 1) {
+                                        merchant_history[1]++;
+                                        echo_history[2]++;
+                                        merchant_builder.setMessage(R.string.merchant_6f1);
+                                    } else {
+                                        merchant_builder.setMessage(R.string.merchant_default);
+                                    }
+                                    break;
+                                case 7:
+                                    if (merchant_history[2] == 0) {
+                                        merchant_builder.setMessage(R.string.merchant_7f0);
+                                        merchant_builder.setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
+                                            @Override
+                                            public void onClick(DialogInterface dialogInterface, int i) {
+                                                npc_dialog = false;
+                                                if (gold >= 50) {
+                                                    sfx_play(R.raw.sfx_choose);
+                                                    merchant_history[2]++;
+                                                    gold -= 50;
+                                                    count_y += 5;
+                                                } else {
+                                                    sfx_play(R.raw.sfx_cancel);
+                                                    no_gold_builder.setMessage(R.string.purchase_fail);
+                                                    AlertDialog no_gold_dialog = no_gold_builder.create();
+                                                    no_gold_dialog.setCanceledOnTouchOutside(true);
+                                                    no_gold_dialog.show();
+                                                }
+                                            }
+                                        });
+                                        merchant_builder.setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {
+                                            @Override
+                                            public void onClick(DialogInterface dialogInterface, int i) {
+                                                npc_dialog = false;
+                                                sfx_play(R.raw.sfx_cancel);
+                                            }
+                                        });
+                                    } else if (merchant_history[2] == 1) {
+                                        merchant_history[2]++;
+                                        echo_history[3]++;
+                                        merchant_builder.setMessage(R.string.merchant_7f1);
+                                    } else {
+                                        merchant_builder.setMessage(R.string.merchant_default);
+                                    }
+                                    break;
+                                case 12:
+                                    if (hero_x < 6) {
+                                        if (merchant_history[3] == 0) {
+                                            merchant_builder.setMessage(R.string.merchant_12f0);
+                                            merchant_builder.setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
+                                                @Override
+                                                public void onClick(DialogInterface dialogInterface, int i) {
+                                                    npc_dialog = false;
+                                                    if (gold >= 800) {
+                                                        sfx_play(R.raw.sfx_choose);
+                                                        merchant_history[3]++;
+                                                        gold -= 800;
+                                                        count_r++;
+                                                    } else {
+                                                        sfx_play(R.raw.sfx_cancel);
+                                                        no_gold_builder.setMessage(R.string.purchase_fail);
+                                                        AlertDialog no_gold_dialog = no_gold_builder.create();
+                                                        no_gold_dialog.setCanceledOnTouchOutside(true);
+                                                        no_gold_dialog.show();
+                                                    }
+                                                }
+                                            });
+                                            merchant_builder.setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {
+                                                @Override
+                                                public void onClick(DialogInterface dialogInterface, int i) {
+                                                    npc_dialog = false;
+                                                    sfx_play(R.raw.sfx_cancel);
+                                                }
+                                            });
+                                        } else if (merchant_history[3] == 1) {
+                                            merchant_history[3]++;
+                                            echo_history[4]++;
+                                            merchant_builder.setMessage(R.string.merchant_12f1);
+                                        } else {
+                                            merchant_builder.setMessage(R.string.merchant_default);
+                                        }
+                                    } else {
+                                        merchant_builder.setMessage(R.string.merchant_12fh);
+                                        merchant_builder.setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
+                                            @Override
+                                            public void onClick(DialogInterface dialogInterface, int i) {
+                                                npc_dialog = false;
+                                                if (gold >= 1000) {
+                                                    sfx_play(R.raw.sfx_choose);
+                                                    merchant_history[4]++;
+                                                    gold -= 1000;
+                                                    count_y++;
+                                                } else {
+                                                    sfx_play(R.raw.sfx_cancel);
+                                                    no_gold_builder.setMessage(R.string.purchase_fail);
+                                                    AlertDialog no_gold_dialog = no_gold_builder.create();
+                                                    no_gold_dialog.setCanceledOnTouchOutside(true);
+                                                    no_gold_dialog.show();
+                                                }
+                                            }
+                                        });
+                                        merchant_builder.setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {
+                                            @Override
+                                            public void onClick(DialogInterface dialogInterface, int i) {
+                                                npc_dialog = false;
+                                                sfx_play(R.raw.sfx_cancel);
+                                            }
+                                        });
+                                    }
+                                    break;
+                                case 15:
+                                    if (merchant_history[5] == 0) {
+                                        merchant_builder.setMessage(R.string.merchant_15f0);
+                                        merchant_builder.setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
+                                            @Override
+                                            public void onClick(DialogInterface dialogInterface, int i) {
+                                                npc_dialog = false;
+                                                if (gold >= 200) {
+                                                    sfx_play(R.raw.sfx_choose);
+                                                    merchant_history[5]++;
+                                                    gold -= 200;
+                                                    count_b++;
+                                                } else {
+                                                    sfx_play(R.raw.sfx_cancel);
+                                                    no_gold_builder.setMessage(R.string.purchase_fail);
+                                                    AlertDialog no_gold_dialog = no_gold_builder.create();
+                                                    no_gold_dialog.setCanceledOnTouchOutside(true);
+                                                    no_gold_dialog.show();
+                                                }
+                                            }
+                                        });
+                                        merchant_builder.setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {
+                                            @Override
+                                            public void onClick(DialogInterface dialogInterface, int i) {
+                                                npc_dialog = false;
+                                                sfx_play(R.raw.sfx_cancel);
+                                            }
+                                        });
+                                    } else if (merchant_history[5] == 1) {
+                                        merchant_history[5]++;
+                                        echo_history[5]++;
+                                        merchant_builder.setMessage(R.string.merchant_15f1);
+                                    } else {
+                                        merchant_builder.setMessage(R.string.merchant_default);
+                                    }
+                                    break;
+                                case 28:
+                                    merchant_builder.setMessage(R.string.merchant_28f);
+                                    merchant_builder.setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
+                                        @Override
+                                        public void onClick(DialogInterface dialogInterface, int i) {
+                                            npc_dialog = false;
+                                            if (count_y > 0) {
+                                                sfx_play(R.raw.sfx_choose);
+                                                gold += 100;
+                                                count_y--;
+                                            } else {
+                                                sfx_play(R.raw.sfx_cancel);
+                                                no_gold_builder.setMessage(R.string.purchase_fail_28f);
+                                                AlertDialog no_gold_dialog = no_gold_builder.create();
+                                                no_gold_dialog.setCanceledOnTouchOutside(true);
+                                                no_gold_dialog.show();
+                                            }
+                                        }
+                                    });
+                                    merchant_builder.setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {
+                                        @Override
+                                        public void onClick(DialogInterface dialogInterface, int i) {
+                                            npc_dialog = false;
+                                            sfx_play(R.raw.sfx_cancel);
+                                        }
+                                    });
+                                    break;
+                                case 31:
+                                    if (merchant_history[7] == 0) {
+                                        merchant_builder.setMessage(R.string.merchant_31f0);
+                                        merchant_builder.setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
+                                            @Override
+                                            public void onClick(DialogInterface dialogInterface, int i) {
+                                                npc_dialog = false;
+                                                if (gold >= 1000) {
+                                                    sfx_play(R.raw.sfx_choose);
+                                                    merchant_history[7]++;
+                                                    gold -= 1000;
+                                                    count_y += 4;
+                                                    count_b++;
+                                                } else {
+                                                    sfx_play(R.raw.sfx_cancel);
+                                                    no_gold_builder.setMessage(R.string.purchase_fail);
+                                                    AlertDialog no_gold_dialog = no_gold_builder.create();
+                                                    no_gold_dialog.setCanceledOnTouchOutside(true);
+                                                    no_gold_dialog.show();
+                                                }
+                                            }
+                                        });
+                                        merchant_builder.setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {
+                                            @Override
+                                            public void onClick(DialogInterface dialogInterface, int i) {
+                                                npc_dialog = false;
+                                                sfx_play(R.raw.sfx_cancel);
+                                            }
+                                        });
+                                    } else if (merchant_history[7] == 1) {
+                                        merchant_history[7]++;
+                                        echo_history[11]++;
+                                        merchant_builder.setMessage(R.string.merchant_31f1);
+                                    } else {
+                                        merchant_builder.setMessage(R.string.merchant_default);
+                                    }
+                                    break;
+                                case 38:
+                                    if (merchant_history[8] == 0) {
+                                        merchant_builder.setMessage(R.string.merchant_38f0);
+                                        merchant_builder.setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
+                                            @Override
+                                            public void onClick(DialogInterface dialogInterface, int i) {
+                                                npc_dialog = false;
+                                                if (gold >= 200) {
+                                                    sfx_play(R.raw.sfx_choose);
+                                                    merchant_history[8]++;
+                                                    gold -= 200;
+                                                    count_y += 3;
+                                                } else {
+                                                    sfx_play(R.raw.sfx_cancel);
+                                                    no_gold_builder.setMessage(R.string.purchase_fail);
+                                                    AlertDialog no_gold_dialog = no_gold_builder.create();
+                                                    no_gold_dialog.setCanceledOnTouchOutside(true);
+                                                    no_gold_dialog.show();
+                                                }
+                                            }
+                                        });
+                                        merchant_builder.setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {
+                                            @Override
+                                            public void onClick(DialogInterface dialogInterface, int i) {
+                                                npc_dialog = false;
+                                                sfx_play(R.raw.sfx_cancel);
+                                            }
+                                        });
+                                    } else if (merchant_history[8] == 1) {
+                                        merchant_history[8]++;
+                                        echo_history[15]++;
+                                        merchant_builder.setMessage(R.string.merchant_38f1);
+                                    } else {
+                                        merchant_builder.setMessage(R.string.merchant_default);
+                                    }
+                                    break;
+                                case 39:
+                                    if (merchant_history[9] == 0) {
+                                        merchant_builder.setMessage(R.string.merchant_39f0);
+                                        merchant_builder.setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
+                                            @Override
+                                            public void onClick(DialogInterface dialogInterface, int i) {
+                                                npc_dialog = false;
+                                                if (gold >= 2000) {
+                                                    sfx_play(R.raw.sfx_choose);
+                                                    merchant_history[9]++;
+                                                    gold -= 2000;
+                                                    count_b += 3;
+                                                } else {
+                                                    sfx_play(R.raw.sfx_cancel);
+                                                    no_gold_builder.setMessage(R.string.purchase_fail);
+                                                    AlertDialog no_gold_dialog = no_gold_builder.create();
+                                                    no_gold_dialog.setCanceledOnTouchOutside(true);
+                                                    no_gold_dialog.show();
+                                                }
+                                            }
+                                        });
+                                        merchant_builder.setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {
+                                            @Override
+                                            public void onClick(DialogInterface dialogInterface, int i) {
+                                                npc_dialog = false;
+                                                sfx_play(R.raw.sfx_cancel);
+                                            }
+                                        });
+                                    } else if (merchant_history[9] == 1) {
+                                        merchant_history[9]++;
+                                        echo_history[17]++;
+                                        merchant_builder.setMessage(R.string.merchant_39f1);
+                                    } else {
+                                        merchant_builder.setMessage(R.string.merchant_default);
+                                    }
+                                    break;
+                                case 45:
+                                    if (merchant_history[10] == 0) {
+                                        merchant_builder.setMessage(R.string.merchant_45f0);
+                                        merchant_builder.setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
+                                            @Override
+                                            public void onClick(DialogInterface dialogInterface, int i) {
+                                                npc_dialog = false;
+                                                if (gold >= 1000) {
+                                                    sfx_play(R.raw.sfx_choose);
+                                                    merchant_history[10]++;
+                                                    gold -= 1000;
+                                                    hp += 2000;
+                                                } else {
+                                                    sfx_play(R.raw.sfx_cancel);
+                                                    no_gold_builder.setMessage(R.string.purchase_fail);
+                                                    AlertDialog no_gold_dialog = no_gold_builder.create();
+                                                    no_gold_dialog.setCanceledOnTouchOutside(true);
+                                                    no_gold_dialog.show();
+                                                }
+                                            }
+                                        });
+                                        merchant_builder.setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {
+                                            @Override
+                                            public void onClick(DialogInterface dialogInterface, int i) {
+                                                npc_dialog = false;
+                                                sfx_play(R.raw.sfx_cancel);
+                                            }
+                                        });
+                                    } else if (merchant_history[10] == 1) {
+                                        merchant_history[10]++;
+                                        echo_history[20]++;
+                                        merchant_builder.setMessage(R.string.merchant_45f1);
+                                    } else {
+                                        merchant_builder.setMessage(R.string.merchant_default);
+                                    }
+                                    break;
+                                case 47:
+                                    if (merchant_history[11] == 0) {
+                                        merchant_builder.setMessage(R.string.merchant_47f0);
+                                        merchant_builder.setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
+                                            @Override
+                                            public void onClick(DialogInterface dialogInterface, int i) {
+                                                npc_dialog = false;
+                                                if (gold >= 4000) {
+                                                    sfx_play(R.raw.sfx_choose);
+                                                    merchant_history[11]++;
+                                                    gold -= 4000;
+                                                    e_mattock = true;
+                                                } else {
+                                                    sfx_play(R.raw.sfx_cancel);
+                                                    no_gold_builder.setMessage(R.string.purchase_fail);
+                                                    AlertDialog no_gold_dialog = no_gold_builder.create();
+                                                    no_gold_dialog.setCanceledOnTouchOutside(true);
+                                                    no_gold_dialog.show();
+                                                }
+                                            }
+                                        });
+                                        merchant_builder.setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {
+                                            @Override
+                                            public void onClick(DialogInterface dialogInterface, int i) {
+                                                npc_dialog = false;
+                                                sfx_play(R.raw.sfx_cancel);
+                                            }
+                                        });
+                                    } else if (merchant_history[11] == 1) {
+                                        merchant_history[11]++;
+                                        echo_history[22]++;
+                                        merchant_builder.setMessage(R.string.merchant_47f1);
+                                    } else {
+                                        merchant_builder.setMessage(R.string.merchant_default);
+                                    }
+                                    break;
+                                default:
+                                    merchant_builder.setMessage("Merchant dialog bug in checkNextPostion()");
+                                    break;
+                            }
+                            AlertDialog merchant_dialog = merchant_builder.create();
+                            merchant_dialog.show();
+
+                        }
+                    });
+                    return 0;
+                case 24:        // fairy
+                    return 0;
+                case 25:        // shop left
+                    return 0;
+                case 26:        // shop middle
+                    npc_dialog = true;
+                    parent.runOnUiThread(new Runnable() {
+                        public void run() {
+                            final int price = 10 * price_idx * price_idx + 10 * price_idx + 20;
+                            String item_atk = "Attack + " + String.valueOf(2 + 2 * (floor_num / 10));
+                            String item_def = "Defence + " + String.valueOf(4 + 4 * (floor_num / 10));
+                            String offer = "Would you like to offer " + String.valueOf(price) + " gold for one of the following items";
+                            String[] item_list = {"Health + 1000", item_atk, item_def, "Not this time"};
+                            final AlertDialog.Builder altar_builder = new AlertDialog.Builder(parent);
+                            final AlertDialog.Builder fail_offer_builder = new AlertDialog.Builder(parent);
+                            altar_builder.setTitle(offer);
+                            altar_builder.setItems(item_list, new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int item) {
+                                    if (item == 0) {
+                                        if (gold > price) {
+                                            gold -= price;
+                                            price_idx++;
+                                            hp += 1000;
+                                            sfx_play(R.raw.sfx_gold_spent);
+                                        } else {
+                                            sfx_play(R.raw.sfx_cancel);
+                                            fail_offer_builder.setMessage(R.string.purchase_fail);
+                                            AlertDialog no_gold_dialog = fail_offer_builder.create();
+                                            no_gold_dialog.setCanceledOnTouchOutside(true);
+                                            no_gold_dialog.show();
+                                        }
+                                    } else if (item == 1) {
+                                        if (gold > price) {
+                                            sfx_play(R.raw.sfx_gold_spent);
+                                            gold -= price;
+                                            price_idx++;
+                                            atk += (2 + 2 * (floor_num / 10));
+                                        } else {
+                                            sfx_play(R.raw.sfx_cancel);
+                                            fail_offer_builder.setMessage(R.string.purchase_fail);
+                                            AlertDialog no_gold_dialog = fail_offer_builder.create();
+                                            no_gold_dialog.setCanceledOnTouchOutside(true);
+                                            no_gold_dialog.show();
+                                        }
+                                    } else if (item == 2) {
+                                        if (gold > price) {
+                                            sfx_play(R.raw.sfx_gold_spent);
+                                            gold -= price;
+                                            price_idx++;
+                                            def += (4 + 4 * (floor_num / 10));
+                                        } else {
+                                            sfx_play(R.raw.sfx_cancel);
+                                            fail_offer_builder.setMessage(R.string.purchase_fail);
+                                            AlertDialog no_gold_dialog = fail_offer_builder.create();
+                                            no_gold_dialog.setCanceledOnTouchOutside(true);
+                                            no_gold_dialog.show();
+                                        }
+                                    } else
+                                        sfx_play(R.raw.sfx_cancel);
+                                    npc_dialog = false;
+                                }
+                            });
+                            AlertDialog altar_list = altar_builder.create();
+                            altar_list.show();
+
+                        }
+                    });
+                    return 0;
+                case 27:        // shop right
+                    return 0;
+                case 28:        // princess
+                    parent.runOnUiThread(new Runnable() {
+                        public void run() {
+                            AlertDialog.Builder princess_builder = new AlertDialog.Builder(parent);
+                            final AlertDialog.Builder zeno_builder = new AlertDialog.Builder(parent);
+                            princess_builder.setMessage(R.string.princess_dialog1);
+                            AlertDialog princess_dialog = princess_builder.create();
+                            princess_dialog.setCanceledOnTouchOutside(true);
+                            princess_dialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
+                                @Override
+                                public void onCancel(DialogInterface dialogInterface) {
+                                    current_game.change_24f();
+                                    zeno_builder.setMessage(R.string.princess_dialog2);
+                                    AlertDialog zeno_dialog = zeno_builder.create();
+                                    zeno_dialog.setCanceledOnTouchOutside(true);
+                                    zeno_dialog.show();
+                                }
+                            });
+                            princess_dialog.show();
+                        }
+                    });
+                    return 0;
+                case 29:        // lava
                     if (snow_cryst) {
                         sfx_play(R.raw.sfx_lava_freezing);
                         current_floor[i][j] = 1;
