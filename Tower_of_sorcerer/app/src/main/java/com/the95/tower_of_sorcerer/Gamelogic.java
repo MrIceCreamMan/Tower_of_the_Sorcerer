@@ -85,7 +85,7 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
     private byte[]              game_data_to_save;
     private MediaPlayer         background_music;
     private String              instruction;
-    private boolean[]           game_settings;
+    private boolean[]           game_settings, if_picked_list;
     private int                 walk_result,    walk_count,     which_button,       sq_size;
     private int                 m_hp,           m_atk,          m_def,              m_gold;
     private float               x,              y,              page,               total_page;
@@ -102,7 +102,7 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
     private int         hp,                 atk,                def,                gold;
     private int         floor_num,          act,                thief_event_count,  highest_floor;
     private int         count_y,            count_b,            count_r,            count_wing;
-    private int         hero_x,             hero_y,             temp_x,             temp_y;
+    private int         hero_x,             hero_y;
     private int         price_idx;
     private boolean     stf_wsdm,           stf_echo,           stf_space,          cross;
     private boolean     elixir,             m_mattock,          wing_cent,          e_mattock;
@@ -149,6 +149,7 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
         all_sprites = new ArrayList<>();
         monsters_to_draw = new ArrayList<>();           monsters_picture = new ArrayList<>();
         monsters_name1 = new ArrayList<>();             monsters_name2 = new ArrayList<>();
+        if_picked_list = new boolean[]{false, false, false, false};
         walk_result = 0;        walk_count = 0;         which_button = 6;       sq_size = 32;
         m_hp = 0;               m_atk = 0;              m_def = 0;              m_gold = 0;
         x = 0;                  y = 0;                  page = 0;               total_page = 1;
@@ -166,7 +167,7 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
         hp = 1000;              atk = 100;              def = 100;              gold = 0;
         floor_num = 1;          act = 0;                thief_event_count = 0;  highest_floor = 1;
         count_y = 0;            count_b = 0;            count_r = 0;            count_wing = 0;
-        hero_x = 6;             hero_y = 11;            temp_x = 6;             temp_y = 11;
+        hero_x = 6;             hero_y = 11;
         price_idx = 0;
         stf_wsdm = false;       stf_echo = false;       stf_space = false;      cross = false;
         elixir = false;         m_mattock = false;      wing_cent = false;      e_mattock = false;
@@ -404,34 +405,24 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
                 if (x > sq_size * 9 + origin && y > sq_size * 13 + origin + offset && x < sq_size * 10 && y < sq_size * 14 + offset) {
                     pt1.setColor(Color.rgb(255, 255, 255));
                     which_button = UP;
-                    temp_x = hero_x;
-                    temp_y = hero_y - 1;
                 } else if (x > sq_size * 9 + origin && y > sq_size * 16 + origin + offset && x < sq_size * 10 && y < sq_size * 17 + offset) {
                     pt2.setColor(Color.rgb(255, 255, 255));
                     which_button = DOWN;
-                    temp_x = hero_x;
-                    temp_y = hero_y + 1;
                 } else if (x > sq_size * 7 && y > sq_size * 14 + offset && x < sq_size * 9 + origin && y < sq_size * 16 + origin + offset) {
                     pt3.setColor(Color.rgb(255, 255, 255));
                     which_button = LEFT;
-                    temp_x = hero_x - 1;
-                    temp_y = hero_y;
                 } else if (x > sq_size * 10 && y > sq_size * 14 + offset && x < sq_size * 12 + origin && y < sq_size * 16 + origin + offset) {
                     pt4.setColor(Color.rgb(255, 255, 255));
                     which_button = RIGHT;
-                    temp_x = hero_x + 1;
-                    temp_y = hero_y;
                 } else if (x > sq_size * 7 && y > sq_size * 17 + offset*3 && x < sq_size * 9 + origin && y < sq_size * 19 + offset*3) {
                     pt5.setColor(Color.rgb(255, 255, 255));
                     which_button = STAFF1;
-                    temp_y = hero_y; temp_x = hero_x;
                     if (stf_wsdm) {
                         load_ctr = true;
                         which_surface_view = false;
                     }
                 } else if (x > sq_size * 9 + origin && y > sq_size * 17 + offset*3 && x < sq_size * 10 && y < sq_size * 19 + offset*3) {
                     pt6.setColor(Color.rgb(255, 255, 255));
-                    temp_y = hero_y; temp_x = hero_x;
                     which_button = STAFF2;
                     if (stf_echo) {
                         LayoutInflater staff_echo_inflater = LayoutInflater.from(Gamelogic.this);
@@ -982,53 +973,37 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
                     }
                 } else if (x > sq_size * 10 && y > sq_size * 17 + offset*3 && x < sq_size * 12 + origin && y < sq_size * 18 + offset*3) {
                     pt7.setColor(Color.rgb(255, 255, 255));
-                    temp_y = hero_y; temp_x = hero_x;
                     which_button = FLY_UP;
                 } else if (x > sq_size * 10 && y > sq_size * 18 + offset*3 && x < sq_size * 12 + origin && y < sq_size * 19 + offset*3) {
                     pt8.setColor(Color.rgb(255, 255, 255));
-                    temp_y = hero_y; temp_x = hero_x;
                     which_button = FLY_DOWN;
                 } else if (x > origin + sq_size && y > sq_size * 17 + offset*3 && x < sq_size*2 + origin && y < sq_size * 18 + offset*3) {
-                    temp_y = hero_y; temp_x = hero_x;
                     which_button = ITEM1;
                 } else if (x > origin + sq_size*2 && y > sq_size * 17 + offset*3 && x < sq_size*3 + origin && y < sq_size * 18 + offset*3) {
-                    temp_y = hero_y; temp_x = hero_x;
                     which_button = ITEM2;
                 } else if (x > origin + sq_size*3 && y > sq_size * 17 + offset*3 && x < sq_size*4 + origin && y < sq_size * 18 + offset*3) {
-                    temp_y = hero_y; temp_x = hero_x;
                     which_button = ITEM3;
                 } else if (x > origin + sq_size*4 && y > sq_size * 17 + offset*3 && x < sq_size*5 + origin && y < sq_size * 18 + offset*3) {
-                    temp_y = hero_y; temp_x = hero_x;
                     which_button = ITEM4;
                 } else if (x > origin + sq_size*5 && y > sq_size * 17 + offset*3 && x < sq_size*6 + origin && y < sq_size * 18 + offset*3) {
-                    temp_y = hero_y; temp_x = hero_x;
                     which_button = ITEM5;
                 } else if (x > origin + sq_size*6 && y > sq_size * 17 + offset*3 && x < sq_size*7 + origin && y < sq_size * 18 + offset*3) {
-                    temp_y = hero_y; temp_x = hero_x;
                     which_button = ITEM6;
                 } else if (x > origin + sq_size && y > sq_size * 18 + offset*3 && x < sq_size*2 + origin && y < sq_size * 19 + offset*3) {
-                    temp_y = hero_y; temp_x = hero_x;
                     which_button = ITEM7;
                 } else if (x > origin + sq_size*2 && y > sq_size * 18 + offset*3 && x < sq_size*3 + origin && y < sq_size * 19 + offset*3) {
-                    temp_y = hero_y; temp_x = hero_x;
                     which_button = ITEM8;
                 } else if (x > origin + sq_size*3 && y > sq_size * 18 + offset*3 && x < sq_size*4 + origin && y < sq_size * 19 + offset*3) {
-                    temp_y = hero_y; temp_x = hero_x;
                     which_button = ITEM9;
                 } else if (x > origin + sq_size*4 && y > sq_size * 18 + offset*3 && x < sq_size*5 + origin && y < sq_size * 19 + offset*3) {
-                    temp_y = hero_y; temp_x = hero_x;
                     which_button = ITEM10;
                 } else if (x > origin + sq_size*5 && y > sq_size * 18 + offset*3 && x < sq_size*6 + origin && y < sq_size * 19 + offset*3) {
-                    temp_y = hero_y; temp_x = hero_x;
                     which_button = ITEM11;
                 } else if (x > origin + sq_size*6 && y > sq_size * 18 + offset*3 && x < sq_size*7 + origin && y < sq_size * 19 + offset*3) {
-                    temp_y = hero_y; temp_x = hero_x;
                     which_button = ITEM12;
                 } else if (x > sq_size*5 - margin*4 && y > sq_size*13 + margin + offset && x < sq_size*6 + margin*7 && y < sq_size * 14 - margin + offset) {
-                    temp_y = hero_y; temp_x = hero_x;
                     which_button = SAVE;
                 } else {
-                    temp_y = hero_y; temp_x = hero_x;
                     which_button = 21;
                 }
                 button_click = true;
@@ -1138,7 +1113,6 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
         game_data += String.valueOf(floor_num) + "\n"   + String.valueOf(count_y) + "\n";
         game_data += String.valueOf(count_b) + "\n"     + String.valueOf(count_r) + "\n";
         game_data += String.valueOf(hero_x) + "\n"      + String.valueOf(hero_y) + "\n";
-        game_data += String.valueOf(temp_x) + "\n"      + String.valueOf(temp_y) + "\n";
         game_data += String.valueOf(price_idx) + "\n"   + String.valueOf(count_wing) + "\n";
         game_data += String.valueOf(act) + "\n"         + String.valueOf(highest_floor) + "\n";
         game_data += String.valueOf(thief_event_count) + "\n";
@@ -1241,18 +1215,6 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
             offset++;
         } offset++;
         hero_y = Integer.parseInt(temp_sb.toString());
-        temp_sb.delete(0,temp_sb.length());
-        while(game_data_to_load[offset] != 10 && offset < game_data_to_load.length){
-            temp_sb.append((char)game_data_to_load[offset]);
-            offset++;
-        } offset++;
-        temp_x = Integer.parseInt(temp_sb.toString());
-        temp_sb.delete(0,temp_sb.length());
-        while(game_data_to_load[offset] != 10 && offset < game_data_to_load.length){
-            temp_sb.append((char)game_data_to_load[offset]);
-            offset++;
-        } offset++;
-        temp_y = Integer.parseInt(temp_sb.toString());
         temp_sb.delete(0,temp_sb.length());
         while(game_data_to_load[offset] != 10 && offset < game_data_to_load.length){
             temp_sb.append((char)game_data_to_load[offset]);
@@ -2010,9 +1972,9 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
                         refresh_ctr = true;
                         isEvent = false;
                     } else if (act == 25) {
-                        sleep(200);
                         act++;
                         sfx_play(R.raw.sfx_stairs);
+                        current_floor[9][6] = 1;
                         current_floor[10][1] = 21;
                         refresh_ctr = true;
                     } else if (act == 26) {
@@ -4090,6 +4052,8 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
                                 floor_num = 45;
                             else
                                 floor_num++;
+                            if_picked_list[0] = false; if_picked_list[1] = false;
+                            if_picked_list[2] = false; if_picked_list[3] = false;
                             int pairup[] = find_hero_next_floor(true, floor_num);
                             refresh_ctr = true;
                             hero_y = pairup[0];
@@ -4126,6 +4090,8 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
                                 floor_num = 43;
                             else
                                 floor_num--;
+                            if_picked_list[0] = false; if_picked_list[1] = false;
+                            if_picked_list[2] = false; if_picked_list[3] = false;
                             int pairup[] = find_hero_next_floor(false, floor_num);
                             refresh_ctr = true;
                             hero_y = pairup[0];
@@ -5948,6 +5914,8 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
                         floor_num = 45;
                     else
                         floor_num++;
+                    if_picked_list[0] = false; if_picked_list[1] = false;
+                    if_picked_list[2] = false; if_picked_list[3] = false;
                     int pairup[] = find_hero_next_floor(true,floor_num);
                     hero_y = pairup[0];
                     hero_x = pairup[1];
@@ -5978,6 +5946,8 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
                         floor_num = 43;
                     else
                         floor_num--;
+                    if_picked_list[0] = false; if_picked_list[1] = false;
+                    if_picked_list[2] = false; if_picked_list[3] = false;
                     int pairdown[] = find_hero_next_floor(false,floor_num);
                     hero_y = pairdown[0];
                     hero_x = pairdown[1];
@@ -6292,6 +6262,13 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
                             });
                             AlertDialog thief_dialog = thief_builder.create();
                             thief_dialog.setCanceledOnTouchOutside(false);
+                            thief_dialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
+                                @Override
+                                public void onCancel(DialogInterface dialogInterface) {
+                                    npc_dialog = false;
+                                    proceed = true;
+                                }
+                            });
                             isEvent = true;
                             thief_dialog.show();
                         }
@@ -6484,6 +6461,12 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
                             }
                             AlertDialog saint_dialog = saint_builder.create();
                             saint_dialog.setCanceledOnTouchOutside(false);
+                            saint_dialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
+                                @Override
+                                public void onCancel(DialogInterface dialogInterface) {
+                                    npc_dialog = false;
+                                }
+                            });
                             saint_dialog.show();
                         }
                     });
@@ -6897,8 +6880,14 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
                                     break;
                             }
                             AlertDialog merchant_dialog = merchant_builder.create();
+                            merchant_dialog.setCanceledOnTouchOutside(false);
+                            merchant_dialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
+                                @Override
+                                public void onCancel(DialogInterface dialogInterface) {
+                                    npc_dialog = false;
+                                }
+                            });
                             merchant_dialog.show();
-
                         }
                     });
                     return 0;
@@ -6964,8 +6953,15 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
                                     npc_dialog = false;
                                 }
                             });
-                            AlertDialog altar_list = altar_builder.create();
-                            altar_list.show();
+                            AlertDialog altar_dialog = altar_builder.create();
+                            altar_dialog.setCanceledOnTouchOutside(false);
+                            altar_dialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
+                                @Override
+                                public void onCancel(DialogInterface dialogInterface) {
+                                    npc_dialog = false;
+                                }
+                            });
+                            altar_dialog.show();
 
                         }
                     });
@@ -6973,6 +6969,7 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
                 case 27:        // shop right
                     return 0;
                 case 28:        // princess
+                    npc_dialog = true;
                     parent.runOnUiThread(new Runnable() {
                         public void run() {
                             AlertDialog.Builder princess_builder = new AlertDialog.Builder(parent);
@@ -6987,6 +6984,12 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
                                     zeno_builder.setMessage(R.string.princess_dialog2);
                                     AlertDialog zeno_dialog = zeno_builder.create();
                                     zeno_dialog.setCanceledOnTouchOutside(true);
+                                    zeno_dialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
+                                        @Override
+                                        public void onCancel(DialogInterface dialogInterface) {
+                                            npc_dialog = false;
+                                        }
+                                    });
                                     zeno_dialog.show();
                                 }
                             });
@@ -7097,34 +7100,40 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
                     refresh_ctr = true;
                     return 1;
                 case 74:        // red potion
-                    parent.runOnUiThread(new Runnable() {
-                        public void run() {
-                            AlertDialog.Builder pick_up_builder = new AlertDialog.Builder(parent);
-                            String full_message = getString(R.string.pick_up_red_potion);
-                            full_message += String.valueOf(50*(1+(floor_num-1)/10)) + ".";
-                            pick_up_builder.setMessage(full_message);
-                            AlertDialog pick_up_dialog = pick_up_builder.create();
-                            pick_up_dialog.setCanceledOnTouchOutside(true);
-                            pick_up_dialog.show();
-                        }
-                    });
+                    if (!if_picked_list[0]) {
+                        if_picked_list[0] = true;
+                        parent.runOnUiThread(new Runnable() {
+                            public void run() {
+                                AlertDialog.Builder pick_up_builder = new AlertDialog.Builder(parent);
+                                String full_message = getString(R.string.pick_up_red_potion);
+                                full_message += String.valueOf(50 * (1 + (floor_num - 1) / 10)) + ".";
+                                pick_up_builder.setMessage(full_message);
+                                AlertDialog pick_up_dialog = pick_up_builder.create();
+                                pick_up_dialog.setCanceledOnTouchOutside(true);
+                                pick_up_dialog.show();
+                            }
+                        });
+                    }
                     sfx_play(R.raw.sfx_potion);
                     current_floor[i][j] = 1;
                     hp += 50 * ((floor_num-1) / 10 + 1);
                     refresh_ctr = true;
                     return 1;
                 case 75:        // blue potion
-                    parent.runOnUiThread(new Runnable() {
-                        public void run() {
-                            AlertDialog.Builder pick_up_builder = new AlertDialog.Builder(parent);
-                            String full_message = getString(R.string.pick_up_blue_potion);
-                            full_message += String.valueOf(200*(1+(floor_num-1)/10)) + ".";
-                            pick_up_builder.setMessage(full_message);
-                            AlertDialog pick_up_dialog = pick_up_builder.create();
-                            pick_up_dialog.setCanceledOnTouchOutside(true);
-                            pick_up_dialog.show();
-                        }
-                    });
+                    if (!if_picked_list[1]) {
+                        if_picked_list[1] = true;
+                        parent.runOnUiThread(new Runnable() {
+                            public void run() {
+                                AlertDialog.Builder pick_up_builder = new AlertDialog.Builder(parent);
+                                String full_message = getString(R.string.pick_up_blue_potion);
+                                full_message += String.valueOf(200 * (1 + (floor_num - 1) / 10)) + ".";
+                                pick_up_builder.setMessage(full_message);
+                                AlertDialog pick_up_dialog = pick_up_builder.create();
+                                pick_up_dialog.setCanceledOnTouchOutside(true);
+                                pick_up_dialog.show();
+                            }
+                        });
+                    }
                     sfx_play(R.raw.sfx_potion);
                     current_floor[i][j] = 1;
                     hp += 200 * ((floor_num-1) / 10 + 1);
@@ -7133,34 +7142,40 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
                         current_floor[1][2] = -7;
                     return 1;
                 case 76:        // red crystal
-                    parent.runOnUiThread(new Runnable() {
-                        public void run() {
-                            AlertDialog.Builder pick_up_builder = new AlertDialog.Builder(parent);
-                            String full_message = getString(R.string.pick_up_red_crystal);
-                            full_message += String.valueOf(1+(floor_num-1)/10) + ".";
-                            pick_up_builder.setMessage(full_message);
-                            AlertDialog pick_up_dialog = pick_up_builder.create();
-                            pick_up_dialog.setCanceledOnTouchOutside(true);
-                            pick_up_dialog.show();
-                        }
-                    });
+                    if (!if_picked_list[2]) {
+                        if_picked_list[2] = true;
+                        parent.runOnUiThread(new Runnable() {
+                            public void run() {
+                                AlertDialog.Builder pick_up_builder = new AlertDialog.Builder(parent);
+                                String full_message = getString(R.string.pick_up_red_crystal);
+                                full_message += String.valueOf(1 + (floor_num - 1) / 10) + ".";
+                                pick_up_builder.setMessage(full_message);
+                                AlertDialog pick_up_dialog = pick_up_builder.create();
+                                pick_up_dialog.setCanceledOnTouchOutside(true);
+                                pick_up_dialog.show();
+                            }
+                        });
+                    }
                     sfx_play(R.raw.sfx_crystal);
                     current_floor[i][j] = 1;
                     atk += ((floor_num-1) / 10 + 1);
                     refresh_ctr = true;
                     return 1;
                 case 77:        // blue crystal
-                    parent.runOnUiThread(new Runnable() {
-                        public void run() {
-                            AlertDialog.Builder pick_up_builder = new AlertDialog.Builder(parent);
-                            String full_message = getString(R.string.pick_up_blue_crystal);
-                            full_message += String.valueOf(1+(floor_num-1)/10) + ".";
-                            pick_up_builder.setMessage(full_message);
-                            AlertDialog pick_up_dialog = pick_up_builder.create();
-                            pick_up_dialog.setCanceledOnTouchOutside(true);
-                            pick_up_dialog.show();
-                        }
-                    });
+                    if (!if_picked_list[3]) {
+                        if_picked_list[3] = true;
+                        parent.runOnUiThread(new Runnable() {
+                            public void run() {
+                                AlertDialog.Builder pick_up_builder = new AlertDialog.Builder(parent);
+                                String full_message = getString(R.string.pick_up_blue_crystal);
+                                full_message += String.valueOf(1 + (floor_num - 1) / 10) + ".";
+                                pick_up_builder.setMessage(full_message);
+                                AlertDialog pick_up_dialog = pick_up_builder.create();
+                                pick_up_dialog.setCanceledOnTouchOutside(true);
+                                pick_up_dialog.show();
+                            }
+                        });
+                    }
                     sfx_play(R.raw.sfx_crystal);
                     current_floor[i][j] = 1;
                     def += ((floor_num-1) / 10 + 1);
