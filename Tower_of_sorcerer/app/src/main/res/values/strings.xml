@@ -12,16 +12,73 @@
     <string name="ok">OK</string>
     <string name="yes">Yes</string>
     <string name="no">No</string>
+    <string name="thief">Thief</string>
+    <string name="saint">Saint</string>
+    <string name="merchant">Merchant</string>
+    <string name="hero">Hero</string>
+    <string name="skeleton_captain">Skeleton Captain</string>
+    <string name="vampire">Vampire</string>
+    <string name="knight_captain">Knight Captain</string>
+    <string name="zeno">Zeno</string>
+    <string name="archmage">Archmage</string>
+    <string name="princess">Princess</string>
     <string name="back_btn_alert">Do you want to exit the game?</string>
     <string name="game_over_title">Game Over</string>
     <string name="game_over_message">Good luck on your next try.</string>
     <string name="game_finish_title">Congratulations</string>
     <string name="game_finish_message">You successfully beat the game!</string>
+    <string name="wake_up">. . . \t\t. . . \t\tup. . . \t\twake up. . .</string>
+    <string name="thief0">Who am I? I am a thief, and I\'m looking for a treasure in this tower. Even though I
+        was caught, it\'s not a big deal you know? \'cause I just need to spend a few nights digging tunnels
+        and I will be out of here. And you are such a lucky dog, bro. \'cause I have just finished the tunnel
+        planning to get out, and you were thrown in my cell. Follow me and let\'s get out!</string>
+    <string name="thief1">Forgot to tell you, but you should have figured out by now that your weapons were
+        taken away. It\'s not wise to fight monsters without any weapons. I know there is one old iron sword
+        on the 5th floor, and one old iron shield on the 9th floor. I ain\'t gonna call them good weapons but
+        still, better than nothing, right? By the way, I have dug many tunnels in this tower. I covered them
+        to look just like regular walls, but if you are able to find them, they will help you a lot. Good
+        luck bro. See ya.</string>
+    <string name="thief2">Oh wow! You are much stronger than I thought, bro. You killed the Skeleton Captain
+        and his soldiers all by yourself? Damn, that\'s amazing. You know thers is a silver sword on 17th
+        floor, right? Good luck finding it. I got to go. See ya.</string>
+    <string name="thief3">Wow, look at who is here! The Skeleton Captain Slayer! Did the giant octopus block
+        your way? It\'s such a pain in the ass! I counld\'t get around it so I had to dig this tunnel. You
+        came just in time. Enjoy this free tunnel. See you later!</string>
+    <string name="thief4">Yo, bro. Nice to see ya. Sigh, I am out of luck. Can\'t find my treasure anywhere.
+        I\'m taking some rest.</string>
+    <string name="thief5">Thank you so much for saving me bro! Thought I was doomed. I got caught again, but
+        this time they saw my mattock and took it away, so I can\'t dig tunnels to get out. But you came and
+        saved me. I can\'t thank you enough. Is the Dragon on the 35th floor blocking your way? Don\'t you
+        worry bro. I got your back. I have hidden my other mattocks in the tower. Let me find one frist and
+        I will dig a tunnel for you so you can get around the Dragon.</string>
+    <string name="thief6_1">Give me some time to find my hidden mattocks, bro. I will catch you up on the
+        35th floor.</string>
+    <string name="thief6_2">Just follow the tunnel I have dug for you, and you will be on your way upstairs.
+        After this incident, I realized that it\'s not worth risking my life looking for some treasures which
+        may not even exist. I\'m outta here. Good luck saving the princess. Goodbye.</string>
+    <string name="thief7">What? Thief!? Why are you here? Didn\'t you leave?</string>
+    <string name="thief8">Haha! Pretty surprised seeing me huh? The only reason I am here is that I am Zeno!</string>
+    <string name="thief9">But why? Why would you help when you could easily kill me?</string>
+    <string name="thief10">Because of power. I want more power!!! The Archmage is only slightly stronger than
+        me, but he became the owner of this tower while I was assigned to be the region boss on the 50th floor.
+        When I found him became obsessed with his spell book, I knew my chance was coming. Before he locked himself
+        up in his chamber trying to create the strongest spell, I managed to replace the last page of his book so he
+        would never succeed. Later, I started to kill his minions and he did know because he has not gone out of his
+        chamber yet. Now he is dead and I will rule this tower!</string>
+    <string name="thief11">If I can kill him, what makes you think I won\'t kill you?</string>
+    <string name="thief12">Because of the sacred weapons you are wielding now. According to the last page of the
+        spell book. Both the Sacred Sword and the Sacred Shield were born in the lava. They were purified by the
+        holy fire so they resist magic. I first tried to get these weapons myself but I almost died to the lava
+        protecting the Sacred Shield. I realized I should better let others to do the job, and that\'s why the
+        legend goes that there is a princess in this tower. The foolish Archmage must have used magic against you,
+        but when he realized it was not working, it was too late, since you already killed him. Knowing this, I
+        trained myself battling without using magic. Once I kill you and take your weapons, I would be invincible!
+        Now is the time. Let the fight begin!</string>
     <string name="saint_2f">Thank you so much for saving me. I can increase your attack and defense power
         by 3 percent. Do you want me to do it now?</string>
-    <string name="saint_3f">Alas, my age is catching up to me. I can fight no more. Brave young man,
+    <string name="saint_3f">Alas, my age is catching up to me. I can\'t fight no more. Brave young man,
         you should take this Staff of Wisdom since I have no use for it. It will reveal the strength of
-        monsters so you could better prepare your fight against them. Take care and good luck.</string>
+        monsters so you can better prepare your fight against them. Take care and good luck.</string>
     <string name="saint_4f">There are doors which cannot be opened with a key. To open them, you will have
         to defeat the monsters which guard them.</string>
     <string name="saint_6f">After you make a purchase from a merchant, go talk to him again because he
@@ -124,53 +181,6 @@
     <string name="no_echo">Echo has not been collected yet.</string>
     <string name="staff_of_echo_menu_select">Choose an echo to listen</string>
     <string name="background_picture">Backgroud Picture</string>
-    <string name="wake_up">. . . \t\t. . . \t\tup. . . \t\twake up. . .</string>
-    <string name="thief0">Who am I? I am a thief, and I\'m looking for a treasure in this tower. Even though I
-        was caught, it\'s not a big deal you know? \'cause I just need to spend a few nights digging tunnels
-        and I will be out of here. And you are such a lucky dog, bro. \'cause I have just finished the tunnel
-        planning to get out, and you were thrown in my cell. Follow me and let\'s get out!</string>
-    <string name="thief1">Forgot to tell you, but you should have figured out by now that your weapons were
-        taken away. It\'s not wise to fight monsters without any weapons. I know there is one old iron sword
-        on the 5th floor, and one old iron shield on the 9th floor. I ain\'t gonna call them good weapons but
-        still, better than nothing, right? By the way, I have dug many tunnels in this tower. I covered them
-        to look just like regular walls, but if you are able to find them, they will help you a lot. Good
-        luck bro. See ya.</string>
-    <string name="thief2">Oh wow! You are much stronger than I thought, bro. You killed the Skeleton Captain
-        and his soldiers all by yourself? Damn, that\'s amazing. You know thers is a silver sword on 17th
-        floor, right? Good luck finding it. I got to go. See ya.</string>
-    <string name="thief3">Wow, look at who is here! The Skeleton Captain Slayer! Did the giant octopus block
-        your way? It\'s such a pain in the ass! I counld\'t get around it so I had to dig this tunnel. You
-        came just in time. Enjoy this free tunnel. See you later!</string>
-    <string name="thief4">Yo, bro. Nice to see ya. Sigh, I am out of luck. Can\'t find my treasure anywhere.
-        I\'m taking some rest.</string>
-    <string name="thief5">Thank you so much for saving me bro! Thought I was doomed. I got caught again, but
-        this time they saw my mattock and took it away, so I can\'t dig tunnels to get out. But you came and
-        saved me. I can\'t thank you enough. Is the Dragon on the 35th floor blocking your way? Don\'t you
-        worry bro. I got your back. I have hidden my other mattocks in the tower. Let me find one frist and
-        I will dig a tunnel for you so you can get around the Dragon.</string>
-    <string name="thief6_1">Give me some time to find my hidden mattocks, bro. I will catch you up on the
-        35th floor.</string>
-    <string name="thief6_2">Just follow the tunnel I have dug for you, and you will be on your way upstairs.
-        After this incident, I realized that it\'s not worth risking my life looking for some treasures which
-        may not even exist. I\'m outta here. Good luck saving the princess. Goodbye.</string>
-    <string name="thief7">What? Thief!? Why are you here? Didn\'t you leave?</string>
-    <string name="thief8">Haha! Pretty surprised seeing me huh? The only reason I am here is that I am Zeno!</string>
-    <string name="thief9">But why? Why would you help when you could easily kill me?</string>
-    <string name="thief10">Because of power. I want more power!!! The Archmage is only slightly stronger than
-        me, but he became the owner of this tower while I was assigned to be the region boss on the 50th floor.
-        When I found him became obsessed with his spell book, I knew my chance was coming. Before he locked himself
-        up in his chamber trying to create the strongest spell, I managed to replace the last page of his book so he
-        would never succeed. Later, I started to kill his minions and he did know because he has not gone out of his
-        chamber yet. Now he is dead and I will rule this tower!</string>
-    <string name="thief11">If I can kill him, what makes you think I won\'t kill you?</string>
-    <string name="thief12">Because of the sacred weapons you are wielding now. According to the last page of the
-        spell book. Both the Sacred Sword and the Sacred Shield were born in the lava. They were purified by the
-        holy fire so they resist magic. I first tried to get these weapons myself but I almost died to the lava
-        protecting the Sacred Shield. I realized I should better let others to do the job, and that\'s why the
-        legend goes that there is a princess in this tower. The foolish Archmage must have used magic against you,
-        but when he realized it was not working, it was too late, since you already killed him. Knowing this, I
-        trained myself battling without using magic. Once I kill you and take your weapons, I would be invincible!
-        Now is the time. Let the fight begin!</string>
     <string name="Load_img_description">Load Activity Image</string>
     <string name="Load_default">----</string>
     <string name="Load_floor_number">-- F</string>

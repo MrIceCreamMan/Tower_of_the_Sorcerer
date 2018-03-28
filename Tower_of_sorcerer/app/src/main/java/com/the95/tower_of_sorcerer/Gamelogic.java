@@ -1083,6 +1083,8 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
         key_enhac = wing_down = lucky_gold = dragonsbane = snow_cryst = true;
         count_wing = 3;
         debug_fly = true;
+        atk = 150; def = 100; hp = 8000; thief_event_count = 4;
+        count_y = 10; count_b = 10; count_r = 10;
     }
 
     // function allows the thread to sleep
@@ -1666,6 +1668,7 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
                         parent.runOnUiThread(new Runnable() {
                             public void run() {
                                 AlertDialog.Builder f3_builder1 = new AlertDialog.Builder(parent);
+                                f3_builder1.setTitle(R.string.zeno);
                                 f3_builder1.setMessage(R.string.zeno_3f);
                                 AlertDialog f3_dialog1 = f3_builder1.create();
                                 f3_dialog1.setCanceledOnTouchOutside(true);
@@ -1729,6 +1732,7 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
                         parent.runOnUiThread(new Runnable() {
                             public void run() {
                                 AlertDialog.Builder f10_builder1 = new AlertDialog.Builder(parent);
+                                f10_builder1.setTitle(R.string.skeleton_captain);
                                 f10_builder1.setMessage(R.string.skeleton_captain_10f_1);
                                 AlertDialog f10_dialog1 = f10_builder1.create();
                                 f10_dialog1.setCanceledOnTouchOutside(true);
@@ -2221,6 +2225,7 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
                         parent.runOnUiThread(new Runnable() {
                             public void run() {
                                 AlertDialog.Builder f20_builder1 = new AlertDialog.Builder(parent);
+                                f20_builder1.setTitle(R.string.vampire);
                                 f20_builder1.setMessage(R.string.vampire_20f_1);
                                 AlertDialog f20_dialog1 = f20_builder1.create();
                                 f20_dialog1.setCanceledOnTouchOutside(true);
@@ -2371,6 +2376,7 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
                         parent.runOnUiThread(new Runnable() {
                             public void run() {
                                 AlertDialog.Builder f25_builder1 = new AlertDialog.Builder(parent);
+                                f25_builder1.setTitle(R.string.archmage);
                                 f25_builder1.setMessage(R.string.archmage_25f);
                                 AlertDialog f25_dialog1 = f25_builder1.create();
                                 f25_dialog1.setCanceledOnTouchOutside(true);
@@ -2531,6 +2537,7 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
                         parent.runOnUiThread(new Runnable() {
                             public void run() {
                                 AlertDialog.Builder f32_builder1 = new AlertDialog.Builder(parent);
+                                f32_builder1.setTitle(R.string.knight_captain);
                                 f32_builder1.setMessage(R.string.knight_captain_32f_1);
                                 AlertDialog f32_dialog1 = f32_builder1.create();
                                 f32_dialog1.setCanceledOnTouchOutside(true);
@@ -2583,6 +2590,7 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
                         parent.runOnUiThread(new Runnable() {
                             public void run() {
                                 AlertDialog.Builder f32_builder2 = new AlertDialog.Builder(parent);
+                                f32_builder2.setTitle(R.string.knight_captain);
                                 f32_builder2.setMessage(R.string.knight_captain_32f_2);
                                 AlertDialog f32_dialog2 = f32_builder2.create();
                                 f32_dialog2.setCanceledOnTouchOutside(true);
@@ -2699,11 +2707,7 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
                     }
                     break;
                 case 35:
-                    if (thief_event_count == 5) {
-                        current_game.change_2f();
-                        current_game.change_29f_again();
-                        isEvent = false;
-                    } else if (act == 0) {
+                    if (act == 0) {
                         if (highest_floor == 35) {
                             if (!proceed)
                                 return;
@@ -2714,7 +2718,7 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
                         }
                     } else if (act == 1) {
                         if (highest_floor == 35) {
-                            sleep(300);
+                            sleep(500);
                             act++;
                             current_floor[10][5] = 1;
                             current_floor[11][5] = 21;
@@ -2732,7 +2736,7 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
                         }
                     } else if (act == 2) {
                         if (highest_floor == 35) {
-                            sleep(300);
+                            sleep(500);
                             act = 0;
                             sfx_play(R.raw.sfx_stairs);
                             current_game.change_2f_again();
@@ -2806,17 +2810,18 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
                         refresh_ctr = true;
                         parent.runOnUiThread(new Runnable() {
                             public void run() {
-                                AlertDialog.Builder f32_builder2 = new AlertDialog.Builder(parent);
-                                f32_builder2.setMessage(R.string.knight_captain_40f_0);
-                                AlertDialog f32_dialog2 = f32_builder2.create();
-                                f32_dialog2.setCanceledOnTouchOutside(true);
-                                f32_dialog2.setOnCancelListener(new DialogInterface.OnCancelListener() {
+                                AlertDialog.Builder f40_builder0 = new AlertDialog.Builder(parent);
+                                f40_builder0.setTitle(R.string.knight_captain);
+                                f40_builder0.setMessage(R.string.knight_captain_40f_0);
+                                AlertDialog f40_dialog0 = f40_builder0.create();
+                                f40_dialog0.setCanceledOnTouchOutside(true);
+                                f40_dialog0.setOnCancelListener(new DialogInterface.OnCancelListener() {
                                     @Override
                                     public void onCancel(DialogInterface dialogInterface) {
                                         proceed = true;
                                     }
                                 });
-                                f32_dialog2.show();
+                                f40_dialog0.show();
                             }
                         });
                     } else if (act == 2) {
@@ -2857,6 +2862,7 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
                         parent.runOnUiThread(new Runnable() {
                             public void run() {
                                 AlertDialog.Builder f40_builder1 = new AlertDialog.Builder(parent);
+                                f40_builder1.setTitle(R.string.knight_captain);
                                 f40_builder1.setMessage(R.string.knight_captain_40f_1);
                                 AlertDialog f40_dialog1 = f40_builder1.create();
                                 f40_dialog1.setCanceledOnTouchOutside(true);
@@ -2963,6 +2969,7 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
                         parent.runOnUiThread(new Runnable() {
                             public void run() {
                                 AlertDialog.Builder f40_builder2 = new AlertDialog.Builder(parent);
+                                f40_builder2.setTitle(R.string.knight_captain);
                                 f40_builder2.setMessage(R.string.knight_captain_40f_2);
                                 AlertDialog f40_dialog2 = f40_builder2.create();
                                 f40_dialog2.setCanceledOnTouchOutside(true);
@@ -3069,6 +3076,7 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
                         parent.runOnUiThread(new Runnable() {
                             public void run() {
                                 AlertDialog.Builder f40_builder3 = new AlertDialog.Builder(parent);
+                                f40_builder3.setTitle(R.string.knight_captain);
                                 f40_builder3.setMessage(R.string.knight_captain_40f_3);
                                 AlertDialog f40_dialog3 = f40_builder3.create();
                                 f40_dialog3.setCanceledOnTouchOutside(true);
@@ -3205,6 +3213,7 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
                         parent.runOnUiThread(new Runnable() {
                             public void run() {
                                 AlertDialog.Builder f40_builder4 = new AlertDialog.Builder(parent);
+                                f40_builder4.setTitle(R.string.knight_captain);
                                 f40_builder4.setMessage(R.string.knight_captain_40f_4);
                                 AlertDialog f40_dialog4 = f40_builder4.create();
                                 f40_dialog4.setCanceledOnTouchOutside(true);
@@ -3341,6 +3350,7 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
                         parent.runOnUiThread(new Runnable() {
                             public void run() {
                                 AlertDialog.Builder f40_builder5 = new AlertDialog.Builder(parent);
+                                f40_builder5.setTitle(R.string.knight_captain);
                                 f40_builder5.setMessage(R.string.knight_captain_40f_5);
                                 AlertDialog f40_dialog5 = f40_builder5.create();
                                 f40_dialog5.setCanceledOnTouchOutside(true);
@@ -3406,6 +3416,7 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
                         parent.runOnUiThread(new Runnable() {
                             public void run() {
                                 AlertDialog.Builder f40_builder6 = new AlertDialog.Builder(parent);
+                                f40_builder6.setTitle(R.string.knight_captain);
                                 f40_builder6.setMessage(R.string.knight_captain_40f_6);
                                 AlertDialog f40_dialog6 = f40_builder6.create();
                                 f40_dialog6.setCanceledOnTouchOutside(true);
@@ -3541,6 +3552,7 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
                         parent.runOnUiThread(new Runnable() {
                             public void run() {
                                 AlertDialog.Builder f42_builder1 = new AlertDialog.Builder(parent);
+                                f42_builder1.setTitle(R.string.knight_captain);
                                 f42_builder1.setMessage(R.string.knight_captain_42f_1);
                                 AlertDialog f42_dialog1 = f42_builder1.create();
                                 f42_dialog1.setCanceledOnTouchOutside(true);
@@ -3562,6 +3574,7 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
                         parent.runOnUiThread(new Runnable() {
                             public void run() {
                                 AlertDialog.Builder f42_builder2 = new AlertDialog.Builder(parent);
+                                f42_builder2.setTitle(R.string.zeno);
                                 f42_builder2.setMessage(R.string.zeno_42f_1);
                                 AlertDialog f42_dialog2 = f42_builder2.create();
                                 f42_dialog2.setCanceledOnTouchOutside(true);
@@ -3592,6 +3605,7 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
                         parent.runOnUiThread(new Runnable() {
                             public void run() {
                                 AlertDialog.Builder f42_builder3 = new AlertDialog.Builder(parent);
+                                f42_builder3.setTitle(R.string.knight_captain);
                                 f42_builder3.setMessage(R.string.knight_captain_42f_2);
                                 AlertDialog f42_dialog3 = f42_builder3.create();
                                 f42_dialog3.setCanceledOnTouchOutside(true);
@@ -3633,6 +3647,7 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
                         parent.runOnUiThread(new Runnable() {
                             public void run() {
                                 AlertDialog.Builder f42_builder4 = new AlertDialog.Builder(parent);
+                                f42_builder4.setTitle(R.string.zeno);
                                 f42_builder4.setMessage(R.string.zeno_42f_2);
                                 AlertDialog f42_dialog4 = f42_builder4.create();
                                 f42_dialog4.setCanceledOnTouchOutside(true);
@@ -3717,6 +3732,7 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
                         parent.runOnUiThread(new Runnable() {
                             public void run() {
                                 AlertDialog.Builder f49_builder1 = new AlertDialog.Builder(parent);
+                                f49_builder1.setTitle(R.string.zeno);
                                 f49_builder1.setMessage(R.string.zeno_49f_1);
                                 AlertDialog f49_dialog1 = f49_builder1.create();
                                 f49_dialog1.setCanceledOnTouchOutside(true);
@@ -3789,6 +3805,7 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
                         parent.runOnUiThread(new Runnable() {
                             public void run() {
                                 AlertDialog.Builder f49_builder2 = new AlertDialog.Builder(parent);
+                                f49_builder2.setTitle(R.string.zeno);
                                 f49_builder2.setMessage(R.string.zeno_49f_2);
                                 AlertDialog f49_dialog2 = f49_builder2.create();
                                 f49_dialog2.setCanceledOnTouchOutside(true);
@@ -3864,6 +3881,7 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
                                         proceed = true;
                                     }
                                 });
+                                f50_builder1.setTitle(R.string.thief);
                                 f50_builder1.setMessage(R.string.thief8);
                                 AlertDialog f50_dialog1 = f50_builder1.create();
                                 f50_dialog1.setCanceledOnTouchOutside(false);
@@ -3884,6 +3902,7 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
                                         proceed = true;
                                     }
                                 });
+                                f50_builder2.setTitle(R.string.hero);
                                 f50_builder2.setMessage(R.string.thief9);
                                 AlertDialog f50_dialog2 = f50_builder2.create();
                                 f50_dialog2.setCanceledOnTouchOutside(false);
@@ -3904,6 +3923,7 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
                                         proceed = true;
                                     }
                                 });
+                                f50_builder3.setTitle(R.string.zeno);
                                 f50_builder3.setMessage(R.string.thief10);
                                 AlertDialog f50_dialog3 = f50_builder3.create();
                                 f50_dialog3.setCanceledOnTouchOutside(false);
@@ -3924,6 +3944,7 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
                                         proceed = true;
                                     }
                                 });
+                                f50_builder4.setTitle(R.string.hero);
                                 f50_builder4.setMessage(R.string.thief11);
                                 AlertDialog f50_dialog4 = f50_builder4.create();
                                 f50_dialog4.setCanceledOnTouchOutside(false);
@@ -3944,6 +3965,7 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
                                         proceed = true;
                                     }
                                 });
+                                f50_builder5.setTitle(R.string.zeno);
                                 f50_builder5.setMessage(R.string.thief12);
                                 AlertDialog f50_dialog5 = f50_builder5.create();
                                 f50_dialog5.setCanceledOnTouchOutside(false);
@@ -5200,9 +5222,9 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
             canvas.drawText(my_text, sq_size*5 - margin*2, sq_size * 13 + margin * 8 + offset, textpaint);
             // ------------------- Game Speed Control -----------------------
             if (game_settings[2])
-                sleep(35);
+                sleep(20);
             else
-                sleep(50);
+                sleep(35);
             // ------------------- Debug Purpose -----------------------
             //canvas.drawBitmap(ball, x - ball.getWidth() / 2, y - ball.getHeight() / 2, null);
         }
@@ -5872,15 +5894,10 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
                         }
                         current_floor[i][j] = 0;
                         refresh_ctr = true;
-                        for (int q = 1; q < 12; q++) {
-                            for (int w = 1; w < 12; w++) {
-                                if (current_floor[q][w] == -2) {
-                                    return 0;
-                                }
-                            }
+                        if (current_floor[4][7] != -2 && saint_history[8] == 0) {
+                            saint_history[8] = 1;
+                            current_game.change_29f();
                         }
-                        saint_history[8]++;
-                        current_game.change_29f();
                     } else if (floor_num == 48) {
                         current_floor[1][1] = 57;
                         refresh_ctr = true;
@@ -5921,7 +5938,11 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
                     hero_x = pairup[1];
                     refresh_ctr = true;
                     if (floor_num > highest_floor) {
-                        if (floor_num == 32 || floor_num == 35 || floor_num == 42)
+                        if (floor_num == 35) {
+                            thief_event_count = 5;
+                            current_game.change_2f();
+                            current_game.change_29f_again();
+                        } else if (floor_num == 32 || floor_num == 42)
                             isEvent = true;
                         else if (floor_num == 36) {
                             current_game.change_2f_again();
@@ -6219,6 +6240,7 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
                     parent.runOnUiThread(new Runnable() {
                         public void run() {
                             AlertDialog.Builder thief_builder = new AlertDialog.Builder(parent);
+                            thief_builder.setTitle(R.string.thief);
                             if (thief_event_count == 0) {
                                 thief_event_count++;
                                 thief_builder.setMessage(R.string.thief0);
@@ -6232,16 +6254,11 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
                                 thief_event_count++;
                                 thief_builder.setMessage(R.string.thief3);
                             } else if (thief_event_count == 4) {
-                                thief_event_count++;
                                 thief_builder.setMessage(R.string.thief4);
                             } else if (thief_event_count == 5) {
-                                if (floor_num == 29)
-                                    thief_builder.setMessage(R.string.thief4);
-                                else {
-                                    thief_event_count = 6;
-                                    thief_builder.setMessage(R.string.thief5);
-                                    current_game.change_35f();
-                                }
+                                thief_event_count = 6;
+                                thief_builder.setMessage(R.string.thief5);
+                                current_game.change_35f();
                             } else if (thief_event_count == 6) {
                                 if (floor_num == 2)
                                     thief_builder.setMessage(R.string.thief6_1);
@@ -6251,6 +6268,7 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
                                 }
                             } else {
                                 thief_event_count = 0;
+                                thief_builder.setTitle(R.string.hero);
                                 thief_builder.setMessage(R.string.thief7);
                             }
                             thief_builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
@@ -6336,7 +6354,7 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
                                         saint_builder.setMessage(R.string.saint_default);
                                     break;
                                 case 16:
-                                    if (hero_x == 1)
+                                    if (hero_x <= 2)
                                         if (saint_history[4] == 0) {
                                             saint_history[4]++;
                                             echo_history[6]++;
@@ -6459,6 +6477,7 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
                                     saint_builder.setMessage("Saint dialog bug in checkNextPostion()");
                                     break;
                             }
+                            saint_builder.setTitle(R.string.saint);
                             AlertDialog saint_dialog = saint_builder.create();
                             saint_dialog.setCanceledOnTouchOutside(false);
                             saint_dialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
@@ -6484,6 +6503,7 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
                                 }
                             });
                             final AlertDialog.Builder no_gold_builder = new AlertDialog.Builder(parent);
+                            no_gold_builder.setTitle(R.string.merchant);
                             switch (floor_num) {
                                 case 2:
                                     if (merchant_history[0] == 0) {
@@ -6879,6 +6899,7 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
                                     merchant_builder.setMessage("Merchant dialog bug in checkNextPostion()");
                                     break;
                             }
+                            merchant_builder.setTitle(R.string.merchant);
                             AlertDialog merchant_dialog = merchant_builder.create();
                             merchant_dialog.setCanceledOnTouchOutside(false);
                             merchant_dialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
@@ -6974,6 +6995,7 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
                         public void run() {
                             AlertDialog.Builder princess_builder = new AlertDialog.Builder(parent);
                             final AlertDialog.Builder zeno_builder = new AlertDialog.Builder(parent);
+                            zeno_builder.setTitle(R.string.princess);
                             princess_builder.setMessage(R.string.princess_dialog1);
                             AlertDialog princess_dialog = princess_builder.create();
                             princess_dialog.setCanceledOnTouchOutside(true);
@@ -6982,6 +7004,7 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
                                 public void onCancel(DialogInterface dialogInterface) {
                                     current_game.change_24f();
                                     zeno_builder.setMessage(R.string.princess_dialog2);
+                                    zeno_builder.setTitle(R.string.hero);
                                     AlertDialog zeno_dialog = zeno_builder.create();
                                     zeno_dialog.setCanceledOnTouchOutside(true);
                                     zeno_dialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
@@ -7525,7 +7548,7 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
                 canvas.drawText(my_text, sq_size * 4 + margin*5, sq_size * a*2 + margin * 40 + margin*5*a + offset*(a+2), textpaint);
 
                 canvas.drawBitmap(t___logo, sq_size * 6 + margin*2, sq_size * a*2 + sq_size * 13/4 + margin*5*a + offset*(a+2), null);
-                if (damage_calculation(stats_table_idx) == 987654321)
+                if (damage_calculation(stats_table_idx) > hp)
                     my_text = "Can't Attack";
                 else
                     my_text = String.valueOf(damage_calculation(stats_table_idx));

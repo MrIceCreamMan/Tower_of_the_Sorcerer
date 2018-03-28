@@ -116,16 +116,25 @@ public class SaveActivity extends AppCompatActivity {
         }
     }
 
+    private void sfx_play(int which_sfx) {
+        MediaPlayer sfx_music = MediaPlayer.create(getApplicationContext(), which_sfx);
+        if (game_settings[1])
+            sfx_music.start();
+        sfx_music.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+            @Override
+            public void onCompletion(MediaPlayer mediaPlayer) {
+                mediaPlayer.release();
+            }
+        });
+    }
+
     public View.OnClickListener Save_Game = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
             FileOutputStream fos;
-            MediaPlayer SelectMusic = MediaPlayer.create(getApplicationContext(), R.raw.sfx_choose);
-            MediaPlayer CancelMusic = MediaPlayer.create(getApplicationContext(), R.raw.sfx_cancel);
             switch (view.getId()) {
                 case R.id.save_1:
-                    if (game_settings[1])
-                        SelectMusic.start();
+                    sfx_play(R.raw.sfx_choose);
                     /*
                     File f = new File(FILENAME);
                     try {
@@ -149,8 +158,7 @@ public class SaveActivity extends AppCompatActivity {
                     break;
 
                 case R.id.save_2:
-                    if (game_settings[1])
-                        SelectMusic.start();
+                    sfx_play(R.raw.sfx_choose);
                     try {
                         fos = openFileOutput(FILENAME2, Context.MODE_PRIVATE);
                         fos.write(game_data);
@@ -164,8 +172,7 @@ public class SaveActivity extends AppCompatActivity {
                     break;
 
                 case R.id.save_3:
-                    if (game_settings[1])
-                        SelectMusic.start();
+                    sfx_play(R.raw.sfx_choose);
                     try {
                         fos = openFileOutput(FILENAME3, Context.MODE_PRIVATE);
                         fos.write(game_data);
@@ -179,8 +186,7 @@ public class SaveActivity extends AppCompatActivity {
                     break;
 
                 case R.id.save_4:
-                    if (game_settings[1])
-                        SelectMusic.start();
+                    sfx_play(R.raw.sfx_choose);
                     try {
                         fos = openFileOutput(FILENAME4, Context.MODE_PRIVATE);
                         fos.write(game_data);
@@ -194,8 +200,7 @@ public class SaveActivity extends AppCompatActivity {
                     break;
 
                 case R.id.cancel:
-                    if (game_settings[1])
-                        CancelMusic.start();
+                    sfx_play(R.raw.sfx_cancel);
                     finish();
                     break;
             }

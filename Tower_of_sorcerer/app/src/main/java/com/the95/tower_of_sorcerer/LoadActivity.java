@@ -139,16 +139,24 @@ public class LoadActivity extends AppCompatActivity {
         }
     }
 
+    private void sfx_play(int which_sfx) {
+        MediaPlayer sfx_music = MediaPlayer.create(getApplicationContext(), which_sfx);
+        if (game_settings[1])
+            sfx_music.start();
+        sfx_music.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+            @Override
+            public void onCompletion(MediaPlayer mediaPlayer) {
+                mediaPlayer.release();
+            }
+        });
+    }
 
     public View.OnClickListener Load_Game = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
-            MediaPlayer SelectMusic = MediaPlayer.create(getApplicationContext(), R.raw.sfx_choose);
-            MediaPlayer CancelMusic = MediaPlayer.create(getApplicationContext(), R.raw.sfx_cancel);
             switch (view.getId()) {
                 case R.id.load_1:
-                    if (game_settings[1])
-                        SelectMusic.start();
+                    sfx_play(R.raw.sfx_choose);
                     Intent game_1 = new Intent(LoadActivity.this, Gamelogic.class);
                     load_all_data_from_save_file("save1.txt");
                     game_1.putExtra("Game_File_1", game_data);
@@ -158,8 +166,7 @@ public class LoadActivity extends AppCompatActivity {
                     break;
 
                 case R.id.load_2:
-                    if (game_settings[1])
-                        SelectMusic.start();
+                    sfx_play(R.raw.sfx_choose);
                     Intent game_2 = new Intent(LoadActivity.this, Gamelogic.class);
                     load_all_data_from_save_file("save2.txt");
                     game_2.putExtra("Game_File_2", game_data);
@@ -169,8 +176,7 @@ public class LoadActivity extends AppCompatActivity {
                     break;
 
                 case R.id.load_3:
-                    if (game_settings[1])
-                        SelectMusic.start();
+                    sfx_play(R.raw.sfx_choose);
                     Intent game_3 = new Intent(LoadActivity.this, Gamelogic.class);
                     load_all_data_from_save_file("save3.txt");
                     game_3.putExtra("Game_File_3", game_data);
@@ -180,8 +186,7 @@ public class LoadActivity extends AppCompatActivity {
                     break;
 
                 case R.id.load_4:
-                    if (game_settings[1])
-                        SelectMusic.start();
+                    sfx_play(R.raw.sfx_choose);
                     Intent game_4 = new Intent(LoadActivity.this, Gamelogic.class);
                     load_all_data_from_save_file("save4.txt");
                     game_4.putExtra("Game_File_4", game_data);
@@ -191,8 +196,7 @@ public class LoadActivity extends AppCompatActivity {
                     break;
 
                 case R.id.cancel:
-                    if (game_settings[1])
-                        CancelMusic.start();
+                    sfx_play(R.raw.sfx_cancel);
                     finish();
                     break;
             }

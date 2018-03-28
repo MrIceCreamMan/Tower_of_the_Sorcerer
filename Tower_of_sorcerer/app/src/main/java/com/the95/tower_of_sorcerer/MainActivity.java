@@ -54,18 +54,28 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    private void sfx_play(int which_sfx) {
+        MediaPlayer sfx_music = MediaPlayer.create(getApplicationContext(), which_sfx);
+        if (game_settings[1])
+            sfx_music.start();
+        sfx_music.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+            @Override
+            public void onCompletion(MediaPlayer mediaPlayer) {
+                mediaPlayer.release();
+            }
+        });
+    }
+
     public View.OnClickListener myListener = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
-            final MediaPlayer SelectMusic = MediaPlayer.create(getApplicationContext(), R.raw.sfx_choose);
             switch (view.getId()) {
                 case R.id.new_game:
                     if (OpeningThemeMusic != null) {
                         OpeningThemeMusic.release();
                         bgm_on = false;
                     }
-                    if (game_settings[1])
-                        SelectMusic.start();
+                    sfx_play(R.raw.sfx_choose);
                     Intent game = new Intent(MainActivity.this, Gamelogic.class);
                     game.putExtra("Game_Settings", game_settings);
                     startActivity(game);
@@ -76,16 +86,14 @@ public class MainActivity extends AppCompatActivity {
                         OpeningThemeMusic.release();
                         bgm_on = false;
                     }
-                    if (game_settings[1])
-                        SelectMusic.start();
+                    sfx_play(R.raw.sfx_choose);
                     Intent load_screen = new Intent(MainActivity.this, LoadActivity.class);
                     load_screen.putExtra("Game_Settings", game_settings);
                     startActivity(load_screen);
                     break;
 
                 case R.id.settings:
-                    if (game_settings[1])
-                        SelectMusic.start();
+                    sfx_play(R.raw.sfx_choose);
                     final String[] items = {"Enable background music", " Enable sound effects", "Fast game"};
                     AlertDialog.Builder music_builder = new AlertDialog.Builder(MainActivity.this);
                     music_builder.setTitle("Game_Settings");
@@ -97,8 +105,7 @@ public class MainActivity extends AppCompatActivity {
                     music_builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int id) {
-                            if (game_settings[1])
-                                SelectMusic.start();
+                            sfx_play(R.raw.sfx_choose);
                             if (!game_settings[0] && bgm_on) {
                                 bgm_on = false;
                                 OpeningThemeMusic.release();
@@ -117,8 +124,7 @@ public class MainActivity extends AppCompatActivity {
                 case R.id.exit:
                     if (OpeningThemeMusic != null)
                         OpeningThemeMusic.release();
-                    if (game_settings[1])
-                        SelectMusic.start();
+                    sfx_play(R.raw.sfx_choose);
                     finish();
                     break;
             }
