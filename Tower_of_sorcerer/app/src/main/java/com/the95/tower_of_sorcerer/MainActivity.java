@@ -12,7 +12,8 @@ import android.view.View;
 public class MainActivity extends AppCompatActivity {
 
     private MediaPlayer OpeningThemeMusic;
-    private boolean[]   game_settings;
+    private int[]       game_settings;
+    private boolean[]   music_settings;
     private boolean     bgm_on;
     private static final String TAG = "debuuuuuuuuuuuuuuuuuug";
     //Log.v(TAG, "x = " + me.getX() + " y = " + me.getY());
@@ -22,7 +23,8 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        game_settings = new boolean[]{true, true, false};
+        game_settings = new int[]{1,1,10,2};
+        music_settings = new boolean[]{true, true};
         bgm_on = true;
         OpeningThemeMusic = MediaPlayer.create(getApplicationContext(), R.raw.bgm_opening);
         OpeningThemeMusic.setLooping(true);
@@ -37,7 +39,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        if (!bgm_on && game_settings[0]) {
+        if (!bgm_on && music_settings[0]) {
             bgm_on = true;
             OpeningThemeMusic = MediaPlayer.create(getApplicationContext(), R.raw.bgm_opening);
             OpeningThemeMusic.setLooping(true);
@@ -56,7 +58,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void sfx_play(int which_sfx) {
         MediaPlayer sfx_music = MediaPlayer.create(getApplicationContext(), which_sfx);
-        if (game_settings[1])
+        if (music_settings[1])
             sfx_music.start();
         sfx_music.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
             @Override
@@ -71,14 +73,38 @@ public class MainActivity extends AppCompatActivity {
         public void onClick(View view) {
             switch (view.getId()) {
                 case R.id.new_game:
-                    if (OpeningThemeMusic != null) {
-                        OpeningThemeMusic.release();
-                        bgm_on = false;
-                    }
                     sfx_play(R.raw.sfx_choose);
-                    Intent game = new Intent(MainActivity.this, Gamelogic.class);
-                    game.putExtra("Game_Settings", game_settings);
-                    startActivity(game);
+                    String[] item_list = {getString(R.string.easy), getString(R.string.medium), getString(R.string.hard)};
+                    AlertDialog.Builder new_game_builder = new AlertDialog.Builder(MainActivity.this);
+                    new_game_builder.setTitle(R.string.difficulty_select);
+                    new_game_builder.setItems(item_list, new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int item) {
+                            if (item == 0)
+                                game_settings[3] = 1;
+                            else if (item == 1)
+                                game_settings[3] = 2;
+                            else if (item == 2)
+                                game_settings[3] = 3;
+                            else
+                                game_settings[3] = 1;
+                            if (OpeningThemeMusic != null) {
+                                OpeningThemeMusic.release();
+                                bgm_on = false;
+                            }
+                            Intent game = new Intent(MainActivity.this, Gamelogic.class);
+                            game.putExtra("Game_Settings", game_settings);
+                            startActivity(game);
+                        }
+                    });
+                    AlertDialog new_game_dialog = new_game_builder.create();
+                    new_game_dialog.setCanceledOnTouchOutside(true);
+                    new_game_dialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
+                        @Override
+                        public void onCancel(DialogInterface dialogInterface) {
+                            sfx_play(R.raw.sfx_cancel);
+                        }
+                    });
+                    new_game_dialog.show();
                     break;
 
                 case R.id.load:
@@ -94,22 +120,30 @@ public class MainActivity extends AppCompatActivity {
 
                 case R.id.settings:
                     sfx_play(R.raw.sfx_choose);
-                    final String[] items = {"Enable background music", " Enable sound effects", "Fast game"};
-                    AlertDialog.Builder music_builder = new AlertDialog.Builder(MainActivity.this);
-                    music_builder.setTitle("Game_Settings");
-                    music_builder.setMultiChoiceItems(items, game_settings, new DialogInterface.OnMultiChoiceClickListener() {
+                    final String[] items = {"Enable background music", " Enable sound effects"};
+                    AlertDialog.Builder settings_builder = new AlertDialog.Builder(MainActivity.this);
+                    settings_builder.setTitle("Game_Settings");
+                    settings_builder.setMultiChoiceItems(items, music_settings, new DialogInterface.OnMultiChoiceClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int indexSelected, boolean isChecked) {
                         }
                     });
-                    music_builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+                    settings_builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int id) {
                             sfx_play(R.raw.sfx_choose);
-                            if (!game_settings[0] && bgm_on) {
+                            if (music_settings[0])
+                                game_settings[0] = 1;
+                            else
+                                game_settings[0] = 0;
+                            if (music_settings[1])
+                                game_settings[1] = 1;
+                            else
+                                game_settings[1] = 0;
+                            if (!music_settings[0] && bgm_on) {
                                 bgm_on = false;
                                 OpeningThemeMusic.release();
-                            } else if (game_settings[0] && !bgm_on){
+                            } else if (music_settings[0] && !bgm_on){
                                 bgm_on = true;
                                 OpeningThemeMusic = MediaPlayer.create(getApplicationContext(), R.raw.bgm_opening);
                                 OpeningThemeMusic.setLooping(true);
@@ -117,8 +151,8 @@ public class MainActivity extends AppCompatActivity {
                             }
                         }
                     });
-                    AlertDialog music_dialog = music_builder.create();
-                    music_dialog.show();
+                    AlertDialog settings_dialog = settings_builder.create();
+                    settings_dialog.show();
                     break;
 
                 case R.id.exit:

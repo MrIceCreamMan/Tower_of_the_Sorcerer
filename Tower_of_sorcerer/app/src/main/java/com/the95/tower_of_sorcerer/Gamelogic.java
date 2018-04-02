@@ -85,11 +85,12 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
     private byte[]              game_data_to_save;
     private MediaPlayer         background_music;
     private String              instruction;
-    private boolean[]           game_settings, if_picked_list;
+    private boolean[]           if_picked_list;
+    private int[]               game_settings;
     private int                 walk_result,    walk_count,     which_button,       sq_size;
     private int                 m_hp,           m_atk,          m_def,              m_gold;
     private float               x,              y,              page,               total_page;
-    private int                 extra_height;
+    private int                 extra_height,   me_count;
     private boolean             refresh_ctr,    load_ctr,       battle_coming,      button_click;
     private boolean             isWalk,         isBattle,       isEvent,            cantMove;
     private boolean             hero_attack,    show_hero,      not_show_hero,      show_fight;
@@ -116,6 +117,7 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
     private Bitmap menu_stf3, menu_up, menu_down, menu_left, menu_right;
     private Bitmap t__floor, t___wall, t___star, t_ustair, t_dstair, t_r_star;
     private Bitmap t_door_y, t_door_b, t_door_r, t_door_m, t_prison, t___logo;
+    private Bitmap t_wall_r, t_wall_c;
     private Bitmap w___ironw, w_silverw, w_knightw, w_divinew, w_sacredw;
     private Bitmap w___ironh, w_silverh, w_knighth, w_divineh, w_sacredh;
     private Bitmap n___thief, n___saint, n_merchat, n___fairy, n_shop__l;
@@ -132,6 +134,7 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
     private Bitmap i____cross, i___elixir, i_m_mattok, i_wing_cen, i_e_mattok;
     private Bitmap i_____bomb, i__wing_up, i_key_ehac, i_wing_dow, i_lucky_gd;
     private Bitmap i_dra_bane, i_snow_crs;
+    private Bitmap z_me;
 
     //  debug purpose
     private Paint pt1, pt2, pt3, pt4, pt5, pt6, pt7, pt8;
@@ -153,7 +156,7 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
         walk_result = 0;        walk_count = 0;         which_button = 6;       sq_size = 32;
         m_hp = 0;               m_atk = 0;              m_def = 0;              m_gold = 0;
         x = 0;                  y = 0;                  page = 0;               total_page = 1;
-        extra_height = 0;
+        extra_height = 0;       me_count = 0;
         refresh_ctr = true;     load_ctr = true;        battle_coming = false;  button_click = false;
         isWalk = false;         isBattle = false;       isEvent = false;        cantMove = false;
         hero_attack = true;     show_hero = true;       not_show_hero = false;  show_fight = false;
@@ -180,7 +183,7 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
         // check if needs to load game
         Bundle extras = getIntent().getExtras();
         if (extras != null) {
-            game_settings = extras.getBooleanArray("Game_Settings");
+            game_settings = extras.getIntArray("Game_Settings");
             byte[] game_data_to_load_1 = extras.getByteArray("Game_File_1");
             byte[] game_data_to_load_2 = extras.getByteArray("Game_File_2");
             byte[] game_data_to_load_3 = extras.getByteArray("Game_File_3");
@@ -215,7 +218,7 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
             which_music = bgm_list[floor_num/10];
         background_music = MediaPlayer.create(getApplicationContext(), which_music);
         background_music.setLooping(true);
-        if (game_settings[0]) {
+        if (game_settings[0] == 1) {
             bgm_on = true;
             background_music.start();
         }
@@ -257,6 +260,8 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
         t_prison = BitmapFactory.decodeResource(getResources(), R.drawable.tile10_prison);
         t___logo = BitmapFactory.decodeResource(getResources(), R.drawable.tile11_logo);
         t_r_star = BitmapFactory.decodeResource(getResources(), R.drawable.tile12_red_star);
+        t_wall_r = BitmapFactory.decodeResource(getResources(), R.drawable.tile13_wall_regular);
+        t_wall_c = BitmapFactory.decodeResource(getResources(), R.drawable.tile14_wall_crack);
         w___ironw = BitmapFactory.decodeResource(getResources(), R.drawable.w01_iron_sword);
         w___ironh = BitmapFactory.decodeResource(getResources(), R.drawable.w02_iron_shield);
         w_silverw = BitmapFactory.decodeResource(getResources(), R.drawable.w03_silver_sword);
@@ -331,6 +336,7 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
         i_lucky_gd = BitmapFactory.decodeResource(getResources(), R.drawable.i20_lucky_gold);
         i_dra_bane = BitmapFactory.decodeResource(getResources(), R.drawable.i21_dragonsbane);
         i_snow_crs = BitmapFactory.decodeResource(getResources(), R.drawable.i22_snow_crystal);
+        z_me = BitmapFactory.decodeResource(getResources(), R.drawable.z_me);
         // button background color to show if buttons are clicked
         pt1 = new Paint();
         pt1.setColor(Color.rgb(220, 220, 220));
@@ -348,10 +354,10 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
         pt5.setColor(Color.rgb(220, 220, 220));
         pt5.setStrokeWidth(10);
         pt6 = new Paint();
-        pt6.setColor(Color.rgb(180, 150, 180));
+        pt6.setColor(Color.rgb(130, 170, 200));
         pt6.setStrokeWidth(10);
         pt7 = new Paint();
-        pt7.setColor(Color.rgb(150, 150, 150));
+        pt7.setColor(Color.rgb(200, 120, 120));
         pt7.setStrokeWidth(10);
         pt8 = new Paint();
         pt8.setColor(Color.rgb(220, 220, 220));
@@ -1020,8 +1026,8 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
                 pt3.setColor(Color.rgb(220, 220, 220));
                 pt4.setColor(Color.rgb(220, 220, 220));
                 pt5.setColor(Color.rgb(220, 220, 220));
-                pt6.setColor(Color.rgb(180, 150, 180));
-                pt7.setColor(Color.rgb(150, 150, 150));
+                pt6.setColor(Color.rgb(130, 170, 200));
+                pt7.setColor(Color.rgb(200, 120, 120));
                 pt8.setColor(Color.rgb(220, 220, 220));
                 if (!sound_block)
                     sound_block = true;
@@ -1066,7 +1072,7 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
     // play sfx sound function
     private void sfx_play(int which_sfx) {
         MediaPlayer sfx_music = MediaPlayer.create(getApplicationContext(), which_sfx);
-        if (game_settings[1])
+        if (game_settings[1] == 1)
             sfx_music.start();
         sfx_music.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
             @Override
@@ -1083,7 +1089,8 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
         key_enhac = wing_down = lucky_gold = dragonsbane = snow_cryst = true;
         count_wing = 3;
         debug_fly = true;
-        atk = 150; def = 100; hp = 8000; thief_event_count = 4;
+        atk = 350; def = 300; hp = 8000;
+        floor_num = 42; thief_event_count = 4;
         count_y = 10; count_b = 10; count_r = 10;
     }
 
@@ -1387,7 +1394,7 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
                     which_music = bgm_list[floor_num / 10];
                 background_music = MediaPlayer.create(getApplicationContext(), which_music);
                 background_music.setLooping(true);
-                if (game_settings[0])
+                if (game_settings[0] == 1)
                     background_music.start();
             }
         }
@@ -1476,6 +1483,8 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
             t_prison = createScaledBitmap(t_prison, sq_size, sq_size, false);
             t___logo = createScaledBitmap(t___logo, sq_size, sq_size, false);
             t_r_star = createScaledBitmap(t_r_star, sq_size, sq_size, false);
+            t_wall_r = createScaledBitmap(t_wall_r, sq_size, sq_size, false);
+            t_wall_c = createScaledBitmap(t_wall_c, sq_size, sq_size, false);
             w___ironw = createScaledBitmap(w___ironw, sq_size, sq_size, false);
             w___ironh = createScaledBitmap(w___ironh, sq_size, sq_size, false);
             w_silverw = createScaledBitmap(w_silverw, sq_size, sq_size, false);
@@ -1550,6 +1559,7 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
             i_lucky_gd = createScaledBitmap(i_lucky_gd, sq_size, sq_size, false);
             i_dra_bane = createScaledBitmap(i_dra_bane, sq_size, sq_size, false);
             i_snow_crs = createScaledBitmap(i_snow_crs, sq_size, sq_size, false);
+            z_me = createScaledBitmap(z_me, sq_size, sq_size, false);
 
             pic_debug = createScaledBitmap(pic_debug, sq_size * 3, sq_size, false);
             pic_d1 = createScaledBitmap(pic_d1, sq_size, sq_size, false);
@@ -1713,7 +1723,12 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
                         floor_num = 2;
                         hero_x = 4;
                         hero_y = 8;
-                        hp = 400;
+                        if (game_settings[3] == 1)
+                            hp = 1400;
+                        else if (game_settings[3] == 2)
+                            hp = 900;
+                        else
+                            hp = 400;
                         atk = 10;
                         def = 10;
                         current_floor[7][5] = 1;
@@ -1754,7 +1769,7 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
                             background_music.release();
                         background_music = MediaPlayer.create(getApplicationContext(), boss_music_list[0]);
                         background_music.setLooping(true);
-                        if (game_settings[0])                  // if bgm option is checked
+                        if (game_settings[0] == 1)              // if bgm option is checked
                             background_music.start();
                         act++;
                         current_floor[4][6] = 1;
@@ -2132,7 +2147,7 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
                             background_music.release();
                         background_music = MediaPlayer.create(getApplicationContext(), boss_music_list[1]);
                         background_music.setLooping(true);
-                        if (game_settings[0])                  // if bgm option is checked
+                        if (game_settings[0] == 1)              // if bgm option is checked
                             background_music.start();
                         act++;
                     } else if (act == 1) {
@@ -2288,7 +2303,7 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
                             background_music.release();
                         background_music = MediaPlayer.create(getApplicationContext(), R.raw.bgm_ending);
                         background_music.setLooping(true);
-                        if (game_settings[0])                  // if bgm option is checked
+                        if (game_settings[0] == 1)              // if bgm option is checked
                             background_music.start();
                     } else if (act == 1) {
                         sleep(500);
@@ -2360,7 +2375,7 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
                             background_music.release();
                         background_music = MediaPlayer.create(getApplicationContext(), boss_music_list[3]);
                         background_music.setLooping(true);
-                        if (game_settings[0])                  // if bgm option is checked
+                        if (game_settings[0] == 1)              // if bgm option is checked
                             background_music.start();
                         act++;
                         current_floor[9][6] = 1;
@@ -2785,7 +2800,7 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
                             background_music.release();
                         background_music = MediaPlayer.create(getApplicationContext(), boss_music_list[3]);
                         background_music.setLooping(true);
-                        if (game_settings[0])                  // if bgm option is checked
+                        if (game_settings[0] == 1)              // if bgm option is checked
                             background_music.start();
                         boolean no_teleport = current_floor[2][2] != 1 && current_floor[2][3] != 1 && current_floor[2][4] != 1;
                         no_teleport &= current_floor[2][8] != 1 && current_floor[2][9] != 1 && current_floor[2][10] != 1;
@@ -3675,6 +3690,7 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
                 case 43:
                     if (act == 0) {
                         act++;
+                        current_floor[1][8] = 1;
                     } else if (act == 1) {
                         sleep(300);
                         act++;
@@ -3711,7 +3727,7 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
                             background_music.release();
                         background_music = MediaPlayer.create(getApplicationContext(), boss_music_list[4]);
                         background_music.setLooping(true);
-                        if (game_settings[0])                  // if bgm option is checked
+                        if (game_settings[0] == 1)              // if bgm option is checked
                             background_music.start();
                         current_floor[6][6] = 1;
                     } else if (act == 1) {
@@ -4062,11 +4078,11 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
                             sound_teleport = true;
                             sleep(150);
                             if (floor_num % 10 == 0 && floor_num != 0) {  // if needs to change music
-                                if (background_music != null)           // kill the old music first
+                                if (background_music != null)             // kill the old music first
                                     background_music.release();
                                 background_music = MediaPlayer.create(getApplicationContext(), bgm_list[floor_num / 10]);
                                 background_music.setLooping(true);
-                                if (game_settings[0])                  // if bgm option is checked
+                                if (game_settings[0] == 1)                // if bgm option is checked
                                     background_music.start();
                             }
                             current_game.put_one_floor(floor_num, current_floor);
@@ -4100,11 +4116,11 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
                             sound_teleport = true;
                             sleep(150);
                             if (floor_num % 10 == 1 && floor_num != 1) {  // if needs to change music
-                                if (background_music != null)           // kill the old music first
+                                if (background_music != null)             // kill the old music first
                                     background_music.release();
                                 background_music = MediaPlayer.create(getApplicationContext(), bgm_list[floor_num / 10 - 1]);
                                 background_music.setLooping(true);
-                                if (game_settings[0])                  // if bgm option is checked
+                                if (game_settings[0] == 1)                // if bgm option is checked
                                     background_music.start();
                             }
                             current_game.put_one_floor(floor_num, current_floor);
@@ -4607,12 +4623,12 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
                             break;
                         case -1:    // fake wall
                             b = -1;
-                            Sprite sp_fake_wall = new Sprite(GameView.this, t___wall, origin + j * sq_size, origin + i * sq_size, b);
+                            Sprite sp_fake_wall = new Sprite(GameView.this, t_wall_c, origin + j * sq_size, origin + i * sq_size, b);
                             all_sprites.add(sp_fake_wall);
                             break;
                         case 0:     // wall
                             b = 0;
-                            Sprite sp_wall = new Sprite(GameView.this, t___wall, origin + j * sq_size, origin + i * sq_size, b);
+                            Sprite sp_wall = new Sprite(GameView.this, t_wall_r, origin + j * sq_size, origin + i * sq_size, b);
                             all_sprites.add(sp_wall);
                             break;
                         case 1:     // floor
@@ -4931,6 +4947,11 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
                             Sprite sp_real_zeno = new Sprite(GameView.this, m_demozeno, origin + j * sq_size, origin + i * sq_size, b);
                             all_sprites.add(sp_real_zeno);
                             break;
+                        case 68:    // me
+                            b = 68;
+                            Sprite sp_me = new Sprite(GameView.this, z_me, origin + j * sq_size, origin + i * sq_size, b);
+                            all_sprites.add(sp_me);
+                            break;
                         case 71:    // yellow_key
                             b = 71;
                             Sprite sp_key_y = new Sprite(GameView.this, i____key_y, origin + j * sq_size, origin + i * sq_size, b);
@@ -5072,19 +5093,16 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
             }
             // ------------------- Draw Wall -----------------------
             for (int i = 0; i < 13; i++) {
-                canvas.drawBitmap(t___wall, origin + i * sq_size, origin, null);
-                canvas.drawBitmap(t___wall, origin + i * sq_size, origin + 12 * sq_size, null);
-                canvas.drawBitmap(t___wall, origin, origin + i * sq_size, null);
-                canvas.drawBitmap(t___wall, origin + 12 * sq_size, origin + i * sq_size, null);
+                canvas.drawBitmap(t_wall_r, origin + i * sq_size, origin, null);
+                canvas.drawBitmap(t_wall_r, origin + i * sq_size, origin + 12 * sq_size, null);
+                canvas.drawBitmap(t_wall_r, origin, origin + i * sq_size, null);
+                canvas.drawBitmap(t_wall_r, origin + 12 * sq_size, origin + i * sq_size, null);
             }
             // ------------------- Draw Menu -----------------------
-            for (int a = 0; a < 12; a++) {
-                for (int b = 12; b < 22; b++) {
-                    canvas.drawBitmap(menu_background, sq_size * a, sq_size * b, null);
-                }
-            }
             Paint num_box = new Paint();
             num_box.setStrokeWidth(10);
+            num_box.setColor(Color.rgb(190, 140, 190));
+            canvas.drawRect(0, sq_size * 12, sq_size * 12, sq_size * 21, num_box);
             num_box.setColor(Color.rgb(130, 130, 130));
             canvas.drawRect(sq_size * 2 - margin * 4, sq_size * 13 + margin + offset, sq_size * 4 + margin, sq_size * 14 - margin + offset, num_box);
             canvas.drawRect(sq_size * 2 - margin * 4, sq_size * 14 + margin + offset, sq_size * 4 - margin, sq_size * 15 - margin + offset, num_box);
@@ -5117,13 +5135,13 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
             // ------------------- Draw Items Buttons ------------------------
             Paint stash_paint = new Paint();
             stash_paint.setStrokeWidth(10);
-            stash_paint.setColor(Color.rgb(180, 150, 180));
+            stash_paint.setColor(Color.rgb(130, 170, 200));
             for (int a = 1; a < 7; a++) {
                 canvas.drawRect(sq_size * a + origin, sq_size * 17 + offset*3, sq_size * (a + 1) + origin, sq_size * 18 + offset*3, stash_paint);
                 if (a % 2 == 1)
                     stash_paint.setColor(Color.rgb(220, 220, 220));
                 else
-                    stash_paint.setColor(Color.rgb(180, 150, 180));
+                    stash_paint.setColor(Color.rgb(130, 170, 200));
                 canvas.drawRect(sq_size * a + origin, sq_size * 18 + offset*3, sq_size * (a + 1) + origin, sq_size * 19 + offset*3, stash_paint);
             }
             if (stf_wsdm)
@@ -5221,10 +5239,7 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
             my_text = "Save";
             canvas.drawText(my_text, sq_size*5 - margin*2, sq_size * 13 + margin * 8 + offset, textpaint);
             // ------------------- Game Speed Control -----------------------
-            if (game_settings[2])
-                sleep(20);
-            else
-                sleep(35);
+            sleep(game_settings[2]);
             // ------------------- Debug Purpose -----------------------
             //canvas.drawBitmap(ball, x - ball.getWidth() / 2, y - ball.getHeight() / 2, null);
         }
@@ -5923,7 +5938,7 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
                             background_music.release();
                         background_music = MediaPlayer.create(getApplicationContext(), bgm_list[floor_num/10]);
                         background_music.setLooping(true);
-                        if (game_settings[0])                  // if bgm option is checked
+                        if (game_settings[0] == 1)              // if bgm option is checked
                             background_music.start();
                     }
                     current_game.put_one_floor(floor_num, current_floor);
@@ -5959,7 +5974,7 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
                             background_music.release();
                         background_music = MediaPlayer.create(getApplicationContext(), bgm_list[floor_num/10 - 1]);
                         background_music.setLooping(true);
-                        if (game_settings[0])                  // if bgm option is checked
+                        if (game_settings[0] == 1)              // if bgm option is checked
                             background_music.start();
                     }
                     current_game.put_one_floor(floor_num, current_floor);
@@ -6983,7 +6998,6 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
                                 }
                             });
                             altar_dialog.show();
-
                         }
                     });
                     return 0;
@@ -7104,6 +7118,37 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
                     return battle_preparation(33);
                 case 66:
                     return battle_preparation(34);
+                case 68:
+                    npc_dialog = true;
+                    parent.runOnUiThread(new Runnable() {
+                        public void run() {
+                            AlertDialog.Builder me_builder = new AlertDialog.Builder(parent);
+                            me_builder.setTitle(R.string.developer);
+                            if (me_count == 0) {
+                                me_count++;
+                                me_builder.setMessage(R.string.me_dialog1);
+                            } else {
+                                me_count = 0;
+                                me_builder.setMessage(R.string.me_dialog2);
+                            }
+                            me_builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialogInterface, int i) {
+                                    npc_dialog = false;
+                                }
+                            });
+                            AlertDialog me_dialog = me_builder.create();
+                            me_dialog.setCanceledOnTouchOutside(false);
+                            me_dialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
+                                @Override
+                                public void onCancel(DialogInterface dialogInterface) {
+                                    npc_dialog = false;
+                                }
+                            });
+                            me_dialog.show();
+                        }
+                    });
+                    return 0;
                 case 71:        // yellow key
                     sfx_play(R.raw.sfx_items);
                     current_floor[i][j] = 1;
@@ -7490,8 +7535,8 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
                 if (page == 0){
                     textpaint.setColor(Color.DKGRAY);
                     textpaint.setTextSize(sq_size*7/8);
-                    instruction = "Click to continue";
-                    canvas.drawText(instruction, sq_size * 6/2, sq_size * 18 + offset*8, textpaint);
+                    instruction = "Next Page";
+                    canvas.drawText(instruction, sq_size * 7/2, sq_size * 18 + offset*8, textpaint);
                     draw_monster_stats(canvas, 0, 6);
 
                 } else {
@@ -7832,7 +7877,7 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
                 }
             }
             if (monsters_to_draw.size() > 6) {
-                instruction = "Click to continue";
+                instruction = "Next Page";
                 total_page = 2;
             }
         }

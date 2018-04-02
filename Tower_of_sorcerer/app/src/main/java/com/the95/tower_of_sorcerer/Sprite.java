@@ -44,7 +44,7 @@ class Sprite {
             width = sprite_sheet.getWidth();
         else if (id == 29)
             width = sprite_sheet.getWidth() / 4;
-        else if (id > 20 && id < 66)
+        else if (id > 20 && id < 67)
             width = sprite_sheet.getWidth() / 3;
         else {
             width = sprite_sheet.getWidth();

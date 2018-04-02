@@ -17,7 +17,7 @@
         android:layout_weight="1"
         android:text="@string/game_title1"
         android:textAppearance="@style/TextAppearance.AppCompat.Display1"
-        android:textColor="@color/colorAccent"
+        android:textColor="@color/titile1"
         android:textSize="50sp"
         android:textStyle="bold" />
 

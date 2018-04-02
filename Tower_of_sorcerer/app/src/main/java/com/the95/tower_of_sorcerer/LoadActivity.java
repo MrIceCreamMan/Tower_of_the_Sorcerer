@@ -14,7 +14,7 @@ import java.io.IOException;
 
 public class LoadActivity extends AppCompatActivity {
     private byte[] game_data;
-    private boolean[] game_settings;
+    private int[]  game_settings;
     private boolean[] can_load;
     private static final String TAG = "debuuuuuuuuuuuuuuuuuug";
 
@@ -26,7 +26,7 @@ public class LoadActivity extends AppCompatActivity {
         Bundle extras = getIntent().getExtras();
         can_load = new boolean[]{false, false, false, false};
         if (extras != null) {
-            game_settings = extras.getBooleanArray("Game_Settings");
+            game_settings = extras.getIntArray("Game_Settings");
         }
 
         findViewById(R.id.load_1).setOnClickListener(Load_Game);
@@ -141,7 +141,7 @@ public class LoadActivity extends AppCompatActivity {
 
     private void sfx_play(int which_sfx) {
         MediaPlayer sfx_music = MediaPlayer.create(getApplicationContext(), which_sfx);
-        if (game_settings[1])
+        if (game_settings[1] == 1)
             sfx_music.start();
         sfx_music.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
             @Override

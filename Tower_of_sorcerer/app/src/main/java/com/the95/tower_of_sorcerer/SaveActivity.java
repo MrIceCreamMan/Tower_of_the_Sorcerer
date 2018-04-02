@@ -18,7 +18,7 @@ public class SaveActivity extends AppCompatActivity {
     final String    FILENAME3 = "save3.txt";
     final String    FILENAME4 = "save4.txt";
     private byte[]  game_data;
-    private boolean[] game_settings;
+    private int[]   game_settings;
     private static final String TAG = "debuuuuuuuuuuuuuuuuuug";
 
     @Override
@@ -29,7 +29,7 @@ public class SaveActivity extends AppCompatActivity {
         Bundle extras = getIntent().getExtras();
         if (extras != null) {
             game_data = extras.getByteArray("Game_Data");
-            game_settings = extras.getBooleanArray("Game_Settings");
+            game_settings = extras.getIntArray("Game_Settings");
         }
 
         findViewById(R.id.save_1).setOnClickListener(Save_Game);
@@ -118,7 +118,7 @@ public class SaveActivity extends AppCompatActivity {
 
     private void sfx_play(int which_sfx) {
         MediaPlayer sfx_music = MediaPlayer.create(getApplicationContext(), which_sfx);
-        if (game_settings[1])
+        if (game_settings[1] == 1)
             sfx_music.start();
         sfx_music.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
             @Override
