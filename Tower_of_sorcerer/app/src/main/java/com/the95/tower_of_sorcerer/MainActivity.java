@@ -1,5 +1,6 @@
 package com.the95.tower_of_sorcerer;
 
+import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.media.MediaPlayer;
@@ -7,14 +8,19 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.SeekBar;
 
 public class MainActivity extends AppCompatActivity {
 
     private MediaPlayer OpeningThemeMusic;
     private int[]       game_settings;
-    private boolean[]   music_settings;
     private boolean     bgm_on;
+    private int         sb_val;
     private static final String TAG = "debuuuuuuuuuuuuuuuuuug";
     //Log.v(TAG, "x = " + me.getX() + " y = " + me.getY());
 
@@ -23,9 +29,9 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        game_settings = new int[]{1,1,10,2};
-        music_settings = new boolean[]{true, true};
+        game_settings = new int[]{1,1,30,2};
         bgm_on = true;
+        sb_val = 30;
         OpeningThemeMusic = MediaPlayer.create(getApplicationContext(), R.raw.bgm_opening);
         OpeningThemeMusic.setLooping(true);
         OpeningThemeMusic.start();
@@ -39,7 +45,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        if (!bgm_on && music_settings[0]) {
+        if (!bgm_on && game_settings[0] == 1) {
             bgm_on = true;
             OpeningThemeMusic = MediaPlayer.create(getApplicationContext(), R.raw.bgm_opening);
             OpeningThemeMusic.setLooping(true);
@@ -58,7 +64,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void sfx_play(int which_sfx) {
         MediaPlayer sfx_music = MediaPlayer.create(getApplicationContext(), which_sfx);
-        if (music_settings[1])
+        if (game_settings[1] == 1)
             sfx_music.start();
         sfx_music.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
             @Override
@@ -120,38 +126,66 @@ public class MainActivity extends AppCompatActivity {
 
                 case R.id.settings:
                     sfx_play(R.raw.sfx_choose);
-                    final String[] items = {"Enable background music", " Enable sound effects"};
-                    AlertDialog.Builder settings_builder = new AlertDialog.Builder(MainActivity.this);
-                    settings_builder.setTitle("Game_Settings");
-                    settings_builder.setMultiChoiceItems(items, music_settings, new DialogInterface.OnMultiChoiceClickListener() {
+
+                    final Dialog settings_dialog = new Dialog(MainActivity.this);
+                    LayoutInflater settings_inflater = LayoutInflater.from(MainActivity.this);
+                    View settings_view = settings_inflater.inflate(R.layout.settings_dialog, (ViewGroup)null);
+                    settings_dialog.setCanceledOnTouchOutside(false);
+
+                    final CheckBox cb_bgm = settings_view.findViewById(R.id.cb_bgm);
+                    cb_bgm.setChecked(game_settings[0]==1);
+                    final CheckBox cb_sfx = settings_view.findViewById(R.id.cb_sfx);
+                    cb_sfx.setChecked(game_settings[1]==1);
+
+                    Button btn_ok = settings_view.findViewById(R.id.btn_settings_ok);
+                    btn_ok.setOnClickListener(new View.OnClickListener() {
                         @Override
-                        public void onClick(DialogInterface dialog, int indexSelected, boolean isChecked) {
-                        }
-                    });
-                    settings_builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int id) {
+                        public void onClick(View view) {
                             sfx_play(R.raw.sfx_choose);
-                            if (music_settings[0])
+                            //settings_dialog.cancel();
+                            if (cb_bgm.isChecked())
                                 game_settings[0] = 1;
                             else
                                 game_settings[0] = 0;
-                            if (music_settings[1])
+                            if (cb_sfx.isChecked())
                                 game_settings[1] = 1;
                             else
                                 game_settings[1] = 0;
-                            if (!music_settings[0] && bgm_on) {
+                            game_settings[2] = sb_val;
+                            if (game_settings[0] != 1 && bgm_on) {
                                 bgm_on = false;
                                 OpeningThemeMusic.release();
-                            } else if (music_settings[0] && !bgm_on){
+                            } else if (game_settings[0] == 1 && !bgm_on){
                                 bgm_on = true;
                                 OpeningThemeMusic = MediaPlayer.create(getApplicationContext(), R.raw.bgm_opening);
                                 OpeningThemeMusic.setLooping(true);
                                 OpeningThemeMusic.start();
                             }
+                            settings_dialog.dismiss();
                         }
                     });
-                    AlertDialog settings_dialog = settings_builder.create();
+
+                    SeekBar sb_game_speed = settings_view.findViewById(R.id.sb_game_speed);
+                    sb_game_speed.setProgress(game_settings[2]);
+                    sb_game_speed.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+                        @Override
+                        public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
+                            sb_val = i;
+                            //Log.v(TAG, "sb_val = " + String.valueOf(sb_val));
+                        }
+
+                        @Override
+                        public void onStartTrackingTouch(SeekBar seekBar) {
+
+                        }
+
+                        @Override
+                        public void onStopTrackingTouch(SeekBar seekBar) {
+
+                        }
+                    });
+
+                    settings_dialog.setContentView(settings_view);
                     settings_dialog.show();
                     break;
 

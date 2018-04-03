@@ -16,6 +16,12 @@
     <string name="easy">Easy</string>
     <string name="medium">Medium</string>
     <string name="hard">Hard</string>
+    <string name="game_settings">Game Settings</string>
+    <string name="bgm_text">Enable background music</string>
+    <string name="sfx_text">Enable sound effects</string>
+    <string name="game_speed_text">Game speed</string>
+    <string name="fast">Fast</string>
+    <string name="slow">Slow</string>
     <string name="thief">Thief</string>
     <string name="saint">Saint</string>
     <string name="merchant">Merchant</string>

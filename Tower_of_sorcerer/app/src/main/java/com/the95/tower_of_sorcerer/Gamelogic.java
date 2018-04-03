@@ -5239,7 +5239,7 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
             my_text = "Save";
             canvas.drawText(my_text, sq_size*5 - margin*2, sq_size * 13 + margin * 8 + offset, textpaint);
             // ------------------- Game Speed Control -----------------------
-            sleep(game_settings[2]);
+            sleep(60 - game_settings[2]);
             // ------------------- Debug Purpose -----------------------
             //canvas.drawBitmap(ball, x - ball.getWidth() / 2, y - ball.getHeight() / 2, null);
         }

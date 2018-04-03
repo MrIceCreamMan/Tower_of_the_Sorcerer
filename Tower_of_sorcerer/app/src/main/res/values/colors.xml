@@ -2,7 +2,7 @@
 <resources>
     <color name="colorPrimary">#3f51b5</color>
     <color name="colorPrimaryDark">#28389e</color>
-    <color name="colorAccent">#d7a5a5</color>
+    <color name="colorAccent">#ffffff</color>
     <color name="colorAccentLight">#82aac8</color>
     <color name="end">#00FF24</color>
     <color name="back">#2e3135</color>
@@ -15,4 +15,6 @@
     <color name="starcolor4">#ffae33</color>
     <color name="gravswitch">#e80000</color>
     <color name="titile1">#fafafa</color>
+    <color name="my_color_gray">#444444</color>
+    <color name="my_color_light_red">#d27272</color>
 </resources>
