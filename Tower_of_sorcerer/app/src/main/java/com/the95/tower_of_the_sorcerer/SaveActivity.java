@@ -1,10 +1,9 @@
-package com.the95.tower_of_sorcerer;
+package com.the95.tower_of_the_sorcerer;
 
 import android.content.Context;
 import android.media.MediaPlayer;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 import java.io.FileInputStream;
@@ -19,7 +18,6 @@ public class SaveActivity extends AppCompatActivity {
     final String    FILENAME4 = "save4.txt";
     private byte[]  game_data;
     private int[]   game_settings;
-    private static final String TAG = "debuuuuuuuuuuuuuuuuuug";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -85,7 +83,6 @@ public class SaveActivity extends AppCompatActivity {
             byte[] saved_data = new byte[25];
             int field_count = 0;
             int total_bytes_read = fis.read(saved_data, 0, 25);
-            Log.v(TAG, "meta data bytes = " + String.valueOf(total_bytes_read));
             int i = 0;
             StringBuilder sb = new StringBuilder();
             while(field_count < 5 && i < 25) {

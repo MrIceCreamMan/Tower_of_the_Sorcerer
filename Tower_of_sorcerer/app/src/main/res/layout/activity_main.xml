@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     android:background="@drawable/home"
     android:orientation="vertical"
-    tools:context="com.the95.tower_of_sorcerer.MainActivity"
+    tools:context="com.the95.tower_of_the_sorcerer.MainActivity"
     tools:layout_editor_absoluteY="25dp">
 
     <TextView

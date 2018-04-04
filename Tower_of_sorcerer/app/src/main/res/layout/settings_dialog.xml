@@ -8,23 +8,12 @@
     android:layout_margin="20dp"
     android:background="@color/my_color_gray">
 
-    <TextView
-        android:id="@+id/tv_game_settings"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="20dp"
-        android:text="@string/game_settings"
-        android:textColor="@android:color/white"
-        android:textSize="22sp" />
-
     <CheckBox
         android:id="@+id/cb_bgm"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:layout_below="@+id/tv_game_settings"
         android:layout_marginLeft="20dp"
         android:layout_marginStart="20dp"
         android:layout_marginTop="20dp"

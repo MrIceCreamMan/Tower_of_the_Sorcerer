@@ -1,13 +1,11 @@
-package com.the95.tower_of_sorcerer;
+package com.the95.tower_of_the_sorcerer;
 
 import android.content.Intent;
 import android.media.MediaPlayer;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
-
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -86,7 +84,6 @@ public class LoadActivity extends AppCompatActivity {
             byte[] meta_data = new byte[25];
             int field_count = 0;
             int total_bytes_read = fis.read(meta_data, 0, 25);
-            Log.v(TAG, "meta data bytes = " + String.valueOf(total_bytes_read) + " " + String.valueOf(save_idx));
             int i = 0;
             StringBuilder sb = new StringBuilder();
             while(field_count < 5 && i < 25) {
@@ -124,7 +121,6 @@ public class LoadActivity extends AppCompatActivity {
             fis = openFileInput(file_name);
             game_data = new byte[fis.available()];
             int total_bytes_read = fis.read(game_data);
-            Log.v(TAG, "total bytes = " + String.valueOf(total_bytes_read));
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         } catch (IOException e) {

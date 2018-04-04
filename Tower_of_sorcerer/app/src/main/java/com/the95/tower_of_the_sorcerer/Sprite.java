@@ -1,9 +1,8 @@
-package com.the95.tower_of_sorcerer;
+package com.the95.tower_of_the_sorcerer;
 
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Rect;
-import android.util.Log;
 
 class Sprite {
 

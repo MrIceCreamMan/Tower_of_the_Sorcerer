@@ -1,4 +1,4 @@
-package com.the95.tower_of_sorcerer;
+package com.the95.tower_of_the_sorcerer;
 
 import org.junit.Test;
 

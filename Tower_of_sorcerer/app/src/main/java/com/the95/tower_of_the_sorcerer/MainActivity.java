@@ -1,4 +1,4 @@
-package com.the95.tower_of_sorcerer;
+package com.the95.tower_of_the_sorcerer;
 
 import android.app.Dialog;
 import android.content.DialogInterface;
@@ -7,7 +7,6 @@ import android.media.MediaPlayer;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -128,6 +127,7 @@ public class MainActivity extends AppCompatActivity {
                     sfx_play(R.raw.sfx_choose);
 
                     final Dialog settings_dialog = new Dialog(MainActivity.this);
+                    settings_dialog.setTitle(R.string.game_settings);
                     LayoutInflater settings_inflater = LayoutInflater.from(MainActivity.this);
                     View settings_view = settings_inflater.inflate(R.layout.settings_dialog, (ViewGroup)null);
                     settings_dialog.setCanceledOnTouchOutside(false);

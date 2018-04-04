@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:background="@color/back"
     android:orientation="vertical"
-    tools:context="com.the95.tower_of_sorcerer.LoadActivity">
+    tools:context="com.the95.tower_of_the_sorcerer.LoadActivity">
 
     <LinearLayout
         android:layout_width="match_parent"

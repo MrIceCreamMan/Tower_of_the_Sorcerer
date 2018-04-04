@@ -3,7 +3,7 @@ apply plugin: 'com.android.application'
 android {
     compileSdkVersion 26
     defaultConfig {
-        applicationId "com.the95.tower_of_sorcerer"
+        applicationId "com.the95.tower_of_the_sorcerer"
         minSdkVersion 15
         targetSdkVersion 26
         versionCode 1

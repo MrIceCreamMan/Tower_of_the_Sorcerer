@@ -1,4 +1,4 @@
-package com.the95.tower_of_sorcerer;
+package com.the95.tower_of_the_sorcerer;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -16,7 +16,6 @@ import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
-import android.util.Log;
 import android.widget.Button;
 import java.util.ArrayList;
 import java.util.List;
@@ -139,8 +138,6 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
     //  debug purpose
     private Paint pt1, pt2, pt3, pt4, pt5, pt6, pt7, pt8;
     private Bitmap ball, pic_debug, pic_d1, pic_d2, pic_d3, pic_dh;
-    private static final String TAG = "debuuuuuuuuuuuuuuuuuug";
-    //Log.v(TAG, "x = " + me.getX() + " y = " + me.getY());
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -224,7 +221,7 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
         }
 
         // debug/testing purpose
-        set_all_true();
+        //set_all_true();
 
         // initialize pictures
         ball = BitmapFactory.decodeResource(getResources(), R.drawable.newearth);
@@ -1407,7 +1404,6 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
                     continue;
                 }
                 Canvas canvas = holder.lockCanvas();
-                Log.v(TAG, "width = " + String.valueOf(canvas.getWidth()) + "  \nHeight =" +  String.valueOf(canvas.getHeight()));
                 sq_size = canvas.getWidth() / 12;
                 extra_height = canvas.getHeight() - sq_size * 19;
                 holder.unlockCanvasAndPost(canvas);
