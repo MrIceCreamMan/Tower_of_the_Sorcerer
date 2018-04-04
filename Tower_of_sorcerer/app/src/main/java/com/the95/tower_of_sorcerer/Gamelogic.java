@@ -224,7 +224,7 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
         }
 
         // debug/testing purpose
-        //set_all_true();
+        set_all_true();
 
         // initialize pictures
         ball = BitmapFactory.decodeResource(getResources(), R.drawable.newearth);
@@ -1089,8 +1089,8 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
         key_enhac = wing_down = lucky_gold = dragonsbane = snow_cryst = true;
         count_wing = 3;
         debug_fly = true;
-        atk = 350; def = 300; hp = 8000;
-        floor_num = 42; thief_event_count = 4;
+        atk = 250; def = 300; hp = 8000;
+        floor_num = 43; thief_event_count = 4;
         count_y = 10; count_b = 10; count_r = 10;
     }
 
@@ -1430,6 +1430,8 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
                     if (!isWalk) {
                         if (button_click && !isBattle && !isEvent && !cantMove && !npc_dialog)
                             button_logic(which_button);
+                        if (cantMove)
+                            sleep(300);
                         if (isBattle)
                             battle_animation(hero_attack, hero_y, hero_x);
                         else {
@@ -1457,6 +1459,8 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
                     this.draw_staff_of_wisdom_results(c);
                     holder.unlockCanvasAndPost(c);
                 }
+                // ------------------- Game Speed Control -----------------------
+                sleep(60 - game_settings[2]);
             }
         }
 
@@ -4539,10 +4543,11 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
                                             current_floor[yr][xr] = 1;
                                             bomb = false;
                                         }
-                                        if (!bomb)
+                                        if (!bomb) {
                                             sfx_play(R.raw.sfx_explosion);
-                                        check_complete();
-                                        refresh_ctr = true;
+                                            check_complete();
+                                            refresh_ctr = true;
+                                        }
                                     }
                                 });
                                 bomb_builder.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
@@ -4613,7 +4618,7 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
                             break;
                         case -3:    // event wall
                             b = -3;
-                            Sprite sp_event_wall = new Sprite(GameView.this, t___wall, origin + j * sq_size, origin + i * sq_size, b);
+                            Sprite sp_event_wall = new Sprite(GameView.this, t_wall_r, origin + j * sq_size, origin + i * sq_size, b);
                             all_sprites.add(sp_event_wall);
                             break;
                         case -2:    // fake floor
@@ -5209,7 +5214,7 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
             if (show_fight) {
                 red_star_sprite.set_location(hero_x * sq_size - sq_size / 2, hero_y * sq_size - sq_size / 2);
                 red_star_sprite.update(canvas);
-                sleep(300);
+                //sleep(180+4*(60-game_settings[2]));
             }
             // ------------------- Draw Text -----------------------
             Paint textpaint = new Paint();
@@ -5238,8 +5243,6 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
             textpaint.setColor(Color.rgb(40, 50, 50));
             my_text = "Save";
             canvas.drawText(my_text, sq_size*5 - margin*2, sq_size * 13 + margin * 8 + offset, textpaint);
-            // ------------------- Game Speed Control -----------------------
-            sleep(60 - game_settings[2]);
             // ------------------- Debug Purpose -----------------------
             //canvas.drawBitmap(ball, x - ball.getWidth() / 2, y - ball.getHeight() / 2, null);
         }
@@ -5371,6 +5374,7 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
                     open33f &= current_floor[7][9] == 1 && current_floor[7][11] == 1;
                     if (open33f) {
                         sfx_play(R.raw.sfx_open_doors);
+                        current_floor[5][10] = 1;
                         current_floor[4][10] = 1;
                         current_floor[8][10] = 1;
                     }
@@ -6018,7 +6022,7 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
                                 current_floor[2][11] = -7;
                                 return 0;
                             }
-                        } else if (floor_num == 43 && i == 1 && j == 8) {
+                        } else if (floor_num == 43 && i == 1 && j == 8 && current_floor[1][9] == 57) {
                             current_floor[1][8] = -4;
                             return 0;
                         } else if (floor_num == 46) {
@@ -7009,7 +7013,7 @@ public class Gamelogic extends Activity implements View.OnTouchListener {
                         public void run() {
                             AlertDialog.Builder princess_builder = new AlertDialog.Builder(parent);
                             final AlertDialog.Builder zeno_builder = new AlertDialog.Builder(parent);
-                            zeno_builder.setTitle(R.string.princess);
+                            princess_builder.setTitle(R.string.princess);
                             princess_builder.setMessage(R.string.princess_dialog1);
                             AlertDialog princess_dialog = princess_builder.create();
                             princess_dialog.setCanceledOnTouchOutside(true);

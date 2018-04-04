@@ -31,7 +31,7 @@
     <string name="knight_captain">Knight Captain</string>
     <string name="zeno">Zeno</string>
     <string name="archmage">Archmage</string>
-    <string name="princess">Princess</string>
+    <string name="princess">\'Princess\'</string>
     <string name="developer">Game Developer</string>
     <string name="back_btn_alert">Do you want to exit the game?</string>
     <string name="game_over_title">Game Over</string>
@@ -39,10 +39,8 @@
     <string name="game_finish_title">Congratulations</string>
     <string name="game_finish_message">You successfully beat the game!</string>
     <string name="me_dialog1">Welcome to the Tower of the Sorcer, brave soul. Your task is to rescue
-        the Princess from the hands of the Demon Zeno. Try to use the stairs on the upper left
-        conner on this floor to go upstairs. Different floors will have different obstacles and
-        items. To get though monsters, you have to fight them. To unlock doors, you need to spend a
-        key of the same color. Have fun exploring. If you like this game, please talk to me
+        the Princess from the hands of the Demon Zeno. Use the stairs on the upper left conner on
+        this floor to go upstairs. Have fun exploring. If you like this game, please talk to me
         again.</string>
     <string name="me_dialog2">I am an international student from Boston University, and I am
         graduating in May 2018. I am currently looking for software developing jobs which can
@@ -84,14 +82,12 @@
         Later, I started to kill his minions and he did know because he has not gone out of his
         chamber yet. Now he is dead and I will rule this tower!</string>
     <string name="thief11">If I can kill him, what makes you think I won\'t kill you?</string>
-    <string name="thief12">You were able to kill him because he tried to use magic against you. He
-        didn\'t know that the sacred weapons you are wielding resist magics. According to the last
-        page of the spell book: \'both the Sacred Sword and the Sacred Shield were born in the lava.
-        They were purified by the holy fire so they resist magic.\' I tried to steal these weapons
-        myself but I almost died to the lava protecting the Sacred Shield, so I decided to let
-        others to steal them for me, and that\'s why I didn't kill then. Though my magic power is
-        not the greatest, I combat power is much stronger than the Archmage. Hand over your weapons
-        or you will die!</string>
+    <string name="thief12">You were able to kill him because the sacred weapons you are wielding
+        resist magic, but he didn\'t know that. According to the last page of the spell book: \'both
+        the Sacred Sword and the Sacred Shield were purified by the flame of lava, and thus resist
+        magic.\' I couldn\'t get through the lava myself, and that\'s why I let you steal them for
+        me. I also know the weakness of these weapons, so you don\'t stand a chance against me. Now,
+        hand over your weapons or you will die!</string>
     <string name="saint_2f">Thank you so much for saving me. I can increase your attack and defense
         power by 3 percent. Do you want me to do it now?</string>
     <string name="saint_3f">I am too old to fight. Brave young man, you should take this Staff of
@@ -254,7 +250,7 @@
     <string name="skeleton_captain_10f_1">You are trapped!!! Soldiers, go kill him!!!</string>
     <string name="vampire_20f_1">Oh nice, fresh blood! You never thought those Giant Bats were just
         my disguise, did you? This is how I hunt: lure the prey in, and drain their blood.
-        mmmwwwahahahaha. . .</string>
+        mmmwwwahahahaha.</string>
     <string name="princess_dialog1">Haha, young man, you did a great job coming this far. If you are
         not afraid of death, you should go through the portal on th 24th floor I just opened. I will
         be waiting for you on the other side.</string>
